@@ -1,5 +1,7 @@
+const BASE = import.meta.env.VITE_API_BASE_URL || "";
+
 async function post(path, body) {
-  const res = await fetch(path, {
+  const res = await fetch(BASE + path, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: body ? JSON.stringify(body) : undefined,
