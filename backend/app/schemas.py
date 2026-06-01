@@ -61,14 +61,23 @@ class ChatMessage(BaseModel):
     content: str
 
 
+Lang = Literal["th", "en"]
+
+
+class OnboardRequest(BaseModel):
+    lang: Lang = "th"
+
+
 class ChatRequest(BaseModel):
     messages: list[ChatMessage]
+    lang: Lang = "th"
 
 
 class QuestRequest(BaseModel):
     user_location_area: str = "หาดใหญ่"
     user_level: Level = "Beginner"
     completed_quests: list[str] = []
+    lang: Lang = "th"
 
 
 class RecommendRequest(BaseModel):
@@ -76,6 +85,7 @@ class RecommendRequest(BaseModel):
     vibe: str = ""
     budget: str = "ปานกลาง"
     companion: str = "คนเดียว"
+    lang: Lang = "th"
 
 
 class VerifyRequest(BaseModel):
@@ -85,8 +95,10 @@ class VerifyRequest(BaseModel):
     user_description: str
     photo_base64: Optional[str] = None
     photo_media_type: str = "image/jpeg"
+    lang: Lang = "th"
 
 
 class BadgeRequest(BaseModel):
     badge_name: str
     quest_completed: str
+    lang: Lang = "th"

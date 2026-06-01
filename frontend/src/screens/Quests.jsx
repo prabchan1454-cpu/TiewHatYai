@@ -2,6 +2,7 @@ import { useState } from "react";
 import { api } from "../lib/api";
 import { levelFor } from "../lib/progress";
 import { Button, Card, ErrorBox, Pill, Spinner } from "../components/ui";
+import { useT } from "../lib/i18n.jsx";
 
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
@@ -13,6 +14,7 @@ function fileToBase64(file) {
 }
 
 export default function Quests({ progress }) {
+  const { t } = useT();
   const { state, update, completeQuest, addBadge, celebrate, updateReward } = progress;
   const quest = state.activeQuest;
   const [loading, setLoading] = useState(false);
@@ -99,17 +101,15 @@ export default function Quests({ progress }) {
       {!quest && (
         <Card className="bg-gradient-to-br from-sunset/15 to-mango/10 text-center">
           <div className="text-5xl">🎯</div>
-          <h2 className="mt-2 text-xl font-extrabold text-deep">พร้อมออกผจญภัยไหม?</h2>
-          <p className="mt-1 text-sm text-slate-500">
-            รับเควสจากน้องเที่ยว ไปสำรวจหาดใหญ่ แล้วเก็บ XP กับ badge!
-          </p>
+          <h2 className="mt-2 text-xl font-extrabold text-deep">{t("quest.readyTitle")}</h2>
+          <p className="mt-1 text-sm text-slate-500">{t("quest.readyDesc")}</p>
           <Button onClick={getQuest} disabled={loading} className="mt-4 w-full">
-            {loading ? "กำลังสุ่มเควส..." : "รับเควสใหม่ ✨"}
+            {loading ? t("quest.rolling") : t("quest.getNew")}
           </Button>
         </Card>
       )}
 
-      {loading && quest === null && <Spinner label="น้องเที่ยวกำลังคิดเควส..." />}
+      {loading && quest === null && <Spinner label={t("quest.thinking")} />}
 
       {quest && (
         <Card className="space-y-3">
@@ -121,31 +121,31 @@ export default function Quests({ progress }) {
           <p className="italic text-slate-600">{quest.quest_story}</p>
 
           <div className="rounded-2xl bg-slate-50 p-3 text-sm">
-            <p className="font-bold text-deep">🎯 เป้าหมาย</p>
+            <p className="font-bold text-deep">{t("quest.objective")}</p>
             <p className="text-slate-600">{quest.objective}</p>
           </div>
           <div className="rounded-2xl bg-teal-50 p-3 text-sm">
-            <p className="font-bold text-lagoon">🔍 คำใบ้</p>
+            <p className="font-bold text-lagoon">{t("quest.hint")}</p>
             <p className="text-slate-600">{quest.location_hint}</p>
           </div>
           <div className="flex items-center gap-2 text-sm text-slate-500">
-            <span>🏅 รางวัล:</span>
+            <span>{t("quest.reward")}</span>
             <span className="font-semibold text-deep">{quest.reward_badge}</span>
           </div>
 
           {!result?.verified && (
             <div className="space-y-2 border-t border-slate-100 pt-3">
-              <p className="font-bold text-deep">ทำเควสเสร็จแล้ว? ส่งหลักฐานเลย!</p>
+              <p className="font-bold text-deep">{t("quest.doneQ")}</p>
               <textarea
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
-                placeholder="เล่าให้น้องเที่ยวฟังว่าเจออะไรบ้าง..."
+                placeholder={t("quest.descPlaceholder")}
                 rows={3}
                 className="w-full rounded-2xl border border-slate-200 p-3 outline-none focus:border-sunset"
               />
               <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-500">
-                <span className="rounded-xl bg-slate-100 px-3 py-2 font-semibold">📷 แนบรูป</span>
-                <span>{photo ? photo.name : "ไม่บังคับ"}</span>
+                <span className="rounded-xl bg-slate-100 px-3 py-2 font-semibold">{t("quest.attachPhoto")}</span>
+                <span>{photo ? photo.name : t("quest.optional")}</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -155,7 +155,7 @@ export default function Quests({ progress }) {
               </label>
               <ErrorBox message={result && !result.verified ? null : ""} />
               <Button variant="lagoon" onClick={submit} disabled={verifying || !desc.trim()} className="w-full">
-                {verifying ? "กำลังตรวจสอบ..." : "ส่งยืนยันเควส ✅"}
+                {verifying ? t("quest.verifying") : t("quest.submit")}
               </Button>
             </div>
           )}
@@ -167,9 +167,9 @@ export default function Quests({ progress }) {
               }`}
             >
               <p className="font-bold text-deep">
-                {result.verified ? "🎉 สำเร็จ!" : "เกือบแล้ว!"}{" "}
+                {result.verified ? t("quest.success") : t("quest.almost")}{" "}
                 <span className="text-xs font-normal text-slate-400">
-                  (ความมั่นใจ: {result.confidence})
+                  ({t("quest.confidence")}: {result.confidence})
                 </span>
               </p>
               <p className="mt-1 text-slate-700">{result.message}</p>
@@ -178,7 +178,7 @@ export default function Quests({ progress }) {
               )}
               {result.verified && (
                 <Button onClick={finishQuest} className="mt-3 w-full">
-                  รับเควสต่อไป →
+                  {t("quest.next")}
                 </Button>
               )}
             </div>
@@ -186,7 +186,7 @@ export default function Quests({ progress }) {
 
           {!result?.verified && (
             <button onClick={finishQuest} className="w-full text-sm text-slate-400 hover:text-slate-600">
-              ข้ามเควสนี้
+              {t("quest.skip")}
             </button>
           )}
         </Card>

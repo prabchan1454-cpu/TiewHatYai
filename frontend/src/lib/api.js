@@ -1,10 +1,16 @@
 const BASE = import.meta.env.VITE_API_BASE_URL || "";
 
+function currentLang() {
+  const v = localStorage.getItem("tiewhatyai_lang");
+  return v === "en" ? "en" : "th";
+}
+
 async function post(path, body) {
+  const payload = { ...(body || {}), lang: currentLang() };
   const res = await fetch(BASE + path, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: body ? JSON.stringify(body) : undefined,
+    body: JSON.stringify(payload),
   });
   if (!res.ok) {
     let detail = `HTTP ${res.status}`;

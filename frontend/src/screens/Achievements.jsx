@@ -1,5 +1,6 @@
 import { levelFor, nextLevel } from "../lib/progress";
 import { Card, Pill } from "../components/ui";
+import { useT } from "../lib/i18n.jsx";
 
 const RARITY_RING = {
   Common: "ring-slate-200",
@@ -9,6 +10,7 @@ const RARITY_RING = {
 };
 
 export default function Achievements({ progress, auth, onLogout }) {
+  const { t } = useT();
   const { state, reset } = progress;
   const lvl = levelFor(state.xp);
   const next = nextLevel(state.xp);
@@ -24,15 +26,19 @@ export default function Achievements({ progress, auth, onLogout }) {
             🧭
           </div>
           <div>
-            <p className="text-sm text-white/70">เลเวลของคุณ</p>
-            <h2 className="text-2xl font-extrabold">{lvl.thai}</h2>
+            <p className="text-sm text-white/70">{t("ach.yourLevel")}</p>
+            <h2 className="text-2xl font-extrabold">{t("level." + lvl.name)}</h2>
             <p className="text-xs text-white/60">{lvl.name}</p>
           </div>
         </div>
         <div className="mt-4">
           <div className="flex justify-between text-sm">
             <span>{state.xp} XP</span>
-            <span>{next ? `อีก ${next.min - state.xp} XP → ${next.thai}` : "เลเวลสูงสุด! 🏆"}</span>
+            <span>
+              {next
+                ? t("ach.toNext", { xp: next.min - state.xp, level: t("level." + next.name) })
+                : t("ach.max")}
+            </span>
           </div>
           <div className="mt-1 h-2.5 overflow-hidden rounded-full bg-white/20">
             <div className="h-full rounded-full bg-mango transition-all" style={{ width: `${pct}%` }} />
@@ -43,19 +49,19 @@ export default function Achievements({ progress, auth, onLogout }) {
       <div className="grid grid-cols-2 gap-3">
         <Card className="text-center">
           <p className="text-3xl font-extrabold text-sunset">{state.completedQuests.length}</p>
-          <p className="text-sm text-slate-500">เควสสำเร็จ</p>
+          <p className="text-sm text-slate-500">{t("ach.questsDone")}</p>
         </Card>
         <Card className="text-center">
           <p className="text-3xl font-extrabold text-lagoon">{state.badges.length}</p>
-          <p className="text-sm text-slate-500">badge ที่ได้</p>
+          <p className="text-sm text-slate-500">{t("ach.badgesGot")}</p>
         </Card>
       </div>
 
       <div>
-        <h3 className="mb-2 px-1 font-extrabold text-deep">🏅 Achievements</h3>
+        <h3 className="mb-2 px-1 font-extrabold text-deep">{t("ach.heading")}</h3>
         {state.badges.length === 0 ? (
           <Card className="text-center text-slate-400">
-            ยังไม่มี badge — ไปทำเควสให้สำเร็จเพื่อปลดล็อก!
+            {t("ach.noBadges")}
           </Card>
         ) : (
           <div className="space-y-3">
@@ -90,17 +96,17 @@ export default function Achievements({ progress, auth, onLogout }) {
           onClick={onLogout}
           className="w-full py-2 text-sm font-semibold text-slate-500 hover:text-deep"
         >
-          {auth.user ? "ออกจากระบบ" : "เข้าสู่ระบบด้วย Google"}
+          {auth.user ? t("ach.logout") : t("ach.login")}
         </button>
       )}
 
       <button
         onClick={() => {
-          if (confirm("ล้างความคืบหน้าทั้งหมด?")) reset();
+          if (confirm(t("ach.resetConfirm"))) reset();
         }}
         className="w-full py-2 text-sm text-slate-400 hover:text-rose-500"
       >
-        รีเซ็ตความคืบหน้า
+        {t("ach.reset")}
       </button>
     </div>
   );

@@ -1,3 +1,18 @@
+import { useT } from "../lib/i18n.jsx";
+
+export function LangToggle({ className = "" }) {
+  const { lang, toggle } = useT();
+  return (
+    <button
+      onClick={toggle}
+      className={`rounded-full border border-slate-200 bg-white/80 px-2.5 py-1 text-xs font-bold text-deep backdrop-blur transition active:scale-95 ${className}`}
+      aria-label="Switch language"
+    >
+      {lang === "th" ? "🇬🇧 EN" : "🇹🇭 ไทย"}
+    </button>
+  );
+}
+
 export function Button({ children, variant = "primary", className = "", ...props }) {
   const base =
     "inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 font-bold transition active:scale-95 disabled:opacity-50 disabled:active:scale-100";

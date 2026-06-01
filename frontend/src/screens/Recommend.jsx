@@ -2,6 +2,7 @@ import { useState } from "react";
 import { api } from "../lib/api";
 import { Button, Card, ErrorBox, Pill, Spinner } from "../components/ui";
 import PlacesMap from "../components/PlacesMap";
+import { useT } from "../lib/i18n.jsx";
 
 const MEDALS = ["🥇", "🥈", "🥉"];
 
@@ -14,6 +15,7 @@ function mapsUrl(p) {
 }
 
 export default function Recommend({ preferences }) {
+  const { t } = useT();
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -39,18 +41,18 @@ export default function Recommend({ preferences }) {
   return (
     <div className="space-y-4 px-4 py-4">
       <Card className="bg-gradient-to-br from-lagoon/15 to-mango/10">
-        <h2 className="text-lg font-extrabold text-deep">แนะนำเฉพาะคุณ ⭐</h2>
+        <h2 className="text-lg font-extrabold text-deep">{t("rec.title")}</h2>
         <p className="text-sm text-slate-500">
-          อิงจากความชอบ: {preferences?.categories || "—"}
+          {t("rec.basedOn")} {preferences?.categories || "—"}
           {preferences?.vibe ? ` · ${preferences.vibe}` : ""}
         </p>
         <Button onClick={fetchRecs} disabled={loading} className="mt-3 w-full">
-          {loading ? "กำลังค้นหา..." : places.length ? "สุ่มใหม่อีกครั้ง 🔄" : "ขอคำแนะนำ 3 ที่"}
+          {loading ? t("rec.searching") : places.length ? t("rec.reroll") : t("rec.ask")}
         </Button>
       </Card>
 
       <ErrorBox message={error} />
-      {loading && <Spinner label="น้องเที่ยวกำลังเลือกที่เด็ดๆ..." />}
+      {loading && <Spinner label={t("rec.picking")} />}
 
       {places.length > 0 && <PlacesMap places={places} />}
 
@@ -65,8 +67,8 @@ export default function Recommend({ preferences }) {
           </div>
           <p className="text-slate-600">{p.why_recommended}</p>
           <div className="rounded-2xl bg-slate-50 p-3 text-sm text-slate-600">
-            <p>✨ <span className="font-semibold text-deep">เด่น:</span> {p.highlight}</p>
-            <p>💡 <span className="font-semibold text-deep">ทิป:</span> {p.local_tip}</p>
+            <p>✨ <span className="font-semibold text-deep">{t("rec.highlight")}</span> {p.highlight}</p>
+            <p>💡 <span className="font-semibold text-deep">{t("rec.tip")}</span> {p.local_tip}</p>
           </div>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
             <span>🕒 {p.best_time}</span>
@@ -78,7 +80,7 @@ export default function Recommend({ preferences }) {
             rel="noreferrer"
             className="inline-flex items-center gap-1 text-sm font-semibold text-lagoon hover:underline"
           >
-            🗺️ เปิดใน Google Maps
+            {t("rec.openMaps")}
           </a>
         </Card>
       ))}

@@ -1,14 +1,19 @@
-import { Button, ErrorBox } from "../components/ui";
+import { Button, ErrorBox, LangToggle } from "../components/ui";
+import { useT } from "../lib/i18n.jsx";
 
 export default function Login({ auth, onGuest }) {
   const { signInGoogle, error, enabled } = auth;
+  const { t } = useT();
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-6 px-8 text-center">
+      <div className="absolute right-4 top-4">
+        <LangToggle />
+      </div>
       <div>
         <div className="text-6xl">🗺️</div>
-        <h1 className="mt-3 text-3xl font-extrabold text-deep">เที่ยวหาดใหญ่</h1>
-        <p className="mt-1 text-slate-500">เข้าสู่ระบบเพื่อเริ่มผจญภัยกับน้องเที่ยว</p>
+        <h1 className="mt-3 text-3xl font-extrabold text-deep">{t("app.title")}</h1>
+        <p className="mt-1 text-slate-500">{t("login.subtitle")}</p>
       </div>
 
       <div className="w-full space-y-3">
@@ -22,12 +27,12 @@ export default function Login({ auth, onGuest }) {
               alt=""
               className="h-5 w-5"
             />
-            เข้าสู่ระบบด้วย Google
+            {t("login.google")}
           </button>
         )}
 
         <Button variant={enabled ? "ghost" : "primary"} onClick={onGuest} className="w-full">
-          {enabled ? "ข้ามไปก่อน (ใช้แบบ guest)" : "เริ่มเลย 🚀"}
+          {enabled ? t("login.guestGhost") : t("login.guestPrimary")}
         </Button>
       </div>
 

@@ -35,12 +35,15 @@ def health():
     return {"status": "ok", "guide": "น้องเที่ยว"}
 
 
-# Prompt 5 — Onboarding greeting (natural Thai text).
+# Prompt 5 — Onboarding greeting (natural text in the chosen language).
 @app.post("/api/onboard")
-def onboard():
+def onboard(req: schemas.OnboardRequest | None = None):
+    lang = req.lang if req else "th"
     text = _guard(
         lambda: ai.complete_text(
-            prompts.ONBOARDING_PROMPT, max_tokens=400, system=prompts.SYSTEM_PROMPT
+            prompts.ONBOARDING_PROMPT + prompts.lang_directive(lang),
+            max_tokens=400,
+            system=prompts.SYSTEM_PROMPT,
         )
     )
     return {"message": text}
@@ -52,7 +55,7 @@ def chat(req: schemas.ChatRequest):
     if not req.messages:
         raise HTTPException(status_code=400, detail="messages cannot be empty")
     history = [{"role": m.role, "content": m.content} for m in req.messages]
-    reply = _guard(lambda: ai.chat(history))
+    reply = _guard(lambda: ai.chat(history, lang=req.lang))
     return {"reply": reply}
 
 
@@ -60,7 +63,7 @@ def chat(req: schemas.ChatRequest):
 @app.post("/api/quest", response_model=schemas.Quest)
 def quest(req: schemas.QuestRequest):
     prompt = prompts.quest_prompt(req.user_location_area, req.user_level, req.completed_quests)
-    data = _guard(lambda: ai.complete_json(prompt))
+    data = _guard(lambda: ai.complete_json(prompt + prompts.lang_directive(req.lang)))
     return schemas.Quest(**data)
 
 
@@ -68,7 +71,7 @@ def quest(req: schemas.QuestRequest):
 @app.post("/api/recommend", response_model=schemas.Recommendations)
 def recommend(req: schemas.RecommendRequest):
     prompt = prompts.recommend_prompt(req.categories, req.vibe, req.budget, req.companion)
-    data = _guard(lambda: ai.complete_json(prompt, max_tokens=1500))
+    data = _guard(lambda: ai.complete_json(prompt + prompts.lang_directive(req.lang), max_tokens=1500))
     places = data if isinstance(data, list) else data.get("places", [])
     return schemas.Recommendations(places=[schemas.Place(**p) for p in places])
 
@@ -81,7 +84,7 @@ def verify(req: schemas.VerifyRequest):
     )
     data = _guard(
         lambda: ai.complete_json(
-            prompt,
+            prompt + prompts.lang_directive(req.lang),
             image_base64=req.photo_base64,
             image_mime=req.photo_media_type,
         )
@@ -93,5 +96,5 @@ def verify(req: schemas.VerifyRequest):
 @app.post("/api/badge", response_model=schemas.Badge)
 def badge(req: schemas.BadgeRequest):
     prompt = prompts.badge_prompt(req.badge_name, req.quest_completed)
-    data = _guard(lambda: ai.complete_json(prompt))
+    data = _guard(lambda: ai.complete_json(prompt + prompts.lang_directive(req.lang)))
     return schemas.Badge(**data)

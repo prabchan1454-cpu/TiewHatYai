@@ -1,14 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { api } from "../lib/api";
 import { ErrorBox } from "../components/ui";
-
-const STARTERS = [
-  "แนะนำของกินเด็ดๆ หน่อย 🍜",
-  "มีที่เที่ยวเงียบๆ ไหม",
-  "ของฝากหาดใหญ่ซื้ออะไรดี",
-];
+import { useT } from "../lib/i18n.jsx";
 
 export default function Chat({ greeting }) {
+  const { t } = useT();
+  const STARTERS = [t("chat.starter.1"), t("chat.starter.2"), t("chat.starter.3")];
   const [messages, setMessages] = useState(() =>
     greeting ? [{ role: "assistant", content: greeting }] : []
   );
@@ -45,7 +42,7 @@ export default function Chat({ greeting }) {
         {messages.length === 0 && (
           <div className="mt-10 text-center text-slate-400">
             <div className="text-4xl">🐘</div>
-            <p className="mt-2">ทักน้องเที่ยวได้เลย!</p>
+            <p className="mt-2">{t("chat.empty")}</p>
           </div>
         )}
         {messages.map((m, i) => (
@@ -93,7 +90,7 @@ export default function Chat({ greeting }) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && send()}
-            placeholder="พิมพ์ข้อความ..."
+            placeholder={t("chat.placeholder")}
             className="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-sunset"
           />
           <button
@@ -101,7 +98,7 @@ export default function Chat({ greeting }) {
             disabled={loading || !input.trim()}
             className="rounded-2xl bg-sunset px-5 py-3 font-bold text-white disabled:opacity-50"
           >
-            ส่ง
+            {t("chat.send")}
           </button>
         </div>
       </div>

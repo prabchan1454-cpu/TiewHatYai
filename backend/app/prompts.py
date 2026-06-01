@@ -1,5 +1,15 @@
 """All AI prompts for TiewHatyai (น้องเที่ยว). Mirrors TiewHatyai_Prompts.md."""
 
+
+def lang_directive(lang: str) -> str:
+    """Force the model to answer in the user's chosen language."""
+    if lang == "en":
+        return (
+            "\n\nLANGUAGE: Respond entirely in natural English. "
+            "All names, stories, hints, descriptions, and messages must be in English."
+        )
+    return "\n\nLANGUAGE: ตอบเป็นภาษาไทยทั้งหมด ทุกชื่อ เรื่องราว คำใบ้ และข้อความต้องเป็นภาษาไทย"
+
 # Prompt 1 — System prompt for the main chatbot. Stable, so it is a good
 # prefix-cache target (sent on every chat turn).
 SYSTEM_PROMPT = """You are "น้องเที่ยว" (Nong Tiew), a friendly and enthusiastic AI travel guide for อำเภอหาดใหญ่ (Hat Yai district), Songkhla province, Thailand. You are part of the TiewHatyai app, designed to help tourists and locals discover hidden gems in Hat Yai district.
