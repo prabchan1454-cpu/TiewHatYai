@@ -10,7 +10,7 @@ export default {
         deep: "#1b2a4a",
       },
       fontFamily: {
-        thai: ["'Noto Sans Thai'", "system-ui", "sans-serif"],
+        sans: ["'Noto Sans Thai'", "system-ui", "sans-serif"],
       },
     },
   },
