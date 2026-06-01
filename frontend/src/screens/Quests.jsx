@@ -29,6 +29,25 @@ export default function Quests({ progress }) {
   const [photo, setPhoto] = useState(null);
   const [verifying, setVerifying] = useState(false);
   const [result, setResult] = useState(null);
+  const [coords, setCoords] = useState(null);
+  const [geoLoading, setGeoLoading] = useState(false);
+
+  function checkIn() {
+    if (!navigator.geolocation || geoLoading) return;
+    setGeoLoading(true);
+    setError("");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setGeoLoading(false);
+      },
+      () => {
+        setError(t("quest.geoError"));
+        setGeoLoading(false);
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  }
 
   const level = levelFor(state.xp).name;
 
@@ -79,11 +98,14 @@ export default function Quests({ progress }) {
         photo_base64 = await fileToBase64(photo);
         photo_media_type = photo.type || "image/jpeg";
       }
+      const userDescription = coords
+        ? `${desc}\n\n📍 GPS check-in: ${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)}`
+        : desc;
       const res = await api.verify({
         quest_name: quest.quest_name,
         quest_objective: quest.objective,
         location_hint: quest.location_hint,
-        user_description: desc,
+        user_description: userDescription,
         photo_base64,
         photo_media_type,
       });
@@ -114,6 +136,7 @@ export default function Quests({ progress }) {
     setDesc("");
     setPhoto(null);
     setResult(null);
+    setCoords(null);
   }
 
   return (
@@ -204,6 +227,22 @@ export default function Quests({ progress }) {
                   onChange={(e) => setPhoto(e.target.files?.[0] || null)}
                 />
               </label>
+              <button
+                type="button"
+                onClick={checkIn}
+                disabled={geoLoading}
+                className={`w-full rounded-2xl border px-3 py-2 text-sm font-semibold ${
+                  coords
+                    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                    : "border-slate-200 text-slate-500 hover:border-lagoon"
+                }`}
+              >
+                {geoLoading
+                  ? t("quest.checkingIn")
+                  : coords
+                    ? t("quest.checkedIn")
+                    : t("quest.checkin")}
+              </button>
               <ErrorBox message={result && !result.verified ? null : ""} />
               <Button variant="lagoon" onClick={submit} disabled={verifying || !desc.trim()} className="w-full">
                 {verifying ? t("quest.verifying") : t("quest.submit")}
