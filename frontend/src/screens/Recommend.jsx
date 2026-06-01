@@ -1,0 +1,68 @@
+import { useState } from "react";
+import { api } from "../lib/api";
+import { Button, Card, ErrorBox, Pill, Spinner } from "../components/ui";
+
+const MEDALS = ["🥇", "🥈", "🥉"];
+
+export default function Recommend({ preferences }) {
+  const [places, setPlaces] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function fetchRecs() {
+    setLoading(true);
+    setError("");
+    try {
+      const { places } = await api.recommend({
+        categories: preferences?.categories || "อาหาร, ของฝาก",
+        vibe: preferences?.vibe || "",
+        budget: preferences?.budget || "ปานกลาง",
+        companion: preferences?.companion || "คนเดียว",
+      });
+      setPlaces(places);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="space-y-4 px-4 py-4">
+      <Card className="bg-gradient-to-br from-lagoon/15 to-mango/10">
+        <h2 className="text-lg font-extrabold text-deep">แนะนำเฉพาะคุณ ⭐</h2>
+        <p className="text-sm text-slate-500">
+          อิงจากความชอบ: {preferences?.categories || "—"}
+          {preferences?.vibe ? ` · ${preferences.vibe}` : ""}
+        </p>
+        <Button onClick={fetchRecs} disabled={loading} className="mt-3 w-full">
+          {loading ? "กำลังค้นหา..." : places.length ? "สุ่มใหม่อีกครั้ง 🔄" : "ขอคำแนะนำ 3 ที่"}
+        </Button>
+      </Card>
+
+      <ErrorBox message={error} />
+      {loading && <Spinner label="น้องเที่ยวกำลังเลือกที่เด็ดๆ..." />}
+
+      {places.map((p) => (
+        <Card key={p.rank} className="space-y-2">
+          <div className="flex items-start justify-between">
+            <div>
+              <span className="text-2xl">{MEDALS[p.rank - 1] || "📍"}</span>
+              <h3 className="text-lg font-extrabold text-deep">{p.place_name}</h3>
+            </div>
+            <Pill tone="sunset">{p.category}</Pill>
+          </div>
+          <p className="text-slate-600">{p.why_recommended}</p>
+          <div className="rounded-2xl bg-slate-50 p-3 text-sm text-slate-600">
+            <p>✨ <span className="font-semibold text-deep">เด่น:</span> {p.highlight}</p>
+            <p>💡 <span className="font-semibold text-deep">ทิป:</span> {p.local_tip}</p>
+          </div>
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
+            <span>🕒 {p.best_time}</span>
+            <span>📌 {p.approximate_area}</span>
+          </div>
+        </Card>
+      ))}
+    </div>
+  );
+}
