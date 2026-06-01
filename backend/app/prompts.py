@@ -83,6 +83,8 @@ User preferences:
 - งบประมาณ: {budget} (ประหยัด/ปานกลาง/หรูหรา)
 - มากับใคร: {companion} (คนเดียว/คู่/ครอบครัว/เพื่อน)
 
+For latitude/longitude, give your best estimate of the real GPS coordinates of the place in Hat Yai (Songkhla, Thailand — city center is around 7.0086, 100.4747). This is used to drop a pin on a map.
+
 Return ONLY a JSON array with exactly 3 items:
 [
   {{
@@ -93,7 +95,9 @@ Return ONLY a JSON array with exactly 3 items:
     "highlight": "สิ่งที่พิเศษหรือน่าสนใจ",
     "best_time": "ช่วงเวลาที่ดีที่สุดในการไปเยือน",
     "local_tip": "ทิปส์จากคนท้องถิ่น",
-    "approximate_area": "ย่านหรือบริเวณใกล้เคียง"
+    "approximate_area": "ย่านหรือบริเวณใกล้เคียง",
+    "latitude": 7.0086,
+    "longitude": 100.4747
   }}
 ]"""
 

@@ -13,7 +13,7 @@ function fileToBase64(file) {
 }
 
 export default function Quests({ progress }) {
-  const { state, update, completeQuest, addBadge } = progress;
+  const { state, update, completeQuest, addBadge, celebrate, updateReward } = progress;
   const quest = state.activeQuest;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -66,12 +66,14 @@ export default function Quests({ progress }) {
       setResult(res);
       if (res.verified) {
         completeQuest(quest.quest_name, quest.reward_xp);
+        celebrate({ xp: quest.reward_xp, badge: null });
         try {
           const badge = await api.badge({
             badge_name: quest.reward_badge,
             quest_completed: quest.quest_name,
           });
           addBadge(badge);
+          updateReward({ badge });
         } catch {
           /* badge is a bonus; ignore failures */
         }

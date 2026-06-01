@@ -1,8 +1,17 @@
 import { useState } from "react";
 import { api } from "../lib/api";
 import { Button, Card, ErrorBox, Pill, Spinner } from "../components/ui";
+import PlacesMap from "../components/PlacesMap";
 
 const MEDALS = ["🥇", "🥈", "🥉"];
+
+function mapsUrl(p) {
+  if (typeof p.latitude === "number" && typeof p.longitude === "number") {
+    return `https://www.google.com/maps/search/?api=1&query=${p.latitude},${p.longitude}`;
+  }
+  const q = encodeURIComponent(`${p.place_name} ${p.approximate_area} หาดใหญ่`);
+  return `https://www.google.com/maps/search/?api=1&query=${q}`;
+}
 
 export default function Recommend({ preferences }) {
   const [places, setPlaces] = useState([]);
@@ -43,6 +52,8 @@ export default function Recommend({ preferences }) {
       <ErrorBox message={error} />
       {loading && <Spinner label="น้องเที่ยวกำลังเลือกที่เด็ดๆ..." />}
 
+      {places.length > 0 && <PlacesMap places={places} />}
+
       {places.map((p) => (
         <Card key={p.rank} className="space-y-2">
           <div className="flex items-start justify-between">
@@ -61,6 +72,14 @@ export default function Recommend({ preferences }) {
             <span>🕒 {p.best_time}</span>
             <span>📌 {p.approximate_area}</span>
           </div>
+          <a
+            href={mapsUrl(p)}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1 text-sm font-semibold text-lagoon hover:underline"
+          >
+            🗺️ เปิดใน Google Maps
+          </a>
         </Card>
       ))}
     </div>

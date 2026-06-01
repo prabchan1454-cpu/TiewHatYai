@@ -40,10 +40,18 @@ function load() {
 
 export function useProgress() {
   const [state, setState] = useState(load);
+  const [reward, setReward] = useState(null); // { xp, badge } celebration
 
   useEffect(() => {
     localStorage.setItem(KEY, JSON.stringify(state));
   }, [state]);
+
+  const celebrate = useCallback((r) => setReward(r), []);
+  const updateReward = useCallback(
+    (patch) => setReward((r) => (r ? { ...r, ...patch } : r)),
+    []
+  );
+  const clearReward = useCallback(() => setReward(null), []);
 
   const update = useCallback((patch) => {
     setState((s) => ({ ...s, ...(typeof patch === "function" ? patch(s) : patch) }));
@@ -69,5 +77,15 @@ export function useProgress() {
 
   const reset = useCallback(() => setState({ ...DEFAULT }), []);
 
-  return { state, update, completeQuest, addBadge, reset };
+  return {
+    state,
+    update,
+    completeQuest,
+    addBadge,
+    reset,
+    reward,
+    celebrate,
+    updateReward,
+    clearReward,
+  };
 }

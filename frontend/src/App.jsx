@@ -7,6 +7,7 @@ import Chat from "./screens/Chat";
 import Quests from "./screens/Quests";
 import Recommend from "./screens/Recommend";
 import Achievements from "./screens/Achievements";
+import RewardOverlay from "./components/RewardOverlay";
 
 const TABS = [
   { id: "home", label: "หน้าหลัก", icon: "🏠" },
@@ -59,19 +60,23 @@ export default function App() {
       </main>
 
       <nav className="grid grid-cols-5 border-t border-slate-200 bg-white">
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => setTab(t.id)}
-            className={`flex flex-col items-center gap-0.5 py-2.5 text-xs font-semibold transition ${
-              tab === t.id ? "text-sunset" : "text-slate-400"
-            }`}
-          >
-            <span className="text-xl">{t.icon}</span>
-            {t.label}
-          </button>
-        ))}
+        {TABS.map((t) => {
+          return (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className={`flex flex-col items-center gap-0.5 py-2.5 text-xs font-semibold transition ${
+                tab === t.id ? "text-sunset" : "text-slate-400"
+              }`}
+            >
+              <span className="text-xl">{t.icon}</span>
+              {t.label}
+            </button>
+          );
+        })}
       </nav>
+
+      <RewardOverlay reward={progress.reward} onClose={progress.clearReward} />
     </div>
   );
 }
