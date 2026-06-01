@@ -101,9 +101,13 @@ Respond ONLY in this JSON format (no extra text):
   "difficulty": "Easy|Medium|Hard",
   "objective": "สิ่งที่ต้องทำหรือหา",
   "location_hint": "คำใบ้แบบปริศนา ไม่บอกตำแหน่งตรงๆ",
+  "target_lat": 7.0066,
+  "target_lng": 100.4717,
   "reward_xp": 50,
   "reward_badge": "ชื่อ badge ที่ได้รับ"
-}}"""
+}}
+
+target_lat and target_lng must be real GPS coordinates (decimal degrees) of the quest location inside Hat Yai district. Example ranges: lat 6.98–7.03, lng 100.44–100.50."""
 
 
 # Prompt 3 — Personalized recommendation. Returns JSON array of 3 items.

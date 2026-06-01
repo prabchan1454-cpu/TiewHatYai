@@ -4,6 +4,15 @@ import { levelFor, todayStr } from "../lib/progress";
 import { Button, Card, ErrorBox, Pill, Spinner } from "../components/ui";
 import { useT } from "../lib/i18n.jsx";
 
+function distanceKm(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2
+    + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -227,22 +236,41 @@ export default function Quests({ progress }) {
                   onChange={(e) => setPhoto(e.target.files?.[0] || null)}
                 />
               </label>
-              <button
-                type="button"
-                onClick={checkIn}
-                disabled={geoLoading}
-                className={`w-full rounded-2xl border px-3 py-2 text-sm font-semibold ${
-                  coords
-                    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                    : "border-slate-200 text-slate-500 hover:border-lagoon"
-                }`}
-              >
-                {geoLoading
-                  ? t("quest.checkingIn")
-                  : coords
-                    ? t("quest.checkedIn")
-                    : t("quest.checkin")}
-              </button>
+              {(() => {
+                const hasTarget = quest.target_lat && quest.target_lng;
+                const km = coords && hasTarget
+                  ? distanceKm(coords.lat, coords.lng, quest.target_lat, quest.target_lng)
+                  : null;
+                const nearby = km !== null && km < 0.3;
+                return (
+                  <>
+                    <button
+                      type="button"
+                      onClick={checkIn}
+                      disabled={geoLoading}
+                      className={`w-full rounded-2xl border px-3 py-2 text-sm font-semibold ${
+                        nearby
+                          ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                          : coords
+                            ? "border-amber-200 bg-amber-50 text-amber-700"
+                            : "border-slate-200 text-slate-500 hover:border-lagoon"
+                      }`}
+                    >
+                      {geoLoading ? t("quest.checkingIn") : t("quest.checkin")}
+                    </button>
+                    {coords && km !== null && (
+                      <p className={`text-center text-sm font-semibold ${nearby ? "text-emerald-600" : "text-amber-600"}`}>
+                        {nearby
+                          ? t("quest.nearby", { m: Math.round(km * 1000) })
+                          : t("quest.tooFar", { km: km.toFixed(1) })}
+                      </p>
+                    )}
+                    {coords && !hasTarget && (
+                      <p className="text-center text-sm text-emerald-600">{t("quest.checkedIn")}</p>
+                    )}
+                  </>
+                );
+              })()}
               <ErrorBox message={result && !result.verified ? null : ""} />
               <Button variant="lagoon" onClick={submit} disabled={verifying || !desc.trim()} className="w-full">
                 {verifying ? t("quest.verifying") : t("quest.submit")}

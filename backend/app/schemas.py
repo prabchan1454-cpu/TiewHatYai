@@ -18,6 +18,8 @@ class Quest(BaseModel):
     difficulty: Difficulty
     objective: str
     location_hint: str
+    target_lat: Optional[float] = None
+    target_lng: Optional[float] = None
     reward_xp: int
     reward_badge: str
 
