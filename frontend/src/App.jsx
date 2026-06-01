@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useProgress, levelFor } from "./lib/progress";
+import { useAuth } from "./lib/auth";
 import Landing from "./screens/Landing";
+import Login from "./screens/Login";
 import Onboarding from "./screens/Onboarding";
 import Home from "./screens/Home";
 import Chat from "./screens/Chat";
@@ -8,6 +10,7 @@ import Quests from "./screens/Quests";
 import Recommend from "./screens/Recommend";
 import Achievements from "./screens/Achievements";
 import RewardOverlay from "./components/RewardOverlay";
+import { Spinner } from "./components/ui";
 
 const TABS = [
   { id: "home", label: "หน้าหลัก", icon: "🏠" },
@@ -20,10 +23,23 @@ const TABS = [
 export default function App() {
   const progress = useProgress();
   const { state, update } = progress;
+  const auth = useAuth();
   const [tab, setTab] = useState("home");
 
   if (!state.started) {
     return <Landing onStart={() => update({ started: true })} />;
+  }
+
+  if (auth.loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Spinner label="กำลังโหลด..." />
+      </div>
+    );
+  }
+
+  if (!auth.user && !state.guest) {
+    return <Login auth={auth} onGuest={() => update({ guest: true })} />;
   }
 
   if (!state.onboarded) {
@@ -35,14 +51,19 @@ export default function App() {
   }
 
   const lvl = levelFor(state.xp);
+  const displayName = auth.user?.displayName?.split(" ")[0] || "นักเที่ยว";
 
   return (
     <div className="mx-auto flex h-screen max-w-md flex-col bg-slate-50">
       <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3">
         <div className="flex items-center gap-2">
-          <span className="text-2xl">🗺️</span>
+          {auth.user?.photoURL ? (
+            <img src={auth.user.photoURL} alt="" className="h-9 w-9 rounded-full" />
+          ) : (
+            <span className="text-2xl">🗺️</span>
+          )}
           <div>
-            <h1 className="font-extrabold leading-none text-deep">เที่ยวหาดใหญ่</h1>
+            <h1 className="font-extrabold leading-none text-deep">สวัสดี {displayName}</h1>
             <p className="text-xs text-slate-400">{lvl.thai}</p>
           </div>
         </div>
@@ -56,7 +77,16 @@ export default function App() {
         {tab === "chat" && <Chat greeting={null} />}
         {tab === "quests" && <Quests progress={progress} />}
         {tab === "recommend" && <Recommend preferences={state.preferences} />}
-        {tab === "profile" && <Achievements progress={progress} />}
+        {tab === "profile" && (
+          <Achievements
+            progress={progress}
+            auth={auth}
+            onLogout={() => {
+              auth.logout();
+              update({ guest: false });
+            }}
+          />
+        )}
       </main>
 
       <nav className="grid grid-cols-5 border-t border-slate-200 bg-white">

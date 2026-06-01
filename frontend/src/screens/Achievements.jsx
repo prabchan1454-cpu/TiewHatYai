@@ -8,7 +8,7 @@ const RARITY_RING = {
   Legendary: "ring-amber-300",
 };
 
-export default function Achievements({ progress }) {
+export default function Achievements({ progress, auth, onLogout }) {
   const { state, reset } = progress;
   const lvl = levelFor(state.xp);
   const next = nextLevel(state.xp);
@@ -72,6 +72,27 @@ export default function Achievements({ progress }) {
           </div>
         )}
       </div>
+
+      {auth?.user && (
+        <Card className="flex items-center gap-3">
+          {auth.user.photoURL && (
+            <img src={auth.user.photoURL} alt="" className="h-10 w-10 rounded-full" />
+          )}
+          <div className="flex-1 overflow-hidden">
+            <p className="truncate font-bold text-deep">{auth.user.displayName}</p>
+            <p className="truncate text-xs text-slate-400">{auth.user.email}</p>
+          </div>
+        </Card>
+      )}
+
+      {auth?.enabled && (
+        <button
+          onClick={onLogout}
+          className="w-full py-2 text-sm font-semibold text-slate-500 hover:text-deep"
+        >
+          {auth.user ? "ออกจากระบบ" : "เข้าสู่ระบบด้วย Google"}
+        </button>
+      )}
 
       <button
         onClick={() => {

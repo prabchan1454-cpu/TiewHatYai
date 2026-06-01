@@ -14,6 +14,7 @@ const DEFAULT = {
   xp: 0,
   preferences: null, // { categories, vibe, budget, companion }
   started: false, // passed the landing hero page
+  guest: false, // chose to continue without signing in
   onboarded: false,
   activeQuest: null, // current quest object the user is working on
   completedQuests: [], // [quest_name]
