@@ -10,7 +10,7 @@ const RARITY_RING = {
 };
 
 export default function Achievements({ progress, auth, onLogout }) {
-  const { t } = useT();
+  const { t, lang } = useT();
   const { state, reset } = progress;
   const lvl = levelFor(state.xp);
   const next = nextLevel(state.xp);
@@ -73,6 +73,33 @@ export default function Achievements({ progress, auth, onLogout }) {
                 </div>
                 <p className="text-sm text-slate-600">{b.badge_description}</p>
                 <p className="mt-1 text-sm italic text-sunset">“{b.flavor_text}”</p>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div>
+        <h3 className="mb-2 px-1 font-extrabold text-deep">{t("ach.history")}</h3>
+        {state.history.length === 0 ? (
+          <Card className="text-center text-slate-400">{t("ach.noHistory")}</Card>
+        ) : (
+          <div className="space-y-2">
+            {state.history.map((h, i) => (
+              <Card key={i} className="flex items-center justify-between py-3">
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <span className="text-lg">{h.isDaily ? "🌅" : "🎯"}</span>
+                  <div className="overflow-hidden">
+                    <p className="truncate font-bold text-deep">{h.quest_name}</p>
+                    <p className="text-xs text-slate-400">
+                      {new Date(h.completedAt).toLocaleDateString(
+                        lang === "en" ? "en-US" : "th-TH",
+                        { day: "numeric", month: "short", year: "numeric" }
+                      )}
+                    </p>
+                  </div>
+                </div>
+                <span className="shrink-0 text-sm font-bold text-sunset">+{h.reward_xp} XP</span>
               </Card>
             ))}
           </div>
