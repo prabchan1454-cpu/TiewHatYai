@@ -18,8 +18,20 @@ const DEFAULT = {
   onboarded: false,
   activeQuest: null, // current quest object the user is working on
   completedQuests: [], // [quest_name]
+  history: [], // [{ quest_name, reward_xp, completedAt, isDaily }] newest first
   badges: [], // [{ badge_title, badge_description, flavor_text, rarity, earnedAt }]
+  daily: { issuedDate: null, completedDate: null, streak: 0 }, // YYYY-MM-DD strings
 };
+
+export function todayStr(d = new Date()) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function yesterdayStr() {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return todayStr(d);
+}
 
 export function levelFor(xp) {
   let current = LEVELS[0];
@@ -58,15 +70,31 @@ export function useProgress() {
     setState((s) => ({ ...s, ...(typeof patch === "function" ? patch(s) : patch) }));
   }, []);
 
-  const completeQuest = useCallback((questName, xp) => {
+  const completeQuest = useCallback((questName, xp, { isDaily = false } = {}) => {
     setState((s) => {
-      if (s.completedQuests.includes(questName)) return s;
+      const already = s.completedQuests.includes(questName);
+      const entry = { quest_name: questName, reward_xp: xp || 0, completedAt: Date.now(), isDaily };
+      let daily = s.daily;
+      if (isDaily) {
+        const streak = s.daily.completedDate === yesterdayStr() ? s.daily.streak + 1 : 1;
+        daily = { ...s.daily, completedDate: todayStr(), streak };
+      }
       return {
         ...s,
-        xp: s.xp + (xp || 0),
-        completedQuests: [...s.completedQuests, questName],
+        xp: s.xp + (already ? 0 : xp || 0),
+        completedQuests: already ? s.completedQuests : [...s.completedQuests, questName],
+        history: [entry, ...s.history],
+        daily,
       };
     });
+  }, []);
+
+  const issueDaily = useCallback((quest) => {
+    setState((s) => ({
+      ...s,
+      activeQuest: { ...quest, isDaily: true },
+      daily: { ...s.daily, issuedDate: todayStr() },
+    }));
   }, []);
 
   const addBadge = useCallback((badge) => {
@@ -82,6 +110,7 @@ export function useProgress() {
     state,
     update,
     completeQuest,
+    issueDaily,
     addBadge,
     reset,
     reward,

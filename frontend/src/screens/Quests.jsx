@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { api } from "../lib/api";
-import { levelFor } from "../lib/progress";
+import { levelFor, todayStr } from "../lib/progress";
 import { Button, Card, ErrorBox, Pill, Spinner } from "../components/ui";
 import { useT } from "../lib/i18n.jsx";
 
@@ -15,10 +15,14 @@ function fileToBase64(file) {
 
 export default function Quests({ progress }) {
   const { t } = useT();
-  const { state, update, completeQuest, addBadge, celebrate, updateReward } = progress;
+  const { state, update, completeQuest, issueDaily, addBadge, celebrate, updateReward } = progress;
   const quest = state.activeQuest;
   const [loading, setLoading] = useState(false);
+  const [dailyLoading, setDailyLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const today = todayStr();
+  const dailyDoneToday = state.daily.completedDate === today;
 
   // verification UI state
   const [desc, setDesc] = useState("");
@@ -46,6 +50,24 @@ export default function Quests({ progress }) {
     }
   }
 
+  async function getDaily() {
+    setDailyLoading(true);
+    setError("");
+    setResult(null);
+    try {
+      const q = await api.quest({
+        user_location_area: "หาดใหญ่",
+        user_level: level,
+        completed_quests: state.completedQuests,
+      });
+      issueDaily(q);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setDailyLoading(false);
+    }
+  }
+
   async function submit() {
     if (!desc.trim() || verifying) return;
     setVerifying(true);
@@ -67,7 +89,7 @@ export default function Quests({ progress }) {
       });
       setResult(res);
       if (res.verified) {
-        completeQuest(quest.quest_name, quest.reward_xp);
+        completeQuest(quest.quest_name, quest.reward_xp, { isDaily: !!quest.isDaily });
         celebrate({ xp: quest.reward_xp, badge: null });
         try {
           const badge = await api.badge({
@@ -98,6 +120,32 @@ export default function Quests({ progress }) {
     <div className="space-y-4 px-4 py-4">
       <ErrorBox message={error} />
 
+      {!quest?.isDaily && (
+        <Card className="bg-gradient-to-br from-mango/20 to-sunset/10">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-extrabold text-deep">🌅 {t("daily.title")}</h3>
+              <p className="text-sm text-slate-500">{t("daily.subtitle")}</p>
+            </div>
+            <span className="text-sm font-bold text-sunset">
+              {state.daily.streak > 0
+                ? t("daily.streak", { n: state.daily.streak })
+                : ""}
+            </span>
+          </div>
+          {dailyDoneToday ? (
+            <div className="mt-3 rounded-2xl bg-emerald-50 p-3 text-sm">
+              <p className="font-bold text-deep">{t("daily.doneToday")}</p>
+              <p className="text-slate-500">{t("daily.comeBack")}</p>
+            </div>
+          ) : (
+            <Button onClick={getDaily} disabled={dailyLoading} className="mt-3 w-full">
+              {dailyLoading ? t("daily.rolling") : t("daily.get")}
+            </Button>
+          )}
+        </Card>
+      )}
+
       {!quest && (
         <Card className="bg-gradient-to-br from-sunset/15 to-mango/10 text-center">
           <div className="text-5xl">🎯</div>
@@ -114,7 +162,10 @@ export default function Quests({ progress }) {
       {quest && (
         <Card className="space-y-3">
           <div className="flex items-center justify-between">
-            <Pill>{quest.difficulty}</Pill>
+            <div className="flex items-center gap-2">
+              {quest.isDaily && <Pill tone="sunset">🌅 {t("daily.badge")}</Pill>}
+              <Pill>{quest.difficulty}</Pill>
+            </div>
             <span className="text-sm font-bold text-sunset">+{quest.reward_xp} XP</span>
           </div>
           <h2 className="text-xl font-extrabold text-deep">{quest.quest_name}</h2>

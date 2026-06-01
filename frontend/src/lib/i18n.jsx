@@ -114,6 +114,15 @@ export const STRINGS = {
     "quest.confidence": "ความมั่นใจ",
     "quest.next": "รับเควสต่อไป →",
     "quest.skip": "ข้ามเควสนี้",
+    "daily.title": "เควสประจำวัน",
+    "daily.subtitle": "ทำสำเร็จทุกวันเพื่อสะสมสตรีค 🔥",
+    "daily.streak": "สตรีค {n} วัน 🔥",
+    "daily.noStreak": "ยังไม่มีสตรีค เริ่มวันนี้เลย!",
+    "daily.get": "รับเควสวันนี้ 🌅",
+    "daily.rolling": "กำลังสุ่มเควสวันนี้...",
+    "daily.doneToday": "ทำเควสวันนี้สำเร็จแล้ว! 🎉",
+    "daily.comeBack": "กลับมาใหม่พรุ่งนี้เพื่อรักษาสตรีค",
+    "daily.badge": "รายวัน",
 
     // Recommend
     "rec.title": "แนะนำเฉพาะคุณ ⭐",
@@ -250,6 +259,15 @@ export const STRINGS = {
     "quest.confidence": "confidence",
     "quest.next": "Next quest →",
     "quest.skip": "Skip this quest",
+    "daily.title": "Daily Quest",
+    "daily.subtitle": "Complete one every day to build your streak 🔥",
+    "daily.streak": "{n}-day streak 🔥",
+    "daily.noStreak": "No streak yet — start today!",
+    "daily.get": "Get today's quest 🌅",
+    "daily.rolling": "Rolling today's quest...",
+    "daily.doneToday": "Today's quest is done! 🎉",
+    "daily.comeBack": "Come back tomorrow to keep your streak",
+    "daily.badge": "Daily",
 
     // Recommend
     "rec.title": "Just for you ⭐",
