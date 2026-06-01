@@ -12,6 +12,21 @@ const RARITY_RING = {
 export default function Achievements({ progress, auth, onLogout }) {
   const { t, lang } = useT();
   const { state, reset } = progress;
+  async function shareBadge(b) {
+    const text = t("ach.shareText", { title: b.badge_title, desc: b.flavor_text || b.badge_description });
+    const url = typeof window !== "undefined" ? window.location.origin : "";
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: b.badge_title, text, url });
+      } else {
+        await navigator.clipboard.writeText(`${text} ${url}`.trim());
+        alert(t("ach.copied"));
+      }
+    } catch {
+      /* user cancelled the share sheet — ignore */
+    }
+  }
+
   const lvl = levelFor(state.xp);
   const next = nextLevel(state.xp);
   const pct = next
@@ -73,6 +88,12 @@ export default function Achievements({ progress, auth, onLogout }) {
                 </div>
                 <p className="text-sm text-slate-600">{b.badge_description}</p>
                 <p className="mt-1 text-sm italic text-sunset">“{b.flavor_text}”</p>
+                <button
+                  onClick={() => shareBadge(b)}
+                  className="mt-2 inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-deep hover:bg-slate-200"
+                >
+                  🔗 {t("ach.share")}
+                </button>
               </Card>
             ))}
           </div>
