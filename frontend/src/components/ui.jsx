@@ -5,7 +5,7 @@ export function LangToggle({ className = "" }) {
   return (
     <button
       onClick={toggle}
-      className={`rounded-full border border-slate-200 bg-white/80 px-2.5 py-1 text-xs font-bold text-deep backdrop-blur transition active:scale-95 ${className}`}
+      className={`rounded-full border border-slate-200 bg-white/80 px-2.5 py-1 text-xs font-bold text-deep backdrop-blur transition duration-200 hover:bg-white active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deep/40 focus-visible:ring-offset-1 ${className}`}
       aria-label="Switch language"
     >
       {lang === "th" ? "🇬🇧 EN" : "🇹🇭 ไทย"}
@@ -15,12 +15,12 @@ export function LangToggle({ className = "" }) {
 
 export function Button({ children, variant = "primary", className = "", ...props }) {
   const base =
-    "inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 font-bold transition active:scale-95 disabled:opacity-50 disabled:active:scale-100";
+    "inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 font-bold transition duration-200 active:scale-95 disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
   const variants = {
-    primary: "bg-sunset text-white shadow-lg shadow-sunset/30 hover:brightness-105",
-    soft: "bg-white text-deep border border-slate-200 hover:bg-slate-50",
-    lagoon: "bg-lagoon text-white shadow-lg shadow-lagoon/30 hover:brightness-105",
-    ghost: "text-deep hover:bg-slate-100",
+    primary: "bg-sunset text-white shadow-lg shadow-sunset/30 hover:brightness-105 focus-visible:ring-sunset",
+    soft: "bg-white text-deep border border-slate-200 hover:bg-slate-50 focus-visible:ring-deep/40",
+    lagoon: "bg-lagoon text-white shadow-lg shadow-lagoon/30 hover:brightness-105 focus-visible:ring-lagoon",
+    ghost: "text-deep hover:bg-slate-100 focus-visible:ring-deep/40",
   };
   return (
     <button className={`${base} ${variants[variant]} ${className}`} {...props}>

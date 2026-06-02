@@ -81,7 +81,7 @@ export default function Home({ progress, onNavigate }) {
             <button
               key={l.id}
               onClick={() => onNavigate(l.id)}
-              className="flex items-center gap-3 rounded-2xl bg-white p-4 text-left shadow-sm shadow-slate-200/60 transition active:scale-[0.98]"
+              className="flex items-center gap-3 rounded-2xl bg-white p-4 text-left shadow-sm shadow-slate-200/60 transition duration-200 hover:shadow-md hover:shadow-slate-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/40"
             >
               <span className="text-2xl">{l.icon}</span>
               <div className="flex-1">

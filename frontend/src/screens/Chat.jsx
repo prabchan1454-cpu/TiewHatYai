@@ -40,7 +40,7 @@ export default function Chat({ greeting }) {
     <div className="flex h-full flex-col">
       <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4 no-scrollbar">
         {messages.length === 0 && (
-          <div className="mt-10 text-center text-slate-400">
+          <div className="mt-10 text-center text-slate-500">
             <div className="text-4xl">🐘</div>
             <p className="mt-2">{t("chat.empty")}</p>
           </div>
@@ -78,7 +78,7 @@ export default function Chat({ greeting }) {
               <button
                 key={s}
                 onClick={() => send(s)}
-                className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-deep"
+                className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-deep transition duration-200 hover:border-sunset hover:bg-orange-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/40"
               >
                 {s}
               </button>
@@ -91,12 +91,12 @@ export default function Chat({ greeting }) {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && send()}
             placeholder={t("chat.placeholder")}
-            className="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-sunset"
+            className="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-deep outline-none transition placeholder:text-slate-400 focus:border-sunset focus:ring-2 focus:ring-sunset/30"
           />
           <button
             onClick={() => send()}
             disabled={loading || !input.trim()}
-            className="rounded-2xl bg-sunset px-5 py-3 font-bold text-white disabled:opacity-50"
+            className="rounded-2xl bg-sunset px-5 py-3 font-bold text-white shadow-lg shadow-sunset/30 transition duration-200 hover:brightness-105 active:scale-95 disabled:opacity-50 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset focus-visible:ring-offset-2"
           >
             {t("chat.send")}
           </button>

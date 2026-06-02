@@ -224,10 +224,10 @@ export default function Quests({ progress }) {
                 onChange={(e) => setDesc(e.target.value)}
                 placeholder={t("quest.descPlaceholder")}
                 rows={3}
-                className="w-full rounded-2xl border border-slate-200 p-3 outline-none focus:border-sunset"
+                className="w-full rounded-2xl border border-slate-200 p-3 text-deep outline-none transition placeholder:text-slate-400 focus:border-sunset focus:ring-2 focus:ring-sunset/30"
               />
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-500">
-                <span className="rounded-xl bg-slate-100 px-3 py-2 font-semibold">{t("quest.attachPhoto")}</span>
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-500 focus-within:[&>span:first-child]:ring-2 focus-within:[&>span:first-child]:ring-sunset/40">
+                <span className="rounded-xl bg-slate-100 px-3 py-2 font-semibold text-deep transition hover:bg-slate-200">{t("quest.attachPhoto")}</span>
                 <span>{photo ? photo.name : t("quest.optional")}</span>
                 <input
                   type="file"
@@ -248,12 +248,12 @@ export default function Quests({ progress }) {
                       type="button"
                       onClick={checkIn}
                       disabled={geoLoading}
-                      className={`w-full rounded-2xl border px-3 py-2 text-sm font-semibold ${
+                      className={`w-full rounded-2xl border px-3 py-2 text-sm font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon/40 disabled:opacity-50 ${
                         nearby
                           ? "border-emerald-200 bg-emerald-50 text-emerald-700"
                           : coords
                             ? "border-amber-200 bg-amber-50 text-amber-700"
-                            : "border-slate-200 text-slate-500 hover:border-lagoon"
+                            : "border-slate-200 text-slate-600 hover:border-lagoon hover:text-lagoon"
                       }`}
                     >
                       {geoLoading ? t("quest.checkingIn") : t("quest.checkin")}
@@ -303,7 +303,7 @@ export default function Quests({ progress }) {
           )}
 
           {!result?.verified && (
-            <button onClick={finishQuest} className="w-full text-sm text-slate-400 hover:text-slate-600">
+            <button onClick={finishQuest} className="w-full rounded-xl py-1.5 text-sm text-slate-500 transition hover:text-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300">
               {t("quest.skip")}
             </button>
           )}

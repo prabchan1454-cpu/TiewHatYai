@@ -80,7 +80,7 @@ export default function Recommend({ preferences }) {
             href={mapsUrl(p)}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1 text-sm font-semibold text-lagoon hover:underline"
+            className="inline-flex items-center gap-1 rounded-lg text-sm font-semibold text-lagoon hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon/40"
           >
             {t("rec.openMaps")}
           </a>

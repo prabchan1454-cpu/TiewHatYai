@@ -16,10 +16,11 @@ function Choice({ label, active, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 ${
+      aria-pressed={active}
+      className={`rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset focus-visible:ring-offset-2 ${
         active
           ? "bg-sunset text-white shadow-md scale-105"
-          : "bg-white text-deep border border-slate-200 active:scale-95"
+          : "bg-white text-deep border border-slate-200 hover:border-sunset hover:bg-orange-50 active:scale-95"
       }`}
     >
       {label}
@@ -139,7 +140,7 @@ export default function Onboarding({ onDone }) {
             <div className="text-center">
               <div className="text-4xl mb-1">🗂️</div>
               <p className="font-bold text-deep text-lg">{t("onboard.q.categories")}</p>
-              <p className="text-sm text-slate-400">{t("onboard.q.categories.hint")}</p>
+              <p className="text-sm text-slate-500">{t("onboard.q.categories.hint")}</p>
             </div>
             <div className="flex flex-wrap gap-2 justify-center pt-1">
               {CATEGORIES.map((c) => (
@@ -207,7 +208,7 @@ export default function Onboarding({ onDone }) {
             <div className="text-center">
               <div className="text-4xl mb-1">🌟</div>
               <p className="font-bold text-deep text-lg">{t("onboard.q.interests")}</p>
-              <p className="text-sm text-slate-400">{t("onboard.q.interests.hint")}</p>
+              <p className="text-sm text-slate-500">{t("onboard.q.interests.hint")}</p>
             </div>
             <div className="flex flex-wrap gap-2 justify-center pt-1">
               {INTERESTS.map((i) => (
@@ -223,7 +224,7 @@ export default function Onboarding({ onDone }) {
         {step > 0 && (
           <button
             onClick={goBack}
-            className="flex-1 rounded-2xl border border-slate-200 py-3 font-semibold text-slate-500 transition hover:bg-slate-50 active:scale-95"
+            className="flex-1 rounded-2xl border border-slate-200 py-3 font-semibold text-slate-600 transition duration-200 hover:bg-slate-50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deep/40 focus-visible:ring-offset-2"
           >
             {t("onboard.back")}
           </button>

@@ -9,6 +9,12 @@
 body {
   margin: 0;
   background: #f4f6fb;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Keyboard focus only — never show the ring for mouse/touch users. */
+:focus:not(:focus-visible) {
+  outline: none;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -80,4 +86,20 @@ body {
 }
 .animate-slide-up {
   animation: slide-up 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* Respect users who ask for less motion: keep state changes, drop choreography. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .confetti-piece {
+    display: none;
+  }
 }

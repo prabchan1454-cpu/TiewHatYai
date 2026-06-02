@@ -20,7 +20,7 @@ export default function Login({ auth, onGuest }) {
         {enabled && (
           <button
             onClick={signInGoogle}
-            className="flex w-full items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3 font-bold text-deep shadow-sm transition active:scale-95 hover:bg-slate-50"
+            className="flex w-full items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3 font-bold text-deep shadow-sm transition duration-200 hover:bg-slate-50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deep/40 focus-visible:ring-offset-2"
           >
             <img
               src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
