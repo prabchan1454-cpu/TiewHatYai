@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { api } from "../lib/api";
 import { levelFor, todayStr } from "../lib/progress";
+import { festivalForToday } from "../lib/festivals";
 import { Button, Card, ErrorBox, Pill, Spinner } from "../components/ui";
 import { useT } from "../lib/i18n.jsx";
 import {
@@ -35,12 +36,16 @@ function fileToBase64(file) {
 }
 
 export default function Quests({ progress }) {
-  const { t } = useT();
+  const { t, lang } = useT();
   const { state, update, completeQuest, issueDaily, addBadge, celebrate, updateReward } = progress;
   const quest = state.activeQuest;
   const [loading, setLoading] = useState(false);
   const [dailyLoading, setDailyLoading] = useState(false);
+  const [festLoading, setFestLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const fest = festivalForToday();
+  const festName = fest.festival ? (lang === "en" ? fest.festival.en : fest.festival.th) : "";
 
   const today = todayStr();
   const dailyDoneToday = state.daily.completedDate === today;
@@ -108,6 +113,25 @@ export default function Quests({ progress }) {
     }
   }
 
+  async function getFestivalQuest() {
+    setFestLoading(true);
+    setError("");
+    setResult(null);
+    try {
+      const q = await api.quest({
+        user_location_area: "หาดใหญ่",
+        user_level: level,
+        completed_quests: state.completedQuests,
+        festival: fest.festival.theme,
+      });
+      update({ activeQuest: q });
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setFestLoading(false);
+    }
+  }
+
   async function submit() {
     if (!desc.trim() || verifying) return;
     setVerifying(true);
@@ -163,6 +187,38 @@ export default function Quests({ progress }) {
   return (
     <div className="space-y-4 p-4 pb-6">
       <ErrorBox message={error} />
+
+      {!quest && fest.festival && (
+        <Card className="ring-1 ring-mango/40 dark:ring-mango/30">
+          <div className="flex items-center gap-2.5">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-mango/15 text-2xl">
+              {fest.festival.emoji}
+            </span>
+            <div className="flex-1">
+              <h3 className="font-bold text-deep dark:text-slate-100">
+                {fest.active
+                  ? t("fest.activeTitle", { name: festName })
+                  : t("fest.soonTitle", { name: festName })}
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                {fest.active
+                  ? t("fest.activeDesc")
+                  : t("fest.soonDesc", {
+                      date: fest.date
+                        ? fest.date.toLocaleDateString(lang === "en" ? "en-US" : "th-TH", {
+                            day: "numeric",
+                            month: "short",
+                          })
+                        : "",
+                    })}
+              </p>
+            </div>
+          </div>
+          <Button onClick={getFestivalQuest} disabled={festLoading} className="mt-3 w-full">
+            {festLoading ? t("quest.rolling") : t("fest.getQuest")}
+          </Button>
+        </Card>
+      )}
 
       {!quest?.isDaily && (
         <Card>

@@ -62,7 +62,7 @@ def chat(req: schemas.ChatRequest):
 # Prompt 2 — Quest generator.
 @app.post("/api/quest", response_model=schemas.Quest)
 def quest(req: schemas.QuestRequest):
-    prompt = prompts.quest_prompt(req.user_location_area, req.user_level, req.completed_quests)
+    prompt = prompts.quest_prompt(req.user_location_area, req.user_level, req.completed_quests, req.festival)
     data = _guard(lambda: ai.complete_json(prompt + prompts.lang_directive(req.lang)))
     return schemas.Quest(**data)
 

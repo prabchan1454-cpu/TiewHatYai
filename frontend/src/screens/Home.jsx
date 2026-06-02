@@ -1,4 +1,5 @@
 import { Card, Button } from "../components/ui";
+import WeatherCard from "../components/WeatherCard";
 import { levelFor, nextLevel } from "../lib/progress";
 import { useT } from "../lib/i18n.jsx";
 import {
@@ -30,6 +31,8 @@ export default function Home({ progress, onNavigate }) {
 
   return (
     <div className="space-y-4 p-4 pb-6">
+      <WeatherCard />
+
       {/* Committed navy hero — the one drenched moment on this screen */}
       <section className="rounded-3xl bg-deep p-5 text-white shadow-hero dark:ring-1 dark:ring-white/10">
         <div className="flex items-start justify-between">

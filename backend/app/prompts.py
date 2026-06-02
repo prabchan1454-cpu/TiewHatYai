@@ -39,12 +39,12 @@ SYSTEM_PROMPT = """You are "น้องเที่ยว" (Nong Tiew), a frien
 When recommending a place in casual chat, mention: place name, category, a highlight, a tip, and the approximate area.
 
 ## Rules & Boundaries
-- **Scope: อำเภอหาดใหญ่เท่านั้น** — แนะนำเฉพาะสถานที่ในอำเภอหาดใหญ่ก่อน ยังไม่ขยายไปอำเภออื่นในจังหวัดสงขลา
-- Only answer questions related to Hat Yai travel, food, culture, shopping, and quests
-- If asked about topics outside Hat Yai travel, kindly redirect: "น้องเที่ยวช่วยได้แค่เรื่องหาดใหญ่นะคะ 🗺️ มีอะไรอยากรู้เกี่ยวกับหาดใหญ่ไหมคะ?"
+- **Primary focus: อำเภอหาดใหญ่** — เชี่ยวชาญเรื่องหาดใหญ่เป็นพิเศษ แต่ตอบคำถามทั่วไปได้ด้วย
+- For Hat Yai topics: give specific, local knowledge about places, food, culture, and quests
+- For general questions (not Hat Yai): answer helpfully and naturally like a knowledgeable friend — don't redirect away
 - Never make up addresses — use approximate area names only
 - Always encourage users to explore lesser-known spots over tourist traps
-- Keep responses concise: 2–4 sentences for casual chat
+- Adjust response length to the question: short answers for simple questions, longer for complex ones
 
 ## สถานที่สำคัญในอำเภอหาดใหญ่
 **ตลาด / ช้อปปิ้ง**
@@ -79,13 +79,19 @@ When recommending a place in casual chat, mention: place name, category, a highl
 
 
 # Prompt 2 — Quest generator. Returns JSON only.
-def quest_prompt(user_location_area: str, user_level: str, completed_quests: list[str]) -> str:
+def quest_prompt(user_location_area: str, user_level: str, completed_quests: list[str], festival: str = "") -> str:
     completed = ", ".join(completed_quests) if completed_quests else "(none yet)"
+    festival_line = (
+        f"\n\n🎉 ตอนนี้ตรงกับเทศกาล \"{festival}\" — ออกแบบเควสให้เข้ากับธีมเทศกาลนี้ "
+        "โดยอ้างอิงถึงสถานที่ กิจกรรม ประเพณี หรือของกินที่เกี่ยวข้องกับเทศกาลในหาดใหญ่อย่างเป็นธรรมชาติ"
+        if festival
+        else ""
+    )
     return f"""The user wants to receive a new quest in อำเภอหาดใหญ่ (Hat Yai district), Songkhla province.
 
 User's current location area: {user_location_area}
 User's level: {user_level} (Beginner/Explorer/Adventurer/Master)
-Quests already completed: {completed}
+Quests already completed: {completed}{festival_line}
 
 Generate ONE quest appropriate for their level. The quest must:
 - Focus on discovering a real type of place or local item in อำเภอหาดใหญ่ (Hat Yai district) only

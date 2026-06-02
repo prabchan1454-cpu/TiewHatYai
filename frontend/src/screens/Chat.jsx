@@ -2,17 +2,45 @@ import { useEffect, useRef, useState } from "react";
 import { api } from "../lib/api";
 import { ErrorBox } from "../components/ui";
 import { useT } from "../lib/i18n.jsx";
+import { Trash2 } from "lucide-react";
+
+const CHAT_KEY = "tiewhatyai_chat_v1";
+// Keep at most this many messages in memory & localStorage to prevent the
+// context window from ballooning. We always keep the most-recent messages.
+const MAX_HISTORY = 40;
+
+function loadMessages() {
+  try {
+    const raw = localStorage.getItem(CHAT_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch { /* corrupted — start fresh */ }
+  return [];
+}
+
+function saveMessages(msgs) {
+  try {
+    localStorage.setItem(CHAT_KEY, JSON.stringify(msgs));
+  } catch { /* storage full — silently skip */ }
+}
 
 export default function Chat({ greeting }) {
   const { t } = useT();
   const STARTERS = [t("chat.starter.1"), t("chat.starter.2"), t("chat.starter.3")];
-  const [messages, setMessages] = useState(() =>
-    greeting ? [{ role: "assistant", content: greeting }] : []
-  );
+
+  const [messages, setMessages] = useState(() => {
+    const saved = loadMessages();
+    if (saved.length > 0) return saved;
+    return greeting ? [{ role: "assistant", content: greeting }] : [];
+  });
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const endRef = useRef(null);
+
+  // Persist every time messages change.
+  useEffect(() => {
+    saveMessages(messages);
+  }, [messages]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -24,16 +52,24 @@ export default function Chat({ greeting }) {
     setInput("");
     setError("");
     const next = [...messages, { role: "user", content }];
-    setMessages(next);
+    // Trim before sending so we never blow the context window.
+    const trimmed = next.slice(-MAX_HISTORY);
+    setMessages(trimmed);
     setLoading(true);
     try {
-      const { reply } = await api.chat(next);
+      const { reply } = await api.chat(trimmed);
       setMessages((m) => [...m, { role: "assistant", content: reply }]);
     } catch (e) {
       setError(e.message);
     } finally {
       setLoading(false);
     }
+  }
+
+  function clearChat() {
+    setMessages([]);
+    setError("");
+    saveMessages([]);
   }
 
   return (
@@ -88,6 +124,15 @@ export default function Chat({ greeting }) {
           </div>
         )}
         <div className="flex items-center gap-2">
+          {messages.length > 0 && (
+            <button
+              onClick={clearChat}
+              aria-label={t("chat.clear")}
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-slate-200 text-slate-400 transition hover:border-rose-300 hover:text-rose-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300 dark:border-slate-700 dark:text-slate-500 dark:hover:text-rose-400"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          )}
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}

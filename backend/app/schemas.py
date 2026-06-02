@@ -79,6 +79,7 @@ class QuestRequest(BaseModel):
     user_location_area: str = "หาดใหญ่"
     user_level: Level = "Beginner"
     completed_quests: list[str] = []
+    festival: str = ""
     lang: Lang = "th"
 
 

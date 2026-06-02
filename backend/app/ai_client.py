@@ -58,7 +58,7 @@ def _call(messages: list[dict], max_tokens: int = 1024, json_mode: bool = False,
     raise last
 
 
-def chat(messages: list[dict], lang: str = "th", max_tokens: int = 1024) -> str:
+def chat(messages: list[dict], lang: str = "th", max_tokens: int = 4096) -> str:
     """Multi-turn chat with the น้องเที่ยว system prompt."""
     history = [{"role": "system", "content": SYSTEM_PROMPT + lang_directive(lang)}] + [
         {"role": m["role"], "content": m["content"]} for m in messages

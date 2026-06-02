@@ -106,6 +106,7 @@ export const STRINGS = {
     "chat.empty": "ทักน้องเที่ยวได้เลย!",
     "chat.placeholder": "พิมพ์ข้อความ...",
     "chat.send": "ส่ง",
+    "chat.clear": "ล้างแชท",
     "chat.starter.1": "แนะนำของกินเด็ดๆ หน่อย 🍜",
     "chat.starter.2": "มีที่เที่ยวเงียบๆ ไหม",
     "chat.starter.3": "ของฝากหาดใหญ่ซื้ออะไรดี",
@@ -183,6 +184,18 @@ export const STRINGS = {
     "lb.refresh": "รีเฟรช",
     "lb.loginToJoin": "ล็อกอินด้วย Google เพื่อเก็บคะแนนและติดอันดับ",
     "lb.notRanked": "คะแนนของคุณ (กำลังอัปเดตอันดับ)",
+
+    // Weather
+    "weather.location": "หาดใหญ่ตอนนี้",
+    "weather.high": "สูง",
+    "weather.low": "ต่ำ",
+
+    // Festival quests
+    "fest.activeTitle": "🎉 เทศกาล{name}!",
+    "fest.activeDesc": "รับเควสพิเศษประจำเทศกาลกันเลย",
+    "fest.soonTitle": "เทศกาล{name}กำลังจะมา",
+    "fest.soonDesc": "เริ่ม {date} — ลองรับเควสธีมเทศกาลก่อนใคร",
+    "fest.getQuest": "รับเควสเทศกาล ✨",
   },
   en: {
     // App shell
@@ -287,6 +300,7 @@ export const STRINGS = {
     "chat.empty": "Say hi to Nong Tiew!",
     "chat.placeholder": "Type a message...",
     "chat.send": "Send",
+    "chat.clear": "Clear chat",
     "chat.starter.1": "Recommend some great food 🍜",
     "chat.starter.2": "Any quiet spots to visit?",
     "chat.starter.3": "What souvenirs should I buy?",
@@ -364,6 +378,18 @@ export const STRINGS = {
     "lb.refresh": "Refresh",
     "lb.loginToJoin": "Sign in with Google to save your score and join the ranking",
     "lb.notRanked": "Your score (ranking is updating)",
+
+    // Weather
+    "weather.location": "Hat Yai now",
+    "weather.high": "H",
+    "weather.low": "L",
+
+    // Festival quests
+    "fest.activeTitle": "🎉 {name} is on!",
+    "fest.activeDesc": "Grab a special festival quest",
+    "fest.soonTitle": "{name} is coming up",
+    "fest.soonDesc": "Starts {date} — try a themed quest early",
+    "fest.getQuest": "Get a festival quest ✨",
   },
 };
 
