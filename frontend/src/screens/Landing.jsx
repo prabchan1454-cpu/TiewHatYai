@@ -1,4 +1,4 @@
-import { Button, LangToggle } from "../components/ui";
+import { Button, LangToggle, ThemeToggle } from "../components/ui";
 import { useT } from "../lib/i18n.jsx";
 import { MessageCircle, Compass, Sparkles, Trophy } from "lucide-react";
 
@@ -13,7 +13,8 @@ export default function Landing({ onStart }) {
   const { t } = useT();
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col bg-gradient-to-b from-sunset to-mango px-6 py-10 text-white">
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-2">
+        <ThemeToggle />
         <LangToggle />
       </div>
       <div className="flex flex-1 flex-col items-center justify-center text-center">

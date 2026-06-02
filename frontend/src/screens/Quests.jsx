@@ -172,8 +172,8 @@ export default function Quests({ progress }) {
                 <Sunrise className="h-5 w-5" />
               </span>
               <div>
-                <h3 className="font-bold text-deep">{t("daily.title")}</h3>
-                <p className="text-xs text-slate-500">{t("daily.subtitle")}</p>
+                <h3 className="font-bold text-deep dark:text-slate-100">{t("daily.title")}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{t("daily.subtitle")}</p>
               </div>
             </div>
             {state.daily.streak > 0 && (
@@ -184,11 +184,11 @@ export default function Quests({ progress }) {
             )}
           </div>
           {dailyDoneToday ? (
-            <div className="mt-3 flex items-start gap-2 rounded-xl bg-emerald-50 p-3 text-sm">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+            <div className="mt-3 flex items-start gap-2 rounded-xl bg-emerald-50 p-3 text-sm dark:bg-emerald-500/10">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
               <div>
-                <p className="font-semibold text-deep">{t("daily.doneToday")}</p>
-                <p className="text-slate-600">{t("daily.comeBack")}</p>
+                <p className="font-semibold text-deep dark:text-slate-100">{t("daily.doneToday")}</p>
+                <p className="text-slate-600 dark:text-slate-300">{t("daily.comeBack")}</p>
               </div>
             </div>
           ) : (
@@ -204,8 +204,8 @@ export default function Quests({ progress }) {
           <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-sunset/10 text-sunset">
             <Compass className="h-7 w-7" />
           </span>
-          <h2 className="mt-3 text-xl font-extrabold text-deep">{t("quest.readyTitle")}</h2>
-          <p className="mt-1 text-sm text-slate-500">{t("quest.readyDesc")}</p>
+          <h2 className="mt-3 text-xl font-extrabold text-deep dark:text-slate-100">{t("quest.readyTitle")}</h2>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{t("quest.readyDesc")}</p>
           <Button onClick={getQuest} disabled={loading} className="mt-4 w-full">
             {loading ? t("quest.rolling") : t("quest.getNew")}
           </Button>
@@ -229,39 +229,39 @@ export default function Quests({ progress }) {
             </div>
             <span className="tnum text-sm font-bold text-sunset">+{quest.reward_xp} XP</span>
           </div>
-          <h2 className="text-xl font-extrabold leading-snug text-deep">{quest.quest_name}</h2>
-          <p className="italic text-slate-600">{quest.quest_story}</p>
+          <h2 className="text-xl font-extrabold leading-snug text-deep dark:text-slate-100">{quest.quest_name}</h2>
+          <p className="italic text-slate-600 dark:text-slate-300">{quest.quest_story}</p>
 
-          <div className="rounded-xl bg-slate-50 p-3 text-sm">
-            <p className="flex items-center gap-1.5 font-bold text-deep">
+          <div className="rounded-xl bg-slate-50 p-3 text-sm dark:bg-slate-800/60">
+            <p className="flex items-center gap-1.5 font-bold text-deep dark:text-slate-100">
               <Target className="h-4 w-4 text-sunset" /> {t("quest.objective")}
             </p>
-            <p className="mt-0.5 text-slate-600">{quest.objective}</p>
+            <p className="mt-0.5 text-slate-600 dark:text-slate-300">{quest.objective}</p>
           </div>
-          <div className="rounded-xl bg-lagoon/5 p-3 text-sm">
+          <div className="rounded-xl bg-lagoon/5 p-3 text-sm dark:bg-lagoon/10">
             <p className="flex items-center gap-1.5 font-bold text-lagoon">
               <Lightbulb className="h-4 w-4" /> {t("quest.hint")}
             </p>
-            <p className="mt-0.5 text-slate-600">{quest.location_hint}</p>
+            <p className="mt-0.5 text-slate-600 dark:text-slate-300">{quest.location_hint}</p>
           </div>
-          <div className="flex items-center gap-1.5 text-sm text-slate-500">
+          <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
             <Award className="h-4 w-4 text-mango" />
             <span>{t("quest.reward")}</span>
-            <span className="font-semibold text-deep">{quest.reward_badge}</span>
+            <span className="font-semibold text-deep dark:text-slate-200">{quest.reward_badge}</span>
           </div>
 
           {!result?.verified && (
-            <div className="space-y-2 border-t border-slate-100 pt-3">
-              <p className="font-bold text-deep">{t("quest.doneQ")}</p>
+            <div className="space-y-2 border-t border-slate-100 pt-3 dark:border-slate-800">
+              <p className="font-bold text-deep dark:text-slate-100">{t("quest.doneQ")}</p>
               <textarea
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
                 placeholder={t("quest.descPlaceholder")}
                 rows={3}
-                className="w-full rounded-xl border border-slate-200 p-3 text-deep outline-none transition placeholder:text-slate-400 focus:border-sunset focus:ring-2 focus:ring-sunset/30"
+                className="w-full rounded-xl border border-slate-200 p-3 text-deep outline-none transition placeholder:text-slate-400 focus:border-sunset focus:ring-2 focus:ring-sunset/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500"
               />
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-500">
-                <span className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-3 py-2 font-semibold text-deep transition hover:bg-slate-200">
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                <span className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-3 py-2 font-semibold text-deep transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">
                   <Camera className="h-4 w-4" /> {t("quest.attachPhoto")}
                 </span>
                 <span className="truncate">{photo ? photo.name : t("quest.optional")}</span>
@@ -286,24 +286,24 @@ export default function Quests({ progress }) {
                       disabled={geoLoading}
                       className={`flex w-full items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon/40 disabled:opacity-50 ${
                         nearby
-                          ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                          ? "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/40 dark:bg-emerald-500/10 dark:text-emerald-300"
                           : coords
-                            ? "border-amber-200 bg-amber-50 text-amber-700"
-                            : "border-slate-200 text-slate-600 hover:border-lagoon hover:text-lagoon"
+                            ? "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-300"
+                            : "border-slate-200 text-slate-600 hover:border-lagoon hover:text-lagoon dark:border-slate-700 dark:text-slate-300"
                       }`}
                     >
                       <LocateFixed className="h-4 w-4" />
                       {geoLoading ? t("quest.checkingIn") : t("quest.checkin")}
                     </button>
                     {coords && km !== null && (
-                      <p className={`text-center text-sm font-semibold ${nearby ? "text-emerald-600" : "text-amber-600"}`}>
+                      <p className={`text-center text-sm font-semibold ${nearby ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}`}>
                         {nearby
                           ? t("quest.nearby", { m: Math.round(km * 1000) })
                           : t("quest.tooFar", { km: km.toFixed(1) })}
                       </p>
                     )}
                     {coords && !hasTarget && (
-                      <p className="text-center text-sm text-emerald-600">{t("quest.checkedIn")}</p>
+                      <p className="text-center text-sm text-emerald-600 dark:text-emerald-400">{t("quest.checkedIn")}</p>
                     )}
                   </>
                 );
@@ -317,24 +317,26 @@ export default function Quests({ progress }) {
           {result && (
             <div
               className={`flex items-start gap-2.5 rounded-xl p-4 ${
-                result.verified ? "bg-emerald-50" : "bg-amber-50"
+                result.verified
+                  ? "bg-emerald-50 dark:bg-emerald-500/10"
+                  : "bg-amber-50 dark:bg-amber-500/10"
               }`}
             >
               {result.verified ? (
-                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
               ) : (
-                <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+                <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
               )}
               <div className="flex-1">
-                <p className="font-bold text-deep">
+                <p className="font-bold text-deep dark:text-slate-100">
                   {result.verified ? t("quest.success") : t("quest.almost")}{" "}
-                  <span className="text-xs font-normal text-slate-500">
+                  <span className="text-xs font-normal text-slate-500 dark:text-slate-400">
                     ({t("quest.confidence")}: {result.confidence})
                   </span>
                 </p>
-                <p className="mt-1 text-slate-700">{result.message}</p>
+                <p className="mt-1 text-slate-700 dark:text-slate-200">{result.message}</p>
                 {!result.verified && result.feedback && (
-                  <p className="mt-2 text-sm text-slate-500">{result.feedback}</p>
+                  <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{result.feedback}</p>
                 )}
                 {result.verified && (
                   <Button onClick={finishQuest} className="mt-3 w-full">
@@ -348,7 +350,7 @@ export default function Quests({ progress }) {
           {!result?.verified && (
             <button
               onClick={finishQuest}
-              className="w-full rounded-xl py-1.5 text-sm text-slate-500 transition hover:text-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
+              className="w-full rounded-xl py-1.5 text-sm text-slate-500 transition hover:text-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 dark:text-slate-400 dark:hover:text-slate-100"
             >
               {t("quest.skip")}
             </button>

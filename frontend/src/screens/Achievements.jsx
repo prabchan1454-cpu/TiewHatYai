@@ -1,13 +1,14 @@
 import { levelFor, nextLevel } from "../lib/progress";
 import { Card, Pill } from "../components/ui";
+import Leaderboard from "../components/Leaderboard";
 import { useT } from "../lib/i18n.jsx";
 import { Trophy, Flag, Award, Share2, Sunrise } from "lucide-react";
 
 const RARITY_RING = {
-  Common: "ring-slate-200",
-  Rare: "ring-sky-300",
-  Epic: "ring-violet-300",
-  Legendary: "ring-amber-300",
+  Common: "ring-slate-200 dark:ring-slate-700",
+  Rare: "ring-sky-300 dark:ring-sky-500/40",
+  Epic: "ring-violet-300 dark:ring-violet-500/40",
+  Legendary: "ring-amber-300 dark:ring-amber-500/40",
 };
 
 export default function Achievements({ progress, auth, onLogout }) {
@@ -36,7 +37,7 @@ export default function Achievements({ progress, auth, onLogout }) {
 
   return (
     <div className="space-y-4 p-4 pb-6">
-      <section className="rounded-3xl bg-deep p-5 text-white shadow-hero">
+      <section className="rounded-3xl bg-deep p-5 text-white shadow-hero dark:ring-1 dark:ring-white/10">
         <div className="flex items-center gap-4">
           <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-mango">
             <Trophy className="h-7 w-7" />
@@ -61,14 +62,14 @@ export default function Achievements({ progress, auth, onLogout }) {
         </div>
       </section>
 
-      <Card className="flex items-stretch divide-x divide-slate-100 p-0">
+      <Card className="flex items-stretch divide-x divide-slate-100 p-0 dark:divide-slate-800">
         <div className="flex flex-1 items-center gap-3 p-4">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sunset/10 text-sunset">
             <Flag className="h-5 w-5" />
           </span>
           <div>
-            <p className="tnum text-xl font-extrabold leading-none text-deep">{state.completedQuests.length}</p>
-            <p className="mt-1 text-xs font-medium text-slate-500">{t("ach.questsDone")}</p>
+            <p className="tnum text-xl font-extrabold leading-none text-deep dark:text-slate-100">{state.completedQuests.length}</p>
+            <p className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">{t("ach.questsDone")}</p>
           </div>
         </div>
         <div className="flex flex-1 items-center gap-3 p-4">
@@ -76,29 +77,35 @@ export default function Achievements({ progress, auth, onLogout }) {
             <Award className="h-5 w-5" />
           </span>
           <div>
-            <p className="tnum text-xl font-extrabold leading-none text-deep">{state.badges.length}</p>
-            <p className="mt-1 text-xs font-medium text-slate-500">{t("ach.badgesGot")}</p>
+            <p className="tnum text-xl font-extrabold leading-none text-deep dark:text-slate-100">{state.badges.length}</p>
+            <p className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">{t("ach.badgesGot")}</p>
           </div>
         </div>
       </Card>
 
+      <Leaderboard
+        auth={auth}
+        self={{ xp: state.xp, level: lvl.name }}
+        onLogin={auth?.signInGoogle}
+      />
+
       <section>
-        <h3 className="mb-2.5 px-1 text-sm font-bold text-deep">{t("ach.heading")}</h3>
+        <h3 className="mb-2.5 px-1 text-sm font-bold text-deep dark:text-slate-100">{t("ach.heading")}</h3>
         {state.badges.length === 0 ? (
-          <Card className="text-center text-sm text-slate-500">{t("ach.noBadges")}</Card>
+          <Card className="text-center text-sm text-slate-500 dark:text-slate-400">{t("ach.noBadges")}</Card>
         ) : (
           <div className="space-y-2.5">
             {state.badges.map((b) => (
-              <Card key={b.badge_title} className={`ring-1 ${RARITY_RING[b.rarity] || "ring-slate-200"}`}>
+              <Card key={b.badge_title} className={`ring-1 ${RARITY_RING[b.rarity] || "ring-slate-200 dark:ring-slate-700"}`}>
                 <div className="flex items-start justify-between gap-3">
-                  <h4 className="text-base font-extrabold text-deep">{b.badge_title}</h4>
+                  <h4 className="text-base font-extrabold text-deep dark:text-slate-100">{b.badge_title}</h4>
                   <Pill>{b.rarity}</Pill>
                 </div>
-                <p className="mt-1 text-sm text-slate-600">{b.badge_description}</p>
+                <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{b.badge_description}</p>
                 <p className="mt-1.5 text-sm italic text-sunset">“{b.flavor_text}”</p>
                 <button
                   onClick={() => shareBadge(b)}
-                  className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-deep transition hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deep/30"
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-deep transition hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deep/30 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
                 >
                   <Share2 className="h-3.5 w-3.5" />
                   {t("ach.share")}
@@ -110,20 +117,20 @@ export default function Achievements({ progress, auth, onLogout }) {
       </section>
 
       <section>
-        <h3 className="mb-2.5 px-1 text-sm font-bold text-deep">{t("ach.history")}</h3>
+        <h3 className="mb-2.5 px-1 text-sm font-bold text-deep dark:text-slate-100">{t("ach.history")}</h3>
         {state.history.length === 0 ? (
-          <Card className="text-center text-sm text-slate-500">{t("ach.noHistory")}</Card>
+          <Card className="text-center text-sm text-slate-500 dark:text-slate-400">{t("ach.noHistory")}</Card>
         ) : (
           <div className="space-y-2">
             {state.history.map((h, i) => (
               <Card key={i} className="flex items-center justify-between py-3">
                 <div className="flex items-center gap-2.5 overflow-hidden">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
                     {h.isDaily ? <Sunrise className="h-4 w-4" /> : <Flag className="h-4 w-4" />}
                   </span>
                   <div className="overflow-hidden">
-                    <p className="truncate font-semibold text-deep">{h.quest_name}</p>
-                    <p className="text-xs text-slate-500">
+                    <p className="truncate font-semibold text-deep dark:text-slate-100">{h.quest_name}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                       {new Date(h.completedAt).toLocaleDateString(
                         lang === "en" ? "en-US" : "th-TH",
                         { day: "numeric", month: "short", year: "numeric" }
@@ -141,11 +148,11 @@ export default function Achievements({ progress, auth, onLogout }) {
       {auth?.user && (
         <Card className="flex items-center gap-3">
           {auth.user.photoURL && (
-            <img src={auth.user.photoURL} alt="" className="h-10 w-10 rounded-full ring-2 ring-slate-100" />
+            <img src={auth.user.photoURL} alt="" className="h-10 w-10 rounded-full ring-2 ring-slate-100 dark:ring-slate-700" />
           )}
           <div className="flex-1 overflow-hidden">
-            <p className="truncate font-semibold text-deep">{auth.user.displayName}</p>
-            <p className="truncate text-xs text-slate-500">{auth.user.email}</p>
+            <p className="truncate font-semibold text-deep dark:text-slate-100">{auth.user.displayName}</p>
+            <p className="truncate text-xs text-slate-500 dark:text-slate-400">{auth.user.email}</p>
           </div>
         </Card>
       )}
@@ -154,7 +161,7 @@ export default function Achievements({ progress, auth, onLogout }) {
         {auth?.enabled && (
           <button
             onClick={onLogout}
-            className="w-full rounded-xl py-2 text-sm font-semibold text-slate-600 transition hover:text-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
+            className="w-full rounded-xl py-2 text-sm font-semibold text-slate-600 transition hover:text-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 dark:text-slate-400 dark:hover:text-slate-100"
           >
             {auth.user ? t("ach.logout") : t("ach.login")}
           </button>
@@ -164,7 +171,7 @@ export default function Achievements({ progress, auth, onLogout }) {
           onClick={() => {
             if (confirm(t("ach.resetConfirm"))) reset();
           }}
-          className="w-full rounded-xl py-2 text-sm text-slate-500 transition hover:text-rose-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300"
+          className="w-full rounded-xl py-2 text-sm text-slate-500 transition hover:text-rose-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300 dark:text-slate-400"
         >
           {t("ach.reset")}
         </button>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../lib/api";
-import { Button, Card, ErrorBox, Spinner, LangToggle } from "../components/ui";
+import { Button, Card, ErrorBox, Spinner, LangToggle, ThemeToggle } from "../components/ui";
 import { useT } from "../lib/i18n.jsx";
 import { LayoutGrid, Palette, Users, Heart } from "lucide-react";
 
@@ -10,8 +10,8 @@ function StepHead({ Icon, title, hint }) {
       <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-sunset/10 text-sunset">
         <Icon className="h-6 w-6" />
       </span>
-      <p className="mt-2.5 text-lg font-bold text-deep">{title}</p>
-      {hint && <p className="text-sm text-slate-500">{hint}</p>}
+      <p className="mt-2.5 text-lg font-bold text-deep dark:text-slate-100">{title}</p>
+      {hint && <p className="text-sm text-slate-500 dark:text-slate-400">{hint}</p>}
     </div>
   );
 }
@@ -30,10 +30,10 @@ function Choice({ label, active, onClick }) {
     <button
       onClick={onClick}
       aria-pressed={active}
-      className={`rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset focus-visible:ring-offset-2 ${
+      className={`rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#0e1525] ${
         active
           ? "bg-sunset text-white shadow-md scale-105"
-          : "bg-white text-deep border border-slate-200 hover:border-sunset hover:bg-orange-50 active:scale-95"
+          : "bg-white text-deep border border-slate-200 hover:border-sunset hover:bg-orange-50 active:scale-95 dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 dark:hover:bg-slate-700"
       }`}
     >
       {label}
@@ -125,15 +125,18 @@ export default function Onboarding({ onDone }) {
       {/* Header row */}
       <div className="flex items-center justify-between mb-3">
         <img src="/logo.svg" alt="TiewHatyai" className="h-10 w-10 rounded-xl shadow" />
-        <LangToggle />
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <LangToggle />
+        </div>
       </div>
 
       {/* Greeting card */}
-      <Card className="bg-gradient-to-br from-mango/20 to-lagoon/10 mb-2">
+      <Card className="bg-gradient-to-br from-mango/20 to-lagoon/10 mb-2 dark:from-mango/10 dark:to-lagoon/5">
         {loadingGreet ? (
           <Spinner label={t("onboard.greeting")} />
         ) : (
-          <p className="whitespace-pre-wrap leading-relaxed text-deep text-sm">{greeting}</p>
+          <p className="whitespace-pre-wrap leading-relaxed text-deep text-sm dark:text-slate-100">{greeting}</p>
         )}
       </Card>
 
@@ -164,7 +167,7 @@ export default function Onboarding({ onDone }) {
           <div className="space-y-5">
             <StepHead Icon={Palette} title={t("onboard.q.vibe_budget")} />
             <div>
-              <p className="mb-2 font-semibold text-deep text-sm">{t("onboard.q.vibe")}</p>
+              <p className="mb-2 font-semibold text-deep text-sm dark:text-slate-100">{t("onboard.q.vibe")}</p>
               <div className="flex flex-wrap gap-2">
                 {VIBES.map((v) => (
                   <Choice key={v} label={t(v)} active={vibe === v} onClick={() => setVibe(v)} />
@@ -172,7 +175,7 @@ export default function Onboarding({ onDone }) {
               </div>
             </div>
             <div>
-              <p className="mb-2 font-semibold text-deep text-sm">{t("onboard.q.budget")}</p>
+              <p className="mb-2 font-semibold text-deep text-sm dark:text-slate-100">{t("onboard.q.budget")}</p>
               <div className="flex flex-wrap gap-2">
                 {BUDGETS.map((b) => (
                   <Choice key={b} label={t(b)} active={budget === b} onClick={() => setBudget(b)} />
@@ -187,7 +190,7 @@ export default function Onboarding({ onDone }) {
           <div className="space-y-5">
             <StepHead Icon={Users} title={t("onboard.q.companion_duration")} />
             <div>
-              <p className="mb-2 font-semibold text-deep text-sm">{t("onboard.q.companion")}</p>
+              <p className="mb-2 font-semibold text-deep text-sm dark:text-slate-100">{t("onboard.q.companion")}</p>
               <div className="flex flex-wrap gap-2">
                 {COMPANIONS.map((c) => (
                   <Choice key={c} label={t(c)} active={companion === c} onClick={() => setCompanion(c)} />
@@ -195,7 +198,7 @@ export default function Onboarding({ onDone }) {
               </div>
             </div>
             <div>
-              <p className="mb-2 font-semibold text-deep text-sm">{t("onboard.q.duration")}</p>
+              <p className="mb-2 font-semibold text-deep text-sm dark:text-slate-100">{t("onboard.q.duration")}</p>
               <div className="flex flex-wrap gap-2">
                 {DURATIONS.map((d) => (
                   <Choice key={d} label={t(d)} active={duration === d} onClick={() => setDuration(d)} />
@@ -223,7 +226,7 @@ export default function Onboarding({ onDone }) {
         {step > 0 && (
           <button
             onClick={goBack}
-            className="flex-1 rounded-2xl border border-slate-200 py-3 font-semibold text-slate-600 transition duration-200 hover:bg-slate-50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deep/40 focus-visible:ring-offset-2"
+            className="flex-1 rounded-2xl border border-slate-200 py-3 font-semibold text-slate-600 transition duration-200 hover:bg-slate-50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deep/40 focus-visible:ring-offset-2 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 dark:focus-visible:ring-offset-[#0e1525]"
           >
             {t("onboard.back")}
           </button>

@@ -6,9 +6,9 @@ import { useT } from "../lib/i18n.jsx";
 import { Sparkles, Lightbulb, Clock, MapPin, ExternalLink } from "lucide-react";
 
 const RANK_TINT = {
-  1: "bg-mango/20 text-amber-600",
-  2: "bg-slate-200 text-slate-600",
-  3: "bg-orange-100 text-orange-600",
+  1: "bg-mango/20 text-amber-600 dark:text-amber-300",
+  2: "bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-200",
+  3: "bg-orange-100 text-orange-600 dark:bg-orange-500/20 dark:text-orange-300",
 };
 
 function mapsUrl(p) {
@@ -53,8 +53,8 @@ export default function Recommend({ preferences }) {
             <Sparkles className="h-5 w-5" />
           </span>
           <div className="flex-1">
-            <h2 className="font-bold text-deep">{t("rec.title")}</h2>
-            <p className="text-sm text-slate-500">
+            <h2 className="font-bold text-deep dark:text-slate-100">{t("rec.title")}</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               {t("rec.basedOn")} {preferences?.categories || "—"}
               {preferences?.vibe ? ` · ${preferences.vibe}` : ""}
             </p>
@@ -81,22 +81,22 @@ export default function Recommend({ preferences }) {
               >
                 <span className="tnum">{p.rank}</span>
               </span>
-              <h3 className="text-lg font-extrabold leading-snug text-deep">{p.place_name}</h3>
+              <h3 className="text-lg font-extrabold leading-snug text-deep dark:text-slate-100">{p.place_name}</h3>
             </div>
             <Pill tone="sunset">{p.category}</Pill>
           </div>
-          <p className="text-slate-600">{p.why_recommended}</p>
-          <div className="space-y-1.5 rounded-xl bg-slate-50 p-3 text-sm text-slate-600">
+          <p className="text-slate-600 dark:text-slate-300">{p.why_recommended}</p>
+          <div className="space-y-1.5 rounded-xl bg-slate-50 p-3 text-sm text-slate-600 dark:bg-slate-800/60 dark:text-slate-300">
             <p className="flex gap-2">
               <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-mango" />
-              <span><span className="font-semibold text-deep">{t("rec.highlight")} </span>{p.highlight}</span>
+              <span><span className="font-semibold text-deep dark:text-slate-100">{t("rec.highlight")} </span>{p.highlight}</span>
             </p>
             <p className="flex gap-2">
               <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-lagoon" />
-              <span><span className="font-semibold text-deep">{t("rec.tip")} </span>{p.local_tip}</span>
+              <span><span className="font-semibold text-deep dark:text-slate-100">{t("rec.tip")} </span>{p.local_tip}</span>
             </p>
           </div>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500 dark:text-slate-400">
             <span className="inline-flex items-center gap-1.5">
               <Clock className="h-4 w-4" /> {p.best_time}
             </span>

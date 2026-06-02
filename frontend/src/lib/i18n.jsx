@@ -174,6 +174,15 @@ export const STRINGS = {
     "ach.login": "เข้าสู่ระบบด้วย Google",
     "ach.resetConfirm": "ล้างความคืบหน้าทั้งหมด?",
     "ach.reset": "รีเซ็ตความคืบหน้า",
+
+    // Leaderboard
+    "lb.title": "🏆 อันดับนักเที่ยว",
+    "lb.loading": "กำลังโหลดอันดับ...",
+    "lb.empty": "ยังไม่มีใครติดอันดับ — เป็นคนแรกเลย!",
+    "lb.you": "คุณ",
+    "lb.refresh": "รีเฟรช",
+    "lb.loginToJoin": "ล็อกอินด้วย Google เพื่อเก็บคะแนนและติดอันดับ",
+    "lb.notRanked": "คะแนนของคุณ (กำลังอัปเดตอันดับ)",
   },
   en: {
     // App shell
@@ -346,6 +355,15 @@ export const STRINGS = {
     "ach.login": "Sign in with Google",
     "ach.resetConfirm": "Clear all progress?",
     "ach.reset": "Reset progress",
+
+    // Leaderboard
+    "lb.title": "🏆 Traveler ranking",
+    "lb.loading": "Loading ranking...",
+    "lb.empty": "No one ranked yet — be the first!",
+    "lb.you": "you",
+    "lb.refresh": "Refresh",
+    "lb.loginToJoin": "Sign in with Google to save your score and join the ranking",
+    "lb.notRanked": "Your score (ranking is updating)",
   },
 };
 

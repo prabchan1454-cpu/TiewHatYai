@@ -1,4 +1,4 @@
-import { Button, ErrorBox, LangToggle } from "../components/ui";
+import { Button, ErrorBox, LangToggle, ThemeToggle } from "../components/ui";
 import { useT } from "../lib/i18n.jsx";
 
 export default function Login({ auth, onGuest }) {
@@ -7,20 +7,21 @@ export default function Login({ auth, onGuest }) {
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-6 px-8 text-center">
-      <div className="absolute right-4 top-4">
+      <div className="absolute right-4 top-4 flex items-center gap-2">
+        <ThemeToggle />
         <LangToggle />
       </div>
       <div>
         <img src="/logo.svg" alt="TiewHatyai" className="mx-auto h-20 w-20 rounded-2xl shadow-md" />
-        <h1 className="mt-3 text-3xl font-extrabold text-deep">{t("app.title")}</h1>
-        <p className="mt-1 text-slate-500">{t("login.subtitle")}</p>
+        <h1 className="mt-3 text-3xl font-extrabold text-deep dark:text-slate-100">{t("app.title")}</h1>
+        <p className="mt-1 text-slate-500 dark:text-slate-400">{t("login.subtitle")}</p>
       </div>
 
       <div className="w-full space-y-3">
         {enabled && (
           <button
             onClick={signInGoogle}
-            className="flex w-full items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3 font-bold text-deep shadow-sm transition duration-200 hover:bg-slate-50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deep/40 focus-visible:ring-offset-2"
+            className="flex w-full items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3 font-bold text-deep shadow-sm transition duration-200 hover:bg-slate-50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deep/40 focus-visible:ring-offset-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700 dark:shadow-none dark:focus-visible:ring-offset-[#0e1525]"
           >
             <img
               src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"

@@ -40,8 +40,8 @@ export default function Chat({ greeting }) {
     <div className="flex h-full flex-col">
       <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4 no-scrollbar">
         {messages.length === 0 && (
-          <div className="mt-12 flex flex-col items-center text-center text-slate-500">
-            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-4xl shadow-card">
+          <div className="mt-12 flex flex-col items-center text-center text-slate-500 dark:text-slate-400">
+            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-4xl shadow-card dark:bg-slate-800 dark:shadow-none">
               🐘
             </span>
             <p className="mt-3 max-w-[16rem] text-sm">{t("chat.empty")}</p>
@@ -53,7 +53,7 @@ export default function Chat({ greeting }) {
               className={`max-w-[80%] whitespace-pre-wrap rounded-3xl px-4 py-2.5 leading-relaxed ${
                 m.role === "user"
                   ? "rounded-br-md bg-sunset text-white"
-                  : "rounded-bl-md bg-white text-deep shadow-sm"
+                  : "rounded-bl-md bg-white text-deep shadow-sm dark:bg-slate-800 dark:text-slate-100 dark:shadow-none"
               }`}
             >
               {m.content}
@@ -62,7 +62,7 @@ export default function Chat({ greeting }) {
         ))}
         {loading && (
           <div className="flex justify-start">
-            <div className="rounded-3xl rounded-bl-md bg-white px-4 py-3 shadow-sm">
+            <div className="rounded-3xl rounded-bl-md bg-white px-4 py-3 shadow-sm dark:bg-slate-800 dark:shadow-none">
               <span className="flex gap-1">
                 <Dot /> <Dot delay="150ms" /> <Dot delay="300ms" />
               </span>
@@ -72,7 +72,7 @@ export default function Chat({ greeting }) {
         <div ref={endRef} />
       </div>
 
-      <div className="space-y-2 border-t border-slate-200 bg-white/80 px-4 py-3 backdrop-blur">
+      <div className="space-y-2 border-t border-slate-200 bg-white/80 px-4 py-3 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
         <ErrorBox message={error} />
         {messages.length <= 1 && (
           <div className="flex flex-wrap gap-2">
@@ -80,7 +80,7 @@ export default function Chat({ greeting }) {
               <button
                 key={s}
                 onClick={() => send(s)}
-                className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-deep transition duration-200 hover:border-sunset hover:bg-orange-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/40"
+                className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-deep transition duration-200 hover:border-sunset hover:bg-orange-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/40 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
               >
                 {s}
               </button>
@@ -93,7 +93,7 @@ export default function Chat({ greeting }) {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && send()}
             placeholder={t("chat.placeholder")}
-            className="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-deep outline-none transition placeholder:text-slate-400 focus:border-sunset focus:ring-2 focus:ring-sunset/30"
+            className="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-deep outline-none transition placeholder:text-slate-400 focus:border-sunset focus:ring-2 focus:ring-sunset/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500"
           />
           <button
             onClick={() => send()}
@@ -111,7 +111,7 @@ export default function Chat({ greeting }) {
 function Dot({ delay = "0ms" }) {
   return (
     <span
-      className="h-2 w-2 animate-bounce rounded-full bg-slate-400"
+      className="h-2 w-2 animate-bounce rounded-full bg-slate-400 dark:bg-slate-500"
       style={{ animationDelay: delay }}
     />
   );

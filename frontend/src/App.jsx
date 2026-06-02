@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProgress, levelFor } from "./lib/progress";
 import { useAuth } from "./lib/auth";
+import { syncScore } from "./lib/leaderboard";
 import { useT } from "./lib/i18n.jsx";
 import Landing from "./screens/Landing";
 import Login from "./screens/Login";
@@ -11,7 +12,7 @@ import Quests from "./screens/Quests";
 import Recommend from "./screens/Recommend";
 import Achievements from "./screens/Achievements";
 import RewardOverlay from "./components/RewardOverlay";
-import { Spinner, LangToggle } from "./components/ui";
+import { Spinner, LangToggle, ThemeToggle } from "./components/ui";
 import { House, MessageCircle, Compass, Sparkles, Trophy, Zap } from "lucide-react";
 
 const TABS = [
@@ -30,6 +31,18 @@ export default function App() {
   const { t } = useT();
   const [tab, setTab] = useState("home");
   const [slideDir, setSlideDir] = useState("right");
+
+  // Keep the signed-in user's leaderboard row in sync with their XP/badges.
+  // Runs before the early returns below so hook order stays stable.
+  useEffect(() => {
+    if (auth.user) {
+      syncScore(auth.user, {
+        xp: state.xp,
+        level: levelFor(state.xp).name,
+        badges: state.badges.length,
+      });
+    }
+  }, [auth.user, state.xp, state.badges.length]);
 
   function navigate(newTab) {
     const oldIdx = TAB_ORDER.indexOf(tab);
@@ -66,22 +79,23 @@ export default function App() {
   const displayName = auth.user?.displayName?.split(" ")[0] || t("app.defaultName");
 
   return (
-    <div className="mx-auto flex h-screen max-w-md flex-col bg-canvas">
-      <header className="flex items-center justify-between border-b border-slate-100 bg-white/90 px-4 py-3 backdrop-blur">
+    <div className="mx-auto flex h-screen max-w-md flex-col bg-canvas dark:bg-[#0e1525]">
+      <header className="flex items-center justify-between border-b border-slate-100 bg-white/90 px-4 py-3 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
         <div className="flex items-center gap-2.5">
           {auth.user?.photoURL ? (
-            <img src={auth.user.photoURL} alt="" className="h-9 w-9 rounded-full ring-2 ring-slate-100" />
+            <img src={auth.user.photoURL} alt="" className="h-9 w-9 rounded-full ring-2 ring-slate-100 dark:ring-slate-700" />
           ) : (
             <img src="/logo.svg" alt="TiewHatyai" className="h-9 w-9 rounded-xl" />
           )}
           <div>
-            <h1 className="text-[15px] font-bold leading-tight text-deep">{t("app.greeting", { name: displayName })}</h1>
-            <p className="text-xs font-medium text-slate-500">{t("level." + lvl.name)}</p>
+            <h1 className="text-[15px] font-bold leading-tight text-deep dark:text-slate-100">{t("app.greeting", { name: displayName })}</h1>
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{t("level." + lvl.name)}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <LangToggle />
-          <div className="flex items-center gap-1.5 rounded-full bg-deep px-3 py-1.5 text-sm font-bold text-white">
+          <div className="flex items-center gap-1.5 rounded-full bg-deep px-3 py-1.5 text-sm font-bold text-white dark:bg-slate-800 dark:ring-1 dark:ring-white/10">
             <Zap className="h-3.5 w-3.5 text-mango" fill="currentColor" />
             <span className="tnum">{state.xp}</span>
           </div>
@@ -110,7 +124,7 @@ export default function App() {
         )}
       </main>
 
-      <nav className="grid grid-cols-5 border-t border-slate-100 bg-white pb-[env(safe-area-inset-bottom)]">
+      <nav className="grid grid-cols-5 border-t border-slate-100 bg-white pb-[env(safe-area-inset-bottom)] dark:border-slate-800 dark:bg-slate-900">
         {TABS.map((tb) => {
           const active = tab === tb.id;
           return (
@@ -119,7 +133,7 @@ export default function App() {
               onClick={() => navigate(tb.id)}
               aria-current={active ? "page" : undefined}
               className={`relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sunset/50 ${
-                active ? "text-sunset" : "text-slate-400 hover:text-deep"
+                active ? "text-sunset" : "text-slate-400 hover:text-deep dark:hover:text-slate-100"
               }`}
             >
               {active && (
