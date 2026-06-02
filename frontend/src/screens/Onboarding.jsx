@@ -2,6 +2,19 @@ import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 import { Button, Card, ErrorBox, Spinner, LangToggle } from "../components/ui";
 import { useT } from "../lib/i18n.jsx";
+import { LayoutGrid, Palette, Users, Heart } from "lucide-react";
+
+function StepHead({ Icon, title, hint }) {
+  return (
+    <div className="text-center">
+      <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-sunset/10 text-sunset">
+        <Icon className="h-6 w-6" />
+      </span>
+      <p className="mt-2.5 text-lg font-bold text-deep">{title}</p>
+      {hint && <p className="text-sm text-slate-500">{hint}</p>}
+    </div>
+  );
+}
 
 const CATEGORIES = ["cat.food", "cat.souvenir", "cat.temple", "cat.nature", "cat.market", "cat.cafe"];
 const VIBES = ["vibe.calm", "vibe.lively", "vibe.adventure"];
@@ -137,11 +150,7 @@ export default function Onboarding({ onDone }) {
         {/* Step 0 — ชอบเที่ยวแบบไหน */}
         {step === 0 && (
           <div className="space-y-4">
-            <div className="text-center">
-              <div className="text-4xl mb-1">🗂️</div>
-              <p className="font-bold text-deep text-lg">{t("onboard.q.categories")}</p>
-              <p className="text-sm text-slate-500">{t("onboard.q.categories.hint")}</p>
-            </div>
+            <StepHead Icon={LayoutGrid} title={t("onboard.q.categories")} hint={t("onboard.q.categories.hint")} />
             <div className="flex flex-wrap gap-2 justify-center pt-1">
               {CATEGORIES.map((c) => (
                 <Choice key={c} label={t(c)} active={categories.includes(c)} onClick={() => toggleCat(c)} />
@@ -153,10 +162,7 @@ export default function Onboarding({ onDone }) {
         {/* Step 1 — สไตล์ + งบ */}
         {step === 1 && (
           <div className="space-y-5">
-            <div className="text-center">
-              <div className="text-4xl mb-1">✨</div>
-              <p className="font-bold text-deep text-lg">{t("onboard.q.vibe_budget")}</p>
-            </div>
+            <StepHead Icon={Palette} title={t("onboard.q.vibe_budget")} />
             <div>
               <p className="mb-2 font-semibold text-deep text-sm">{t("onboard.q.vibe")}</p>
               <div className="flex flex-wrap gap-2">
@@ -179,10 +185,7 @@ export default function Onboarding({ onDone }) {
         {/* Step 2 — มากับใคร + ระยะเวลา */}
         {step === 2 && (
           <div className="space-y-5">
-            <div className="text-center">
-              <div className="text-4xl mb-1">🧭</div>
-              <p className="font-bold text-deep text-lg">{t("onboard.q.companion_duration")}</p>
-            </div>
+            <StepHead Icon={Users} title={t("onboard.q.companion_duration")} />
             <div>
               <p className="mb-2 font-semibold text-deep text-sm">{t("onboard.q.companion")}</p>
               <div className="flex flex-wrap gap-2">
@@ -205,11 +208,7 @@ export default function Onboarding({ onDone }) {
         {/* Step 3 — ความสนใจพิเศษ */}
         {step === 3 && (
           <div className="space-y-4">
-            <div className="text-center">
-              <div className="text-4xl mb-1">🌟</div>
-              <p className="font-bold text-deep text-lg">{t("onboard.q.interests")}</p>
-              <p className="text-sm text-slate-500">{t("onboard.q.interests.hint")}</p>
-            </div>
+            <StepHead Icon={Heart} title={t("onboard.q.interests")} hint={t("onboard.q.interests.hint")} />
             <div className="flex flex-wrap gap-2 justify-center pt-1">
               {INTERESTS.map((i) => (
                 <Choice key={i} label={t(i)} active={interests.includes(i)} onClick={() => toggleInterest(i)} />

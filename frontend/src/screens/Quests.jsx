@@ -3,6 +3,18 @@ import { api } from "../lib/api";
 import { levelFor, todayStr } from "../lib/progress";
 import { Button, Card, ErrorBox, Pill, Spinner } from "../components/ui";
 import { useT } from "../lib/i18n.jsx";
+import {
+  Sunrise,
+  Flame,
+  Compass,
+  Target,
+  Lightbulb,
+  Award,
+  Camera,
+  LocateFixed,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
 
 function distanceKm(lat1, lng1, lat2, lng2) {
   const R = 6371;
@@ -149,26 +161,35 @@ export default function Quests({ progress }) {
   }
 
   return (
-    <div className="space-y-4 px-4 py-4">
+    <div className="space-y-4 p-4 pb-6">
       <ErrorBox message={error} />
 
       {!quest?.isDaily && (
-        <Card className="bg-gradient-to-br from-mango/20 to-sunset/10">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-extrabold text-deep">🌅 {t("daily.title")}</h3>
-              <p className="text-sm text-slate-500">{t("daily.subtitle")}</p>
+        <Card>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-mango/15 text-amber-600">
+                <Sunrise className="h-5 w-5" />
+              </span>
+              <div>
+                <h3 className="font-bold text-deep">{t("daily.title")}</h3>
+                <p className="text-xs text-slate-500">{t("daily.subtitle")}</p>
+              </div>
             </div>
-            <span className="text-sm font-bold text-sunset">
-              {state.daily.streak > 0
-                ? t("daily.streak", { n: state.daily.streak })
-                : ""}
-            </span>
+            {state.daily.streak > 0 && (
+              <span className="flex shrink-0 items-center gap-1 rounded-full bg-sunset/10 px-2.5 py-1 text-xs font-bold text-sunset">
+                <Flame className="h-3.5 w-3.5" />
+                <span className="tnum">{state.daily.streak}</span>
+              </span>
+            )}
           </div>
           {dailyDoneToday ? (
-            <div className="mt-3 rounded-2xl bg-emerald-50 p-3 text-sm">
-              <p className="font-bold text-deep">{t("daily.doneToday")}</p>
-              <p className="text-slate-500">{t("daily.comeBack")}</p>
+            <div className="mt-3 flex items-start gap-2 rounded-xl bg-emerald-50 p-3 text-sm">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+              <div>
+                <p className="font-semibold text-deep">{t("daily.doneToday")}</p>
+                <p className="text-slate-600">{t("daily.comeBack")}</p>
+              </div>
             </div>
           ) : (
             <Button onClick={getDaily} disabled={dailyLoading} className="mt-3 w-full">
@@ -179,9 +200,11 @@ export default function Quests({ progress }) {
       )}
 
       {!quest && (
-        <Card className="bg-gradient-to-br from-sunset/15 to-mango/10 text-center">
-          <div className="text-5xl">🎯</div>
-          <h2 className="mt-2 text-xl font-extrabold text-deep">{t("quest.readyTitle")}</h2>
+        <Card className="text-center">
+          <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-sunset/10 text-sunset">
+            <Compass className="h-7 w-7" />
+          </span>
+          <h2 className="mt-3 text-xl font-extrabold text-deep">{t("quest.readyTitle")}</h2>
           <p className="mt-1 text-sm text-slate-500">{t("quest.readyDesc")}</p>
           <Button onClick={getQuest} disabled={loading} className="mt-4 w-full">
             {loading ? t("quest.rolling") : t("quest.getNew")}
@@ -195,23 +218,34 @@ export default function Quests({ progress }) {
         <Card className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              {quest.isDaily && <Pill tone="sunset">🌅 {t("daily.badge")}</Pill>}
+              {quest.isDaily && (
+                <Pill tone="sunset">
+                  <span className="inline-flex items-center gap-1">
+                    <Sunrise className="h-3 w-3" /> {t("daily.badge")}
+                  </span>
+                </Pill>
+              )}
               <Pill>{quest.difficulty}</Pill>
             </div>
-            <span className="text-sm font-bold text-sunset">+{quest.reward_xp} XP</span>
+            <span className="tnum text-sm font-bold text-sunset">+{quest.reward_xp} XP</span>
           </div>
-          <h2 className="text-xl font-extrabold text-deep">{quest.quest_name}</h2>
+          <h2 className="text-xl font-extrabold leading-snug text-deep">{quest.quest_name}</h2>
           <p className="italic text-slate-600">{quest.quest_story}</p>
 
-          <div className="rounded-2xl bg-slate-50 p-3 text-sm">
-            <p className="font-bold text-deep">{t("quest.objective")}</p>
-            <p className="text-slate-600">{quest.objective}</p>
+          <div className="rounded-xl bg-slate-50 p-3 text-sm">
+            <p className="flex items-center gap-1.5 font-bold text-deep">
+              <Target className="h-4 w-4 text-sunset" /> {t("quest.objective")}
+            </p>
+            <p className="mt-0.5 text-slate-600">{quest.objective}</p>
           </div>
-          <div className="rounded-2xl bg-teal-50 p-3 text-sm">
-            <p className="font-bold text-lagoon">{t("quest.hint")}</p>
-            <p className="text-slate-600">{quest.location_hint}</p>
+          <div className="rounded-xl bg-lagoon/5 p-3 text-sm">
+            <p className="flex items-center gap-1.5 font-bold text-lagoon">
+              <Lightbulb className="h-4 w-4" /> {t("quest.hint")}
+            </p>
+            <p className="mt-0.5 text-slate-600">{quest.location_hint}</p>
           </div>
-          <div className="flex items-center gap-2 text-sm text-slate-500">
+          <div className="flex items-center gap-1.5 text-sm text-slate-500">
+            <Award className="h-4 w-4 text-mango" />
             <span>{t("quest.reward")}</span>
             <span className="font-semibold text-deep">{quest.reward_badge}</span>
           </div>
@@ -224,11 +258,13 @@ export default function Quests({ progress }) {
                 onChange={(e) => setDesc(e.target.value)}
                 placeholder={t("quest.descPlaceholder")}
                 rows={3}
-                className="w-full rounded-2xl border border-slate-200 p-3 text-deep outline-none transition placeholder:text-slate-400 focus:border-sunset focus:ring-2 focus:ring-sunset/30"
+                className="w-full rounded-xl border border-slate-200 p-3 text-deep outline-none transition placeholder:text-slate-400 focus:border-sunset focus:ring-2 focus:ring-sunset/30"
               />
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-500 focus-within:[&>span:first-child]:ring-2 focus-within:[&>span:first-child]:ring-sunset/40">
-                <span className="rounded-xl bg-slate-100 px-3 py-2 font-semibold text-deep transition hover:bg-slate-200">{t("quest.attachPhoto")}</span>
-                <span>{photo ? photo.name : t("quest.optional")}</span>
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-500">
+                <span className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-3 py-2 font-semibold text-deep transition hover:bg-slate-200">
+                  <Camera className="h-4 w-4" /> {t("quest.attachPhoto")}
+                </span>
+                <span className="truncate">{photo ? photo.name : t("quest.optional")}</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -248,7 +284,7 @@ export default function Quests({ progress }) {
                       type="button"
                       onClick={checkIn}
                       disabled={geoLoading}
-                      className={`w-full rounded-2xl border px-3 py-2 text-sm font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon/40 disabled:opacity-50 ${
+                      className={`flex w-full items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon/40 disabled:opacity-50 ${
                         nearby
                           ? "border-emerald-200 bg-emerald-50 text-emerald-700"
                           : coords
@@ -256,6 +292,7 @@ export default function Quests({ progress }) {
                             : "border-slate-200 text-slate-600 hover:border-lagoon hover:text-lagoon"
                       }`}
                     >
+                      <LocateFixed className="h-4 w-4" />
                       {geoLoading ? t("quest.checkingIn") : t("quest.checkin")}
                     </button>
                     {coords && km !== null && (
@@ -271,7 +308,6 @@ export default function Quests({ progress }) {
                   </>
                 );
               })()}
-              <ErrorBox message={result && !result.verified ? null : ""} />
               <Button variant="lagoon" onClick={submit} disabled={verifying || !desc.trim()} className="w-full">
                 {verifying ? t("quest.verifying") : t("quest.submit")}
               </Button>
@@ -280,30 +316,40 @@ export default function Quests({ progress }) {
 
           {result && (
             <div
-              className={`rounded-2xl p-4 ${
+              className={`flex items-start gap-2.5 rounded-xl p-4 ${
                 result.verified ? "bg-emerald-50" : "bg-amber-50"
               }`}
             >
-              <p className="font-bold text-deep">
-                {result.verified ? t("quest.success") : t("quest.almost")}{" "}
-                <span className="text-xs font-normal text-slate-400">
-                  ({t("quest.confidence")}: {result.confidence})
-                </span>
-              </p>
-              <p className="mt-1 text-slate-700">{result.message}</p>
-              {!result.verified && result.feedback && (
-                <p className="mt-2 text-sm text-slate-500">💡 {result.feedback}</p>
+              {result.verified ? (
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
+              ) : (
+                <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
               )}
-              {result.verified && (
-                <Button onClick={finishQuest} className="mt-3 w-full">
-                  {t("quest.next")}
-                </Button>
-              )}
+              <div className="flex-1">
+                <p className="font-bold text-deep">
+                  {result.verified ? t("quest.success") : t("quest.almost")}{" "}
+                  <span className="text-xs font-normal text-slate-500">
+                    ({t("quest.confidence")}: {result.confidence})
+                  </span>
+                </p>
+                <p className="mt-1 text-slate-700">{result.message}</p>
+                {!result.verified && result.feedback && (
+                  <p className="mt-2 text-sm text-slate-500">{result.feedback}</p>
+                )}
+                {result.verified && (
+                  <Button onClick={finishQuest} className="mt-3 w-full">
+                    {t("quest.next")}
+                  </Button>
+                )}
+              </div>
             </div>
           )}
 
           {!result?.verified && (
-            <button onClick={finishQuest} className="w-full rounded-xl py-1.5 text-sm text-slate-500 transition hover:text-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300">
+            <button
+              onClick={finishQuest}
+              className="w-full rounded-xl py-1.5 text-sm text-slate-500 transition hover:text-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
+            >
               {t("quest.skip")}
             </button>
           )}

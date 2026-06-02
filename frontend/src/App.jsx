@@ -12,13 +12,14 @@ import Recommend from "./screens/Recommend";
 import Achievements from "./screens/Achievements";
 import RewardOverlay from "./components/RewardOverlay";
 import { Spinner, LangToggle } from "./components/ui";
+import { House, MessageCircle, Compass, Sparkles, Trophy, Zap } from "lucide-react";
 
 const TABS = [
-  { id: "home", key: "tab.home", icon: "🏠" },
-  { id: "chat", key: "tab.chat", icon: "💬" },
-  { id: "quests", key: "tab.quests", icon: "🎯" },
-  { id: "recommend", key: "tab.recommend", icon: "⭐" },
-  { id: "profile", key: "tab.profile", icon: "🏅" },
+  { id: "home", key: "tab.home", Icon: House },
+  { id: "chat", key: "tab.chat", Icon: MessageCircle },
+  { id: "quests", key: "tab.quests", Icon: Compass },
+  { id: "recommend", key: "tab.recommend", Icon: Sparkles },
+  { id: "profile", key: "tab.profile", Icon: Trophy },
 ];
 const TAB_ORDER = TABS.map((t) => t.id);
 
@@ -65,23 +66,24 @@ export default function App() {
   const displayName = auth.user?.displayName?.split(" ")[0] || t("app.defaultName");
 
   return (
-    <div className="mx-auto flex h-screen max-w-md flex-col bg-slate-50">
-      <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3">
-        <div className="flex items-center gap-2">
+    <div className="mx-auto flex h-screen max-w-md flex-col bg-canvas">
+      <header className="flex items-center justify-between border-b border-slate-100 bg-white/90 px-4 py-3 backdrop-blur">
+        <div className="flex items-center gap-2.5">
           {auth.user?.photoURL ? (
-            <img src={auth.user.photoURL} alt="" className="h-9 w-9 rounded-full" />
+            <img src={auth.user.photoURL} alt="" className="h-9 w-9 rounded-full ring-2 ring-slate-100" />
           ) : (
-            <img src="/logo.svg" alt="TiewHatyai" className="h-9 w-9 rounded-lg" />
+            <img src="/logo.svg" alt="TiewHatyai" className="h-9 w-9 rounded-xl" />
           )}
           <div>
-            <h1 className="font-extrabold leading-none text-deep">{t("app.greeting", { name: displayName })}</h1>
-            <p className="text-xs text-slate-500">{t("level." + lvl.name)}</p>
+            <h1 className="text-[15px] font-bold leading-tight text-deep">{t("app.greeting", { name: displayName })}</h1>
+            <p className="text-xs font-medium text-slate-500">{t("level." + lvl.name)}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <LangToggle />
-          <div className="rounded-full bg-mango/15 px-3 py-1 text-sm font-bold text-sunset">
-            ⚡ {state.xp} XP
+          <div className="flex items-center gap-1.5 rounded-full bg-deep px-3 py-1.5 text-sm font-bold text-white">
+            <Zap className="h-3.5 w-3.5 text-mango" fill="currentColor" />
+            <span className="tnum">{state.xp}</span>
           </div>
         </div>
       </header>
@@ -108,18 +110,22 @@ export default function App() {
         )}
       </main>
 
-      <nav className="grid grid-cols-5 border-t border-slate-200 bg-white">
+      <nav className="grid grid-cols-5 border-t border-slate-100 bg-white pb-[env(safe-area-inset-bottom)]">
         {TABS.map((tb) => {
+          const active = tab === tb.id;
           return (
             <button
               key={tb.id}
               onClick={() => navigate(tb.id)}
-              aria-current={tab === tb.id ? "page" : undefined}
-              className={`flex flex-col items-center gap-0.5 py-2.5 text-xs font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sunset/50 ${
-                tab === tb.id ? "text-sunset" : "text-slate-500 hover:text-deep"
+              aria-current={active ? "page" : undefined}
+              className={`relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sunset/50 ${
+                active ? "text-sunset" : "text-slate-400 hover:text-deep"
               }`}
             >
-              <span className="text-xl">{tb.icon}</span>
+              {active && (
+                <span className="absolute top-0 h-0.5 w-8 rounded-full bg-sunset" />
+              )}
+              <tb.Icon className="h-5 w-5" strokeWidth={active ? 2.4 : 2} />
               {t(tb.key)}
             </button>
           );

@@ -29,11 +29,14 @@ export function Button({ children, variant = "primary", className = "", ...props
   );
 }
 
-export function Card({ children, className = "" }) {
+export function Card({ children, className = "", as: Tag = "div", ...props }) {
   return (
-    <div className={`rounded-3xl bg-white p-5 shadow-sm shadow-slate-200/60 ${className}`}>
+    <Tag
+      className={`rounded-2xl border border-slate-100 bg-white p-5 shadow-card ${className}`}
+      {...props}
+    >
       {children}
-    </div>
+    </Tag>
   );
 }
 

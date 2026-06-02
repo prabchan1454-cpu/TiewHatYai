@@ -8,8 +8,16 @@
 
 body {
   margin: 0;
-  background: #f4f6fb;
+  background: #f6f7fb;
+  color: #334155;
   -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Numerals that don't jitter as values change (XP, stats, distances). */
+.tnum {
+  font-variant-numeric: tabular-nums;
 }
 
 /* Keyboard focus only — never show the ring for mouse/touch users. */

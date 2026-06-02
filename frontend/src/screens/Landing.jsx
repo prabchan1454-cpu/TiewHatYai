@@ -1,17 +1,18 @@
 import { Button, LangToggle } from "../components/ui";
 import { useT } from "../lib/i18n.jsx";
+import { MessageCircle, Compass, Sparkles, Trophy } from "lucide-react";
 
 const FEATURES = [
-  { icon: "💬", key: "chat" },
-  { icon: "🎯", key: "quest" },
-  { icon: "⭐", key: "places" },
-  { icon: "🏅", key: "rewards" },
+  { Icon: MessageCircle, key: "chat" },
+  { Icon: Compass, key: "quest" },
+  { Icon: Sparkles, key: "places" },
+  { Icon: Trophy, key: "rewards" },
 ];
 
 export default function Landing({ onStart }) {
   const { t } = useT();
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col bg-gradient-to-b from-sunset via-mango to-lagoon px-6 py-10 text-white">
+    <div className="mx-auto flex min-h-screen max-w-md flex-col bg-gradient-to-b from-sunset to-mango px-6 py-10 text-white">
       <div className="flex justify-end">
         <LangToggle />
       </div>
@@ -24,11 +25,11 @@ export default function Landing({ onStart }) {
           {FEATURES.map((f) => (
             <div
               key={f.key}
-              className="rounded-2xl bg-white/15 p-4 text-left backdrop-blur-sm"
+              className="rounded-2xl bg-white/15 p-4 text-left ring-1 ring-white/15"
             >
-              <div className="text-2xl">{f.icon}</div>
-              <p className="mt-1 font-bold">{t(`landing.feat.${f.key}.title`)}</p>
-              <p className="text-xs text-white/80">{t(`landing.feat.${f.key}.desc`)}</p>
+              <f.Icon className="h-6 w-6" strokeWidth={2.2} />
+              <p className="mt-2 font-bold">{t(`landing.feat.${f.key}.title`)}</p>
+              <p className="text-xs text-white/85">{t(`landing.feat.${f.key}.desc`)}</p>
             </div>
           ))}
         </div>

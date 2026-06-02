@@ -40,9 +40,11 @@ export default function Chat({ greeting }) {
     <div className="flex h-full flex-col">
       <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4 no-scrollbar">
         {messages.length === 0 && (
-          <div className="mt-10 text-center text-slate-500">
-            <div className="text-4xl">🐘</div>
-            <p className="mt-2">{t("chat.empty")}</p>
+          <div className="mt-12 flex flex-col items-center text-center text-slate-500">
+            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-4xl shadow-card">
+              🐘
+            </span>
+            <p className="mt-3 max-w-[16rem] text-sm">{t("chat.empty")}</p>
           </div>
         )}
         {messages.map((m, i) => (

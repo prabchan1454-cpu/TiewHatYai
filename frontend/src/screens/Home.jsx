@@ -1,12 +1,22 @@
 import { Card, Button } from "../components/ui";
 import { levelFor, nextLevel } from "../lib/progress";
 import { useT } from "../lib/i18n.jsx";
+import {
+  MessageCircle,
+  Compass,
+  Sparkles,
+  Trophy,
+  Flag,
+  Award,
+  Zap,
+  ChevronRight,
+} from "lucide-react";
 
 const LINKS = [
-  { id: "chat", icon: "💬", key: "chat" },
-  { id: "quests", icon: "🎯", key: "quests" },
-  { id: "recommend", icon: "⭐", key: "recommend" },
-  { id: "profile", icon: "🏅", key: "profile" },
+  { id: "chat", Icon: MessageCircle, key: "chat", tint: "bg-sunset/10 text-sunset" },
+  { id: "quests", Icon: Compass, key: "quests", tint: "bg-lagoon/10 text-lagoon" },
+  { id: "recommend", Icon: Sparkles, key: "recommend", tint: "bg-mango/15 text-amber-600" },
+  { id: "profile", Icon: Trophy, key: "profile", tint: "bg-deep/10 text-deep" },
 ];
 
 export default function Home({ progress, onNavigate }) {
@@ -19,80 +29,111 @@ export default function Home({ progress, onNavigate }) {
     : 100;
 
   return (
-    <div className="space-y-4 p-4">
-      <Card className="bg-gradient-to-br from-sunset to-mango text-white">
-        <div className="flex items-center justify-between">
+    <div className="space-y-4 p-4 pb-6">
+      {/* Committed navy hero — the one drenched moment on this screen */}
+      <section className="rounded-3xl bg-deep p-5 text-white shadow-hero">
+        <div className="flex items-start justify-between">
           <div>
-            <p className="text-sm text-white/80">{t("home.yourLevel")}</p>
-            <h2 className="text-2xl font-extrabold">{t("level." + lvl.name)}</h2>
+            <p className="text-xs font-medium text-white/55">{t("home.yourLevel")}</p>
+            <h2 className="mt-0.5 text-2xl font-extrabold tracking-tight">
+              {t("level." + lvl.name)}
+            </h2>
           </div>
-          <div className="rounded-full bg-white/20 px-4 py-2 text-lg font-bold">
-            ⚡ {state.xp} XP
+          <div className="flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-sm font-bold">
+            <Zap className="h-4 w-4 text-mango" fill="currentColor" />
+            <span className="tnum">{state.xp}</span>
+            <span className="text-white/45">XP</span>
           </div>
         </div>
-        <div className="mt-4">
-          <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/25">
-            <div className="h-full rounded-full bg-white" style={{ width: `${pct}%` }} />
+        <div className="mt-5">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-white/15">
+            <div
+              className="h-full rounded-full bg-mango transition-all duration-500"
+              style={{ width: `${pct}%` }}
+            />
           </div>
-          <p className="mt-1 text-xs text-white/80">
+          <p className="mt-2 text-xs text-white/60">
             {next
               ? t("home.toNext", { xp: next.min - state.xp, level: t("level." + next.name) })
               : t("home.maxLevel")}
           </p>
         </div>
+      </section>
+
+      {/* One stat card, split by a divider — not two identical big-number cards */}
+      <Card className="flex items-stretch divide-x divide-slate-100 p-0">
+        <div className="flex flex-1 items-center gap-3 p-4">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-lagoon/10 text-lagoon">
+            <Flag className="h-5 w-5" />
+          </span>
+          <div>
+            <p className="tnum text-xl font-extrabold leading-none text-deep">
+              {state.completedQuests.length}
+            </p>
+            <p className="mt-1 text-xs font-medium text-slate-500">{t("home.questsDone")}</p>
+          </div>
+        </div>
+        <div className="flex flex-1 items-center gap-3 p-4">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sunset/10 text-sunset">
+            <Award className="h-5 w-5" />
+          </span>
+          <div>
+            <p className="tnum text-xl font-extrabold leading-none text-deep">
+              {state.badges.length}
+            </p>
+            <p className="mt-1 text-xs font-medium text-slate-500">{t("home.rewardsGot")}</p>
+          </div>
+        </div>
       </Card>
 
-      <div className="grid grid-cols-2 gap-3">
-        <Card className="text-center">
-          <div className="text-3xl font-extrabold text-lagoon">{state.completedQuests.length}</div>
-          <p className="text-xs font-semibold text-slate-500">{t("home.questsDone")}</p>
-        </Card>
-        <Card className="text-center">
-          <div className="text-3xl font-extrabold text-sunset">{state.badges.length}</div>
-          <p className="text-xs font-semibold text-slate-500">{t("home.rewardsGot")}</p>
-        </Card>
-      </div>
-
       {state.activeQuest ? (
-        <Card className="border-2 border-sunset/30">
-          <p className="text-xs font-bold uppercase text-sunset">{t("home.activeQuest")}</p>
-          <h3 className="mt-1 font-bold text-deep">{state.activeQuest.quest_name}</h3>
-          <p className="mt-1 text-sm text-slate-500 line-clamp-2">
+        <Card>
+          <div className="flex items-center gap-1.5 text-sunset">
+            <Flag className="h-3.5 w-3.5" />
+            <p className="text-xs font-bold">{t("home.activeQuest")}</p>
+          </div>
+          <h3 className="mt-2 font-bold text-deep">{state.activeQuest.quest_name}</h3>
+          <p className="mt-1 line-clamp-2 text-sm text-slate-600">
             {state.activeQuest.objective}
           </p>
-          <Button onClick={() => onNavigate("quests")} className="mt-3 w-full">
+          <Button onClick={() => onNavigate("quests")} className="mt-4 w-full">
             {t("home.continueQuest")}
           </Button>
         </Card>
       ) : (
-        <Card className="bg-gradient-to-br from-lagoon/15 to-mango/10 text-center">
-          <p className="font-bold text-deep">{t("home.noActiveQuest")}</p>
+        <Card className="text-center">
+          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-lagoon/10 text-lagoon">
+            <Compass className="h-6 w-6" />
+          </span>
+          <p className="mt-3 font-bold text-deep">{t("home.noActiveQuest")}</p>
           <p className="mt-1 text-sm text-slate-500">{t("home.noActiveQuestDesc")}</p>
-          <Button onClick={() => onNavigate("quests")} variant="lagoon" className="mt-3 w-full">
+          <Button onClick={() => onNavigate("quests")} variant="lagoon" className="mt-4 w-full">
             {t("home.getQuest")}
           </Button>
         </Card>
       )}
 
-      <div>
-        <p className="mb-2 px-1 font-bold text-deep">{t("home.keepGoing")}</p>
-        <div className="grid grid-cols-1 gap-2">
+      <section>
+        <h2 className="mb-2.5 px-1 text-sm font-bold text-deep">{t("home.keepGoing")}</h2>
+        <div className="space-y-2">
           {LINKS.map((l) => (
             <button
               key={l.id}
               onClick={() => onNavigate(l.id)}
-              className="flex items-center gap-3 rounded-2xl bg-white p-4 text-left shadow-sm shadow-slate-200/60 transition duration-200 hover:shadow-md hover:shadow-slate-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/40"
+              className="flex w-full items-center gap-3 rounded-2xl border border-slate-100 bg-white p-3.5 text-left shadow-card transition duration-200 hover:shadow-lift active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/40"
             >
-              <span className="text-2xl">{l.icon}</span>
+              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${l.tint}`}>
+                <l.Icon className="h-5 w-5" />
+              </span>
               <div className="flex-1">
-                <p className="font-bold text-deep">{t(`home.link.${l.key}.title`)}</p>
+                <p className="font-semibold text-deep">{t(`home.link.${l.key}.title`)}</p>
                 <p className="text-xs text-slate-500">{t(`home.link.${l.key}.desc`)}</p>
               </div>
-              <span className="text-slate-300">›</span>
+              <ChevronRight className="h-5 w-5 shrink-0 text-slate-300" />
             </button>
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 }
