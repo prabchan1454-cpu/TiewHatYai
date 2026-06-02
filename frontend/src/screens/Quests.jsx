@@ -83,7 +83,7 @@ export default function Quests({ progress }) {
     setResult(null);
     try {
       const q = await api.quest({
-        user_location_area: "หาดใหญ่",
+        user_location_area: "สงขลา",
         user_level: level,
         completed_quests: state.completedQuests,
       });
@@ -101,7 +101,7 @@ export default function Quests({ progress }) {
     setResult(null);
     try {
       const q = await api.quest({
-        user_location_area: "หาดใหญ่",
+        user_location_area: "สงขลา",
         user_level: level,
         completed_quests: state.completedQuests,
       });
@@ -119,7 +119,7 @@ export default function Quests({ progress }) {
     setResult(null);
     try {
       const q = await api.quest({
-        user_location_area: "หาดใหญ่",
+        user_location_area: "สงขลา",
         user_level: level,
         completed_quests: state.completedQuests,
         festival: fest.festival.theme,

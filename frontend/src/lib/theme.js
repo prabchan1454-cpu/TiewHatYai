@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-const KEY = "tiewhatyai_theme";
+const KEY = "travelsongkhla_theme";
 
 function initialTheme() {
   try {

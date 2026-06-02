@@ -1,7 +1,7 @@
 const BASE = import.meta.env.VITE_API_BASE_URL || "";
 
 function currentLang() {
-  const v = localStorage.getItem("tiewhatyai_lang");
+  const v = localStorage.getItem("travelsongkhla_lang");
   return v === "en" ? "en" : "th";
 }
 
@@ -29,6 +29,7 @@ export const api = {
   chat: (messages) => post("/api/chat", { messages }),
   quest: (payload) => post("/api/quest", payload),
   recommend: (payload) => post("/api/recommend", payload),
+  souvenirs: (payload) => post("/api/souvenirs", payload),
   verify: (payload) => post("/api/verify", payload),
   badge: (payload) => post("/api/badge", payload),
 };

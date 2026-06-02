@@ -1,11 +1,11 @@
 import { createContext, useCallback, useContext, useState } from "react";
 
-const KEY = "tiewhatyai_lang";
+const KEY = "travelsongkhla_lang";
 
 export const STRINGS = {
   th: {
     // App shell
-    "app.title": "เที่ยวหาดใหญ่",
+    "app.title": "เที่ยวสงขลา",
     "app.greeting": "สวัสดี {name}",
     "app.defaultName": "นักเที่ยว",
     "app.loading": "กำลังโหลด...",
@@ -19,12 +19,12 @@ export const STRINGS = {
     "level.Beginner": "นักเที่ยวมือใหม่",
     "level.Explorer": "นักสำรวจ",
     "level.Adventurer": "นักผจญภัย",
-    "level.Master": "เซียนหาดใหญ่",
+    "level.Master": "เซียนสงขลา",
 
     // Landing
-    "landing.subtitle": "ผจญภัยทั่วเมืองหาดใหญ่กับน้องเที่ยว ไกด์ AI ส่วนตัวของคุณ",
+    "landing.subtitle": "ผจญภัยทั่วสงขลากับน้องเที่ยว ไกด์ AI ส่วนตัวของคุณ",
     "landing.feat.chat.title": "น้องเที่ยว",
-    "landing.feat.chat.desc": "ไกด์ AI ตอบทุกเรื่องหาดใหญ่",
+    "landing.feat.chat.desc": "ไกด์ AI ตอบทุกเรื่องสงขลา",
     "landing.feat.quest.title": "เควสผจญภัย",
     "landing.feat.quest.desc": "ทำภารกิจสะสม XP เลเวลอัป",
     "landing.feat.places.title": "ที่เที่ยวเด็ด",
@@ -94,7 +94,7 @@ export const STRINGS = {
     "home.getQuest": "รับเควสใหม่ 🎯",
     "home.keepGoing": "ไปต่อกันเลย",
     "home.link.chat.title": "คุยกับน้องเที่ยว",
-    "home.link.chat.desc": "ถามอะไรก็ได้เรื่องหาดใหญ่",
+    "home.link.chat.desc": "ถามอะไรก็ได้เรื่องสงขลา",
     "home.link.quests.title": "เควสผจญภัย",
     "home.link.quests.desc": "ทำภารกิจสะสม XP",
     "home.link.recommend.title": "ที่เที่ยวแนะนำ",
@@ -109,11 +109,11 @@ export const STRINGS = {
     "chat.clear": "ล้างแชท",
     "chat.starter.1": "แนะนำของกินเด็ดๆ หน่อย 🍜",
     "chat.starter.2": "มีที่เที่ยวเงียบๆ ไหม",
-    "chat.starter.3": "ของฝากหาดใหญ่ซื้ออะไรดี",
+    "chat.starter.3": "ของฝากสงขลาซื้ออะไรดี",
 
     // Quests
     "quest.readyTitle": "พร้อมออกผจญภัยไหม?",
-    "quest.readyDesc": "รับเควสจากน้องเที่ยว ไปสำรวจหาดใหญ่ แล้วเก็บ XP กับ badge!",
+    "quest.readyDesc": "รับเควสจากน้องเที่ยว ไปสำรวจสงขลา แล้วเก็บ XP กับ badge!",
     "quest.rolling": "กำลังสุ่มเควส...",
     "quest.getNew": "รับเควสใหม่ ✨",
     "quest.thinking": "น้องเที่ยวกำลังคิดเควส...",
@@ -157,6 +157,12 @@ export const STRINGS = {
     "rec.highlight": "เด่น:",
     "rec.tip": "ทิป:",
     "rec.openMaps": "เปิดใน Google Maps",
+    "rec.modePlaces": "ที่เที่ยว",
+    "rec.modeSouvenirs": "ของฝาก",
+    "rec.souvenirTitle": "ของฝากสงขลา",
+    "rec.souvenirDesc": "ของฝากอัตลักษณ์เฉพาะถิ่น",
+    "rec.askSouvenir": "แนะนำของฝาก",
+    "rec.identity": "อัตลักษณ์:",
 
     // Achievements
     "ach.yourLevel": "เลเวลของคุณ",
@@ -169,7 +175,7 @@ export const STRINGS = {
     "ach.history": "ประวัติเควส",
     "ach.noHistory": "ยังไม่มีประวัติ — เริ่มผจญภัยกันเลย!",
     "ach.share": "แชร์",
-    "ach.shareText": "ฉันปลดล็อก badge “{title}” ใน เที่ยวหาดใหญ่! 🏅 {desc}",
+    "ach.shareText": "ฉันปลดล็อก badge “{title}” ใน เที่ยวสงขลา! 🏅 {desc}",
     "ach.copied": "คัดลอกแล้ว! ไปแชร์ได้เลย ✨",
     "ach.logout": "ออกจากระบบ",
     "ach.login": "เข้าสู่ระบบด้วย Google",
@@ -186,7 +192,7 @@ export const STRINGS = {
     "lb.notRanked": "คะแนนของคุณ (กำลังอัปเดตอันดับ)",
 
     // Weather
-    "weather.location": "หาดใหญ่ตอนนี้",
+    "weather.location": "สงขลาตอนนี้",
     "weather.high": "สูง",
     "weather.low": "ต่ำ",
 
@@ -199,7 +205,7 @@ export const STRINGS = {
   },
   en: {
     // App shell
-    "app.title": "Explore Hat Yai",
+    "app.title": "Travel Songkhla",
     "app.greeting": "Hi {name}",
     "app.defaultName": "Traveler",
     "app.loading": "Loading...",
@@ -213,12 +219,12 @@ export const STRINGS = {
     "level.Beginner": "Beginner",
     "level.Explorer": "Explorer",
     "level.Adventurer": "Adventurer",
-    "level.Master": "Hat Yai Master",
+    "level.Master": "Songkhla Master",
 
     // Landing
-    "landing.subtitle": "Adventure across Hat Yai with Nong Tiew, your personal AI guide",
+    "landing.subtitle": "Adventure across Songkhla with Nong Tiew, your personal AI guide",
     "landing.feat.chat.title": "Nong Tiew",
-    "landing.feat.chat.desc": "An AI guide for everything Hat Yai",
+    "landing.feat.chat.desc": "An AI guide for everything Songkhla",
     "landing.feat.quest.title": "Adventure Quests",
     "landing.feat.quest.desc": "Complete missions, earn XP, level up",
     "landing.feat.places.title": "Top Spots",
@@ -288,7 +294,7 @@ export const STRINGS = {
     "home.getQuest": "Get a quest 🎯",
     "home.keepGoing": "Keep going",
     "home.link.chat.title": "Chat with Nong Tiew",
-    "home.link.chat.desc": "Ask anything about Hat Yai",
+    "home.link.chat.desc": "Ask anything about Songkhla",
     "home.link.quests.title": "Adventure Quests",
     "home.link.quests.desc": "Complete missions for XP",
     "home.link.recommend.title": "Recommended Spots",
@@ -307,7 +313,7 @@ export const STRINGS = {
 
     // Quests
     "quest.readyTitle": "Ready for an adventure?",
-    "quest.readyDesc": "Get a quest from Nong Tiew, explore Hat Yai, and earn XP and badges!",
+    "quest.readyDesc": "Get a quest from Nong Tiew, explore Songkhla, and earn XP and badges!",
     "quest.rolling": "Rolling a quest...",
     "quest.getNew": "Get a new quest ✨",
     "quest.thinking": "Nong Tiew is thinking up a quest...",
@@ -351,6 +357,12 @@ export const STRINGS = {
     "rec.highlight": "Highlight:",
     "rec.tip": "Tip:",
     "rec.openMaps": "Open in Google Maps",
+    "rec.modePlaces": "Places",
+    "rec.modeSouvenirs": "Souvenirs",
+    "rec.souvenirTitle": "Songkhla souvenirs",
+    "rec.souvenirDesc": "Local-identity gifts to take home",
+    "rec.askSouvenir": "Suggest souvenirs",
+    "rec.identity": "Identity:",
 
     // Achievements
     "ach.yourLevel": "Your level",
@@ -363,7 +375,7 @@ export const STRINGS = {
     "ach.history": "Quest history",
     "ach.noHistory": "No history yet — start your adventure!",
     "ach.share": "Share",
-    "ach.shareText": "I unlocked the “{title}” badge in Tiew Hat Yai! 🏅 {desc}",
+    "ach.shareText": "I unlocked the “{title}” badge in Travel Songkhla! 🏅 {desc}",
     "ach.copied": "Copied! Paste it anywhere to share ✨",
     "ach.logout": "Sign out",
     "ach.login": "Sign in with Google",
@@ -380,7 +392,7 @@ export const STRINGS = {
     "lb.notRanked": "Your score (ranking is updating)",
 
     // Weather
-    "weather.location": "Hat Yai now",
+    "weather.location": "Songkhla now",
     "weather.high": "H",
     "weather.low": "L",
 

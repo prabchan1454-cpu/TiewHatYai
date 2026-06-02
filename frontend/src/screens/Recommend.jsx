@@ -3,7 +3,7 @@ import { api } from "../lib/api";
 import { Button, Card, ErrorBox, Pill, Spinner } from "../components/ui";
 import PlacesMap from "../components/PlacesMap";
 import { useT } from "../lib/i18n.jsx";
-import { Sparkles, Lightbulb, Clock, MapPin, ExternalLink } from "lucide-react";
+import { Sparkles, Lightbulb, Clock, MapPin, ExternalLink, Gift, Tag } from "lucide-react";
 
 const RANK_TINT = {
   1: "bg-mango/20 text-amber-600 dark:text-amber-300",
@@ -15,15 +15,21 @@ function mapsUrl(p) {
   if (typeof p.latitude === "number" && typeof p.longitude === "number") {
     return `https://www.google.com/maps/search/?api=1&query=${p.latitude},${p.longitude}`;
   }
-  const q = encodeURIComponent(`${p.place_name} ${p.approximate_area} หาดใหญ่`);
+  const q = encodeURIComponent(`${p.place_name} ${p.approximate_area} สงขลา`);
   return `https://www.google.com/maps/search/?api=1&query=${q}`;
 }
 
 export default function Recommend({ preferences }) {
   const { t } = useT();
+  const [mode, setMode] = useState("places");
+
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const [souvenirs, setSouvenirs] = useState([]);
+  const [sLoading, setSLoading] = useState(false);
+  const [sError, setSError] = useState("");
 
   async function fetchRecs() {
     setLoading(true);
@@ -45,75 +51,161 @@ export default function Recommend({ preferences }) {
     }
   }
 
+  async function fetchSouvenirs() {
+    setSLoading(true);
+    setSError("");
+    try {
+      const { items } = await api.souvenirs({ categories: preferences?.categories || "" });
+      setSouvenirs(items);
+    } catch (e) {
+      setSError(e.message);
+    } finally {
+      setSLoading(false);
+    }
+  }
+
+  const seg = (active) =>
+    `flex-1 rounded-xl py-2 text-sm font-bold transition ${
+      active
+        ? "bg-white text-deep shadow-sm dark:bg-slate-700 dark:text-slate-100"
+        : "text-slate-500 hover:text-deep dark:text-slate-400 dark:hover:text-slate-200"
+    }`;
+
   return (
     <div className="space-y-4 p-4 pb-6">
-      <Card>
-        <div className="flex items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-mango/15 text-amber-600">
-            <Sparkles className="h-5 w-5" />
-          </span>
-          <div className="flex-1">
-            <h2 className="font-bold text-deep dark:text-slate-100">{t("rec.title")}</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              {t("rec.basedOn")} {preferences?.categories || "—"}
-              {preferences?.vibe ? ` · ${preferences.vibe}` : ""}
-            </p>
-          </div>
-        </div>
-        <Button onClick={fetchRecs} disabled={loading} className="mt-4 w-full">
-          {loading ? t("rec.searching") : places.length ? t("rec.reroll") : t("rec.ask")}
-        </Button>
-      </Card>
+      <div className="flex gap-1 rounded-2xl bg-slate-100 p-1 dark:bg-slate-800">
+        <button onClick={() => setMode("places")} className={seg(mode === "places")}>
+          {t("rec.modePlaces")}
+        </button>
+        <button onClick={() => setMode("souvenirs")} className={seg(mode === "souvenirs")}>
+          {t("rec.modeSouvenirs")}
+        </button>
+      </div>
 
-      <ErrorBox message={error} />
-      {loading && <Spinner label={t("rec.picking")} />}
-
-      {places.length > 0 && <PlacesMap places={places} />}
-
-      {places.map((p) => (
-        <Card key={p.rank} className="space-y-2.5">
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-start gap-2.5">
-              <span
-                className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-extrabold ${
-                  RANK_TINT[p.rank] || "bg-slate-100 text-slate-500"
-                }`}
-              >
-                <span className="tnum">{p.rank}</span>
+      {mode === "places" ? (
+        <>
+          <Card>
+            <div className="flex items-start gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-mango/15 text-amber-600">
+                <Sparkles className="h-5 w-5" />
               </span>
-              <h3 className="text-lg font-extrabold leading-snug text-deep dark:text-slate-100">{p.place_name}</h3>
+              <div className="flex-1">
+                <h2 className="font-bold text-deep dark:text-slate-100">{t("rec.title")}</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  {t("rec.basedOn")} {preferences?.categories || "—"}
+                  {preferences?.vibe ? ` · ${preferences.vibe}` : ""}
+                </p>
+              </div>
             </div>
-            <Pill tone="sunset">{p.category}</Pill>
-          </div>
-          <p className="text-slate-600 dark:text-slate-300">{p.why_recommended}</p>
-          <div className="space-y-1.5 rounded-xl bg-slate-50 p-3 text-sm text-slate-600 dark:bg-slate-800/60 dark:text-slate-300">
-            <p className="flex gap-2">
-              <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-mango" />
-              <span><span className="font-semibold text-deep dark:text-slate-100">{t("rec.highlight")} </span>{p.highlight}</span>
-            </p>
-            <p className="flex gap-2">
-              <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-lagoon" />
-              <span><span className="font-semibold text-deep dark:text-slate-100">{t("rec.tip")} </span>{p.local_tip}</span>
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500 dark:text-slate-400">
-            <span className="inline-flex items-center gap-1.5">
-              <Clock className="h-4 w-4" /> {p.best_time}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <MapPin className="h-4 w-4" /> {p.approximate_area}
-            </span>
-          </div>
-          <a
-            href={mapsUrl(p)}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-lg text-sm font-semibold text-lagoon hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon/40"
-          >
-            <ExternalLink className="h-4 w-4" /> {t("rec.openMaps")}
-          </a>
-        </Card>
-      ))}
+            <Button onClick={fetchRecs} disabled={loading} className="mt-4 w-full">
+              {loading ? t("rec.searching") : places.length ? t("rec.reroll") : t("rec.ask")}
+            </Button>
+          </Card>
+
+          <ErrorBox message={error} />
+          {loading && <Spinner label={t("rec.picking")} />}
+
+          {places.length > 0 && <PlacesMap places={places} />}
+
+          {places.map((p) => (
+            <Card key={p.rank} className="space-y-2.5">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-2.5">
+                  <span
+                    className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-extrabold ${
+                      RANK_TINT[p.rank] || "bg-slate-100 text-slate-500"
+                    }`}
+                  >
+                    <span className="tnum">{p.rank}</span>
+                  </span>
+                  <h3 className="text-lg font-extrabold leading-snug text-deep dark:text-slate-100">{p.place_name}</h3>
+                </div>
+                <Pill tone="sunset">{p.category}</Pill>
+              </div>
+              <p className="text-slate-600 dark:text-slate-300">{p.why_recommended}</p>
+              <div className="space-y-1.5 rounded-xl bg-slate-50 p-3 text-sm text-slate-600 dark:bg-slate-800/60 dark:text-slate-300">
+                <p className="flex gap-2">
+                  <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-mango" />
+                  <span><span className="font-semibold text-deep dark:text-slate-100">{t("rec.highlight")} </span>{p.highlight}</span>
+                </p>
+                <p className="flex gap-2">
+                  <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-lagoon" />
+                  <span><span className="font-semibold text-deep dark:text-slate-100">{t("rec.tip")} </span>{p.local_tip}</span>
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500 dark:text-slate-400">
+                <span className="inline-flex items-center gap-1.5">
+                  <Clock className="h-4 w-4" /> {p.best_time}
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPin className="h-4 w-4" /> {p.approximate_area}
+                </span>
+              </div>
+              <a
+                href={mapsUrl(p)}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-lg text-sm font-semibold text-lagoon hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon/40"
+              >
+                <ExternalLink className="h-4 w-4" /> {t("rec.openMaps")}
+              </a>
+            </Card>
+          ))}
+        </>
+      ) : (
+        <>
+          <Card>
+            <div className="flex items-start gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-lagoon/10 text-lagoon">
+                <Gift className="h-5 w-5" />
+              </span>
+              <div className="flex-1">
+                <h2 className="font-bold text-deep dark:text-slate-100">{t("rec.souvenirTitle")}</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400">{t("rec.souvenirDesc")}</p>
+              </div>
+            </div>
+            <Button onClick={fetchSouvenirs} disabled={sLoading} variant="lagoon" className="mt-4 w-full">
+              {sLoading ? t("rec.searching") : souvenirs.length ? t("rec.reroll") : t("rec.askSouvenir")}
+            </Button>
+          </Card>
+
+          <ErrorBox message={sError} />
+          {sLoading && <Spinner label={t("rec.picking")} />}
+
+          {souvenirs.map((s, i) => (
+            <Card key={i} className="space-y-2.5">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-2.5">
+                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-mango/15 text-amber-600">
+                    <Gift className="h-4 w-4" />
+                  </span>
+                  <h3 className="text-lg font-extrabold leading-snug text-deep dark:text-slate-100">{s.name}</h3>
+                </div>
+                <Pill tone="lagoon">{s.category}</Pill>
+              </div>
+              <p className="text-slate-600 dark:text-slate-300">{s.description}</p>
+              <div className="space-y-1.5 rounded-xl bg-slate-50 p-3 text-sm text-slate-600 dark:bg-slate-800/60 dark:text-slate-300">
+                <p className="flex gap-2">
+                  <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-mango" />
+                  <span><span className="font-semibold text-deep dark:text-slate-100">{t("rec.identity")} </span>{s.why_special}</span>
+                </p>
+                <p className="flex gap-2">
+                  <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-lagoon" />
+                  <span><span className="font-semibold text-deep dark:text-slate-100">{t("rec.tip")} </span>{s.tip}</span>
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500 dark:text-slate-400">
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPin className="h-4 w-4" /> {s.where_to_buy}
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Tag className="h-4 w-4" /> {s.price_range}
+                </span>
+              </div>
+            </Card>
+          ))}
+        </>
+      )}
     </div>
   );
 }

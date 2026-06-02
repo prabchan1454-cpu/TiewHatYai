@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 
-const KEY = "tiewhatyai_progress_v1";
+const KEY = "travelsongkhla_progress_v1";
 
 // XP thresholds -> level. Index = level tier.
 export const LEVELS = [
   { name: "Beginner", thai: "นักเที่ยวมือใหม่", min: 0 },
   { name: "Explorer", thai: "นักสำรวจ", min: 200 },
   { name: "Adventurer", thai: "นักผจญภัย", min: 600 },
-  { name: "Master", thai: "เซียนหาดใหญ่", min: 1200 },
+  { name: "Master", thai: "เซียนสงขลา", min: 1200 },
 ];
 
 const DEFAULT = {

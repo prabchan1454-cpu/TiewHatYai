@@ -41,6 +41,20 @@ class Recommendations(BaseModel):
     places: list[Place] = Field(..., description="Exactly 3 recommended places")
 
 
+class Souvenir(BaseModel):
+    name: str
+    category: str
+    description: str
+    why_special: str
+    where_to_buy: str
+    price_range: str
+    tip: str
+
+
+class Souvenirs(BaseModel):
+    items: list[Souvenir] = Field(..., description="Local Songkhla souvenirs")
+
+
 class Verification(BaseModel):
     verified: bool
     confidence: Confidence
@@ -80,6 +94,11 @@ class QuestRequest(BaseModel):
     user_level: Level = "Beginner"
     completed_quests: list[str] = []
     festival: str = ""
+    lang: Lang = "th"
+
+
+class SouvenirRequest(BaseModel):
+    categories: str = ""
     lang: Lang = "th"
 
 

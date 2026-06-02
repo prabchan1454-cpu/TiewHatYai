@@ -12,7 +12,7 @@ export default function Login({ auth, onGuest }) {
         <LangToggle />
       </div>
       <div>
-        <img src="/logo.svg" alt="TiewHatyai" className="mx-auto h-20 w-20 rounded-2xl shadow-md" />
+        <img src="/logo.svg" alt="Travel Songkhla" className="mx-auto h-20 w-20 rounded-2xl shadow-md" />
         <h1 className="mt-3 text-3xl font-extrabold text-deep dark:text-slate-100">{t("app.title")}</h1>
         <p className="mt-1 text-slate-500 dark:text-slate-400">{t("login.subtitle")}</p>
       </div>

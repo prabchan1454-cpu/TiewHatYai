@@ -18,7 +18,7 @@ export default function Landing({ onStart }) {
         <LangToggle />
       </div>
       <div className="flex flex-1 flex-col items-center justify-center text-center">
-        <img src="/logo.svg" alt="TiewHatyai" className="h-28 w-28 rounded-3xl shadow-lg" />
+        <img src="/logo.svg" alt="Travel Songkhla" className="h-28 w-28 rounded-3xl shadow-lg" />
         <h1 className="mt-4 text-4xl font-extrabold drop-shadow">{t("app.title")}</h1>
         <p className="mt-2 text-lg font-medium text-white/90">{t("landing.subtitle")}</p>
 

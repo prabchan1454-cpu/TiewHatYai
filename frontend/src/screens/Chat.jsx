@@ -4,7 +4,7 @@ import { ErrorBox } from "../components/ui";
 import { useT } from "../lib/i18n.jsx";
 import { Trash2 } from "lucide-react";
 
-const CHAT_KEY = "tiewhatyai_chat_v1";
+const CHAT_KEY = "travelsongkhla_chat_v1";
 // Keep at most this many messages in memory & localStorage to prevent the
 // context window from ballooning. We always keep the most-recent messages.
 const MAX_HISTORY = 40;

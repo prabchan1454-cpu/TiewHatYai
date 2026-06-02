@@ -9,7 +9,7 @@
       // Apply saved theme before paint to avoid a flash of the wrong theme.
       (function () {
         try {
-          var t = localStorage.getItem("tiewhatyai_theme");
+          var t = localStorage.getItem("travelsongkhla_theme");
           var dark = t ? t === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
           document.documentElement.classList.toggle("dark", dark);
         } catch (e) {}
@@ -18,14 +18,13 @@
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <title>เที่ยวหาดใหญ่ · TiewHatyai</title>
+    <title>เที่ยวสงขลา · Travel Songkhla</title>
   </head>
   <body>
     <div id="root"></div>

@@ -124,7 +124,7 @@ export default function Onboarding({ onDone }) {
     <div className="mx-auto flex min-h-screen max-w-md flex-col px-5 py-8 animate-slide-up">
       {/* Header row */}
       <div className="flex items-center justify-between mb-3">
-        <img src="/logo.svg" alt="TiewHatyai" className="h-10 w-10 rounded-xl shadow" />
+        <img src="/logo.svg" alt="Travel Songkhla" className="h-10 w-10 rounded-xl shadow" />
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <LangToggle />

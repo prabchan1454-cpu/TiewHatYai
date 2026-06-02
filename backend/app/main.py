@@ -76,6 +76,15 @@ def recommend(req: schemas.RecommendRequest):
     return schemas.Recommendations(places=[schemas.Place(**p) for p in places])
 
 
+# Prompt 3b — Local souvenirs / ของฝาก (exactly 4 items).
+@app.post("/api/souvenirs", response_model=schemas.Souvenirs)
+def souvenirs(req: schemas.SouvenirRequest):
+    prompt = prompts.souvenir_prompt(req.categories)
+    data = _guard(lambda: ai.complete_json(prompt + prompts.lang_directive(req.lang), max_tokens=1500))
+    items = data if isinstance(data, list) else data.get("items", [])
+    return schemas.Souvenirs(items=[schemas.Souvenir(**s) for s in items])
+
+
 # Prompt 4 — Quest verification (optional photo).
 @app.post("/api/verify", response_model=schemas.Verification)
 def verify(req: schemas.VerifyRequest):
