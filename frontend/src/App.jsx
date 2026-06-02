@@ -20,6 +20,7 @@ const TABS = [
   { id: "recommend", key: "tab.recommend", icon: "⭐" },
   { id: "profile", key: "tab.profile", icon: "🏅" },
 ];
+const TAB_ORDER = TABS.map((t) => t.id);
 
 export default function App() {
   const progress = useProgress();
@@ -27,6 +28,14 @@ export default function App() {
   const auth = useAuth();
   const { t } = useT();
   const [tab, setTab] = useState("home");
+  const [slideDir, setSlideDir] = useState("right");
+
+  function navigate(newTab) {
+    const oldIdx = TAB_ORDER.indexOf(tab);
+    const newIdx = TAB_ORDER.indexOf(newTab);
+    setSlideDir(newIdx >= oldIdx ? "right" : "left");
+    setTab(newTab);
+  }
 
   if (!state.started) {
     return <Landing onStart={() => update({ started: true })} />;
@@ -77,8 +86,13 @@ export default function App() {
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto no-scrollbar">
-        {tab === "home" && <Home progress={progress} onNavigate={setTab} />}
+      <main
+        key={tab}
+        className={`flex-1 overflow-y-auto no-scrollbar ${
+          slideDir === "right" ? "animate-slide-in-right" : "animate-slide-in-left"
+        }`}
+      >
+        {tab === "home" && <Home progress={progress} onNavigate={navigate} />}
         {tab === "chat" && <Chat greeting={null} />}
         {tab === "quests" && <Quests progress={progress} />}
         {tab === "recommend" && <Recommend preferences={state.preferences} />}
@@ -99,7 +113,7 @@ export default function App() {
           return (
             <button
               key={tb.id}
-              onClick={() => setTab(tb.id)}
+              onClick={() => navigate(tb.id)}
               className={`flex flex-col items-center gap-0.5 py-2.5 text-xs font-semibold transition ${
                 tab === tb.id ? "text-sunset" : "text-slate-400"
               }`}

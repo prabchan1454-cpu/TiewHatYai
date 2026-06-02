@@ -29,6 +29,8 @@ export default function Recommend({ preferences }) {
         vibe: preferences?.vibe || "",
         budget: preferences?.budget || "ปานกลาง",
         companion: preferences?.companion || "คนเดียว",
+        duration: preferences?.duration || "",
+        interests: preferences?.interests || "",
       });
       setPlaces(places);
     } catch (e) {

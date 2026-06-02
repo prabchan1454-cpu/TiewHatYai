@@ -70,7 +70,7 @@ def quest(req: schemas.QuestRequest):
 # Prompt 3 — Personalized recommendations (exactly 3 places).
 @app.post("/api/recommend", response_model=schemas.Recommendations)
 def recommend(req: schemas.RecommendRequest):
-    prompt = prompts.recommend_prompt(req.categories, req.vibe, req.budget, req.companion)
+    prompt = prompts.recommend_prompt(req.categories, req.vibe, req.budget, req.companion, req.duration, req.interests)
     data = _guard(lambda: ai.complete_json(prompt + prompts.lang_directive(req.lang), max_tokens=1500))
     places = data if isinstance(data, list) else data.get("places", [])
     return schemas.Recommendations(places=[schemas.Place(**p) for p in places])

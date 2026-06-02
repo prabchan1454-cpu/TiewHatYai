@@ -111,14 +111,19 @@ target_lat and target_lng must be real GPS coordinates (decimal degrees) of the 
 
 
 # Prompt 3 — Personalized recommendation. Returns JSON array of 3 items.
-def recommend_prompt(categories: str, vibe: str, budget: str, companion: str) -> str:
+def recommend_prompt(categories: str, vibe: str, budget: str, companion: str, duration: str = "", interests: str = "") -> str:
+    extra = ""
+    if duration:
+        extra += f"\n- ระยะเวลา: {duration} (ครึ่งวัน/หนึ่งวัน/หลายวัน)"
+    if interests:
+        extra += f"\n- ความสนใจพิเศษ: {interests}"
     return f"""You are a travel guide for อำเภอหาดใหญ่ (Hat Yai district), Songkhla province, Thailand. Based on the user's preferences below, recommend 3 places specifically within Hat Yai district that match their interests. Prioritize lesser-known or underrated spots over mainstream tourist attractions. Do NOT recommend places outside Hat Yai district.
 
 User preferences:
 - ประเภทที่ชอบ: {categories} (เช่น อาหาร, ของฝาก, วัด, ธรรมชาติ, ตลาด)
 - บรรยากาศที่ชอบ: {vibe} (เช่น เงียบสงบ, คึกคัก, ผจญภัย)
 - งบประมาณ: {budget} (ประหยัด/ปานกลาง/หรูหรา)
-- มากับใคร: {companion} (คนเดียว/คู่/ครอบครัว/เพื่อน)
+- มากับใคร: {companion} (คนเดียว/คู่/ครอบครัว/เพื่อน){extra}
 
 For latitude/longitude, give your best estimate of the real GPS coordinates of the place in อำเภอหาดใหญ่ (Hat Yai district), Songkhla, Thailand — city center is around 7.0086, 100.4747. All places must be within Hat Yai district. This is used to drop a pin on a map.
 

@@ -87,6 +87,8 @@ class RecommendRequest(BaseModel):
     vibe: str = ""
     budget: str = "ปานกลาง"
     companion: str = "คนเดียว"
+    duration: str = ""
+    interests: str = ""
     lang: Lang = "th"
 
 
