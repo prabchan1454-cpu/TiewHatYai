@@ -62,7 +62,7 @@ export default function App() {
           {auth.user?.photoURL ? (
             <img src={auth.user.photoURL} alt="" className="h-9 w-9 rounded-full" />
           ) : (
-            <span className="text-2xl">🗺️</span>
+            <img src="/logo.svg" alt="TiewHatyai" className="h-9 w-9 rounded-lg" />
           )}
           <div>
             <h1 className="font-extrabold leading-none text-deep">{t("app.greeting", { name: displayName })}</h1>

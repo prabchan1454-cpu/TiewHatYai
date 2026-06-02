@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Travel mountain and sun logo">
+  <defs>
+    <linearGradient id="tm" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffb020"/>
+      <stop offset="1" stop-color="#ff7a45"/>
+    </linearGradient>
+    <clipPath id="tmclip">
+      <circle cx="256" cy="256" r="150"/>
+    </clipPath>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="#1b2a4a"/>
+  <circle cx="256" cy="256" r="150" fill="none" stroke="url(#tm)" stroke-width="14"/>
+  <g clip-path="url(#tmclip)">
+    <!-- sun -->
+    <circle cx="318" cy="196" r="34" fill="url(#tm)"/>
+    <!-- back mountain -->
+    <path d="M120 392 L226 250 L300 348 L360 280 L406 392 Z" fill="#ffd27f"/>
+    <!-- front mountain -->
+    <path d="M106 400 L210 268 L320 400 Z" fill="url(#tm)"/>
+    <!-- winding path on the mountain -->
+    <path d="M210 268 C196 312 246 320 232 358 C222 384 200 388 196 400"
+          fill="none" stroke="#1b2a4a" stroke-width="14" stroke-linecap="round"/>
+    <path d="M210 268 C196 312 246 320 232 358 C222 384 200 388 196 400"
+          fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 14" opacity="0.8"/>
+  </g>
+</svg>
