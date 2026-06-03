@@ -41,6 +41,9 @@ export default function Recommend({ preferences }) {
         budget: preferences?.budget || "ปานกลาง",
         companion: preferences?.companion || "คนเดียว",
         duration: preferences?.duration || "",
+        date_start: preferences?.dateStart || "",
+        date_end: preferences?.dateEnd || "",
+        festivals: preferences?.festivals || "",
         interests: preferences?.interests || "",
       });
       setPlaces(places);

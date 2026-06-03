@@ -35,6 +35,27 @@ function startDate(f, now) {
   return dt;
 }
 
+// Returns every festival that overlaps the user's travel window [start, end]
+// (inclusive). Trips are short, so we just walk day-by-day and dedupe by key —
+// `inRange` already handles year-end wrap. Used to theme recommendations.
+export function festivalsInRange(start, end) {
+  if (!start || !end) return [];
+  const s = new Date(start);
+  const e = new Date(end);
+  if (isNaN(s) || isNaN(e) || e < s) return [];
+  const found = new Map();
+  const day = new Date(s.getFullYear(), s.getMonth(), s.getDate());
+  let guard = 0;
+  while (day <= e && guard < 400) {
+    for (const f of FESTIVALS) {
+      if (inRange(day, f.start, f.end)) found.set(f.key, f);
+    }
+    day.setDate(day.getDate() + 1);
+    guard++;
+  }
+  return [...found.values()];
+}
+
 // Returns the festival happening now, or the next upcoming one, so the UI
 // always has something to show (and stays demoable off-season).
 export function festivalForToday(now = new Date()) {

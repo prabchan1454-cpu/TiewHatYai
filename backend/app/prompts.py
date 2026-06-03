@@ -142,10 +142,29 @@ target_lat and target_lng must be real GPS coordinates (decimal degrees) of the 
 
 
 # Prompt 3 — Personalized recommendation. Returns JSON array of 3 items.
-def recommend_prompt(categories: str, vibe: str, budget: str, companion: str, duration: str = "", interests: str = "") -> str:
+def recommend_prompt(
+    categories: str,
+    vibe: str,
+    budget: str,
+    companion: str,
+    duration: str = "",
+    interests: str = "",
+    date_start: str = "",
+    date_end: str = "",
+    festivals: str = "",
+) -> str:
     extra = ""
-    if duration:
-        extra += f"\n- ระยะเวลา: {duration} (ครึ่งวัน/หนึ่งวัน/หลายวัน)"
+    if date_start and date_end:
+        extra += f"\n- ช่วงวันที่มาเที่ยว: {date_start} ถึง {date_end}"
+        if duration:
+            extra += f" ({duration})"
+    elif duration:
+        extra += f"\n- ระยะเวลา: {duration}"
+    if festivals:
+        extra += (
+            f"\n- ช่วงนี้ตรงกับเทศกาล: {festivals} "
+            "— ถ้าเหมาะสม ช่วยแนะนำสถานที่หรือกิจกรรมที่เข้ากับเทศกาลนี้ด้วย"
+        )
     if interests:
         extra += f"\n- ความสนใจพิเศษ: {interests}"
     return f"""You are a travel guide for จังหวัดสงขลา (Songkhla province), Thailand. Based on the user's preferences below, recommend 3 places anywhere within Songkhla province (Hat Yai, Songkhla city, Ko Yo, the old town, beaches, the lake, nearby districts) that match their interests. Prioritize lesser-known or underrated spots over mainstream tourist attractions. Do NOT recommend places outside Songkhla province.

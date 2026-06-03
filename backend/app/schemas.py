@@ -108,6 +108,9 @@ class RecommendRequest(BaseModel):
     budget: str = "ปานกลาง"
     companion: str = "คนเดียว"
     duration: str = ""
+    date_start: str = ""
+    date_end: str = ""
+    festivals: str = ""
     interests: str = ""
     lang: Lang = "th"
 

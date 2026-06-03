@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 import { Button, Card, ErrorBox, Spinner, LangToggle, ThemeToggle } from "../components/ui";
 import { useT } from "../lib/i18n.jsx";
+import { festivalsInRange } from "../lib/festivals";
 import { LayoutGrid, Palette, Users, Heart } from "lucide-react";
 
 function StepHead({ Icon, title, hint }) {
@@ -20,8 +21,9 @@ const CATEGORIES = ["cat.food", "cat.souvenir", "cat.temple", "cat.nature", "cat
 const VIBES = ["vibe.calm", "vibe.lively", "vibe.adventure"];
 const BUDGETS = ["budget.cheap", "budget.medium", "budget.luxury"];
 const COMPANIONS = ["companion.solo", "companion.couple", "companion.family", "companion.friends"];
-const DURATIONS = ["duration.half", "duration.one", "duration.multi"];
 const INTERESTS = ["interest.photo", "interest.history", "interest.shopping", "interest.spa", "interest.sport", "interest.nightlife"];
+
+const todayISO = () => new Date().toISOString().slice(0, 10);
 
 const TOTAL_STEPS = 4;
 
@@ -61,7 +63,7 @@ function StepDots({ current, total }) {
 }
 
 export default function Onboarding({ onDone }) {
-  const { t } = useT();
+  const { t, lang } = useT();
   const [greeting, setGreeting] = useState("");
   const [loadingGreet, setLoadingGreet] = useState(true);
   const [error, setError] = useState("");
@@ -70,8 +72,18 @@ export default function Onboarding({ onDone }) {
   const [vibe, setVibe] = useState("");
   const [budget, setBudget] = useState("budget.medium");
   const [companion, setCompanion] = useState("");
-  const [duration, setDuration] = useState("");
+  const [dateStart, setDateStart] = useState("");
+  const [dateEnd, setDateEnd] = useState("");
   const [interests, setInterests] = useState([]);
+
+  // Derive trip length + any festivals that overlap the chosen window.
+  const tripDays =
+    dateStart && dateEnd
+      ? Math.round((new Date(dateEnd) - new Date(dateStart)) / 86400000) + 1
+      : 0;
+  const datesValid = !!dateStart && !!dateEnd && tripDays > 0;
+  const tripFestivals = datesValid ? festivalsInRange(dateStart, dateEnd) : [];
+  const festivalNames = tripFestivals.map((f) => (lang === "en" ? f.en : f.th)).join(", ");
 
   const [step, setStep] = useState(0);
   const [dir, setDir] = useState("right");
@@ -108,7 +120,10 @@ export default function Onboarding({ onDone }) {
       vibe: vibe ? t(vibe) : "",
       budget: t(budget),
       companion: companion ? t(companion) : "",
-      duration: duration ? t(duration) : "",
+      dateStart,
+      dateEnd,
+      duration: datesValid ? t("onboard.date.days", { n: tripDays }) : "",
+      festivals: festivalNames,
       interests: interests.map((i) => t(i)).join(", "),
     });
   }
@@ -116,7 +131,7 @@ export default function Onboarding({ onDone }) {
   const canNext = [
     categories.length > 0,
     true,
-    !!companion,
+    !!companion && datesValid,
     true,
   ][step];
 
@@ -199,11 +214,42 @@ export default function Onboarding({ onDone }) {
             </div>
             <div>
               <p className="mb-2 font-semibold text-deep text-sm dark:text-slate-100">{t("onboard.q.duration")}</p>
-              <div className="flex flex-wrap gap-2">
-                {DURATIONS.map((d) => (
-                  <Choice key={d} label={t(d)} active={duration === d} onClick={() => setDuration(d)} />
-                ))}
+              <div className="grid grid-cols-2 gap-3">
+                <label className="flex flex-col gap-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                  {t("onboard.date.start")}
+                  <input
+                    type="date"
+                    value={dateStart}
+                    min={todayISO()}
+                    onChange={(e) => {
+                      setDateStart(e.target.value);
+                      if (dateEnd && dateEnd < e.target.value) setDateEnd(e.target.value);
+                    }}
+                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:[color-scheme:dark]"
+                  />
+                </label>
+                <label className="flex flex-col gap-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                  {t("onboard.date.end")}
+                  <input
+                    type="date"
+                    value={dateEnd}
+                    min={dateStart || todayISO()}
+                    onChange={(e) => setDateEnd(e.target.value)}
+                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:[color-scheme:dark]"
+                  />
+                </label>
               </div>
+              {dateStart && dateEnd && !datesValid && (
+                <p className="mt-2 text-xs font-semibold text-red-500">{t("onboard.date.invalid")}</p>
+              )}
+              {datesValid && (
+                <p className="mt-2 text-xs font-semibold text-lagoon">{t("onboard.date.days", { n: tripDays })}</p>
+              )}
+              {datesValid && festivalNames && (
+                <p className="mt-1 rounded-lg bg-mango/15 px-3 py-1.5 text-xs font-semibold text-amber-700 dark:text-amber-300">
+                  {t("onboard.date.festival", { names: festivalNames })}
+                </p>
+              )}
             </div>
           </div>
         )}
