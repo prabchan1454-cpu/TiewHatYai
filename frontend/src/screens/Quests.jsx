@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { api } from "../lib/api";
 import { levelFor, todayStr } from "../lib/progress";
-import { festivalForToday } from "../lib/festivals";
+import { festivalForTrip } from "../lib/festivals";
 import { Button, Card, ErrorBox, Pill, Spinner } from "../components/ui";
 import { useT } from "../lib/i18n.jsx";
 import {
@@ -44,7 +44,7 @@ export default function Quests({ progress }) {
   const [festLoading, setFestLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const fest = festivalForToday();
+  const fest = festivalForTrip(state.preferences?.dateStart, state.preferences?.dateEnd);
   const festName = fest.festival ? (lang === "en" ? fest.festival.en : fest.festival.th) : "";
 
   const today = todayStr();

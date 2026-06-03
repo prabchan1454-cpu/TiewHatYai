@@ -111,7 +111,7 @@ export default function App() {
         {tab === "home" && <Home progress={progress} onNavigate={navigate} />}
         {tab === "chat" && <Chat greeting={null} />}
         {tab === "quests" && <Quests progress={progress} />}
-        {tab === "recommend" && <Recommend preferences={state.preferences} />}
+        {tab === "recommend" && <Recommend preferences={state.preferences} onNavigate={navigate} />}
         {tab === "profile" && (
           <Achievements
             progress={progress}

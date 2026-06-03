@@ -33,3 +33,46 @@ export async function fetchWeather() {
     low: Math.round(j.daily.temperature_2m_min[0]),
   };
 }
+
+// Open-Meteo's free forecast only reaches ~16 days out. Past that horizon (or
+// for dates already gone) there is no data, so callers should hide the forecast
+// rather than show blanks.
+const FORECAST_HORIZON_DAYS = 16;
+
+function ymd(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+// Per-day forecast for the trip window, clamped to today..horizon. Returns []
+// when the whole trip is outside the forecastable range (caller hides the card).
+export async function fetchTripWeather(dateStart, dateEnd) {
+  if (!dateStart || !dateEnd) return [];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const horizon = new Date(today);
+  horizon.setDate(horizon.getDate() + FORECAST_HORIZON_DAYS);
+
+  const start = new Date(dateStart);
+  const end = new Date(dateEnd);
+  if (isNaN(start) || isNaN(end)) return [];
+
+  const from = start < today ? today : start;
+  const to = end > horizon ? horizon : end;
+  if (to < from) return []; // trip entirely in the past or beyond the horizon
+
+  const url =
+    `https://api.open-meteo.com/v1/forecast?latitude=${HATYAI.lat}&longitude=${HATYAI.lng}` +
+    "&daily=weather_code,temperature_2m_max,temperature_2m_min" +
+    `&timezone=Asia%2FBangkok&start_date=${ymd(from)}&end_date=${ymd(to)}`;
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("weather unavailable");
+  const j = await res.json();
+  const days = j.daily?.time || [];
+  return days.map((date, i) => ({
+    date,
+    code: j.daily.weather_code[i],
+    high: Math.round(j.daily.temperature_2m_max[i]),
+    low: Math.round(j.daily.temperature_2m_min[i]),
+  }));
+}

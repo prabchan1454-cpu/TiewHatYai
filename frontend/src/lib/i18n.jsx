@@ -152,6 +152,8 @@ export const STRINGS = {
     // Recommend
     "rec.title": "แนะนำเฉพาะคุณ",
     "rec.basedOn": "อิงจากความชอบ:",
+    "rec.dates": "วันที่เที่ยว: {range}",
+    "rec.tripExpired": "ทริปที่บันทึกไว้ผ่านไปแล้ว — อัปเดตวันที่ในหน้าโปรไฟล์",
     "rec.searching": "กำลังค้นหา...",
     "rec.reroll": "สุ่มใหม่อีกครั้ง 🔄",
     "rec.ask": "ขอคำแนะนำ 3 ที่",
@@ -184,6 +186,12 @@ export const STRINGS = {
     "ach.resetConfirm": "ล้างความคืบหน้าทั้งหมด?",
     "ach.reset": "รีเซ็ตความคืบหน้า",
 
+    // Trip (edit travel dates)
+    "trip.heading": "ทริปของฉัน",
+    "trip.none": "ยังไม่ได้ระบุวันเที่ยว",
+    "trip.save": "บันทึกวันที่",
+    "trip.saved": "บันทึกแล้ว ✓",
+
     // Leaderboard
     "lb.title": "🏆 อันดับนักเที่ยว",
     "lb.loading": "กำลังโหลดอันดับ...",
@@ -197,6 +205,7 @@ export const STRINGS = {
     "weather.location": "สงขลาตอนนี้",
     "weather.high": "สูง",
     "weather.low": "ต่ำ",
+    "weather.tripTitle": "พยากรณ์อากาศช่วงทริป",
 
     // Festival quests
     "fest.activeTitle": "🎉 เทศกาล{name}!",
@@ -354,6 +363,8 @@ export const STRINGS = {
     // Recommend
     "rec.title": "Just for you",
     "rec.basedOn": "Based on:",
+    "rec.dates": "Travel dates: {range}",
+    "rec.tripExpired": "Your saved trip has passed — update the dates in your profile",
     "rec.searching": "Searching...",
     "rec.reroll": "Shuffle again 🔄",
     "rec.ask": "Get 3 recommendations",
@@ -386,6 +397,12 @@ export const STRINGS = {
     "ach.resetConfirm": "Clear all progress?",
     "ach.reset": "Reset progress",
 
+    // Trip (edit travel dates)
+    "trip.heading": "My Trip",
+    "trip.none": "No travel dates set",
+    "trip.save": "Save dates",
+    "trip.saved": "Saved ✓",
+
     // Leaderboard
     "lb.title": "🏆 Traveler ranking",
     "lb.loading": "Loading ranking...",
@@ -399,6 +416,7 @@ export const STRINGS = {
     "weather.location": "Songkhla now",
     "weather.high": "H",
     "weather.low": "L",
+    "weather.tripTitle": "Trip forecast",
 
     // Festival quests
     "fest.activeTitle": "🎉 {name} is on!",

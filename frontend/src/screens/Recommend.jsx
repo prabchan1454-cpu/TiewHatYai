@@ -2,8 +2,10 @@ import { useState } from "react";
 import { api } from "../lib/api";
 import { Button, Card, ErrorBox, Pill, Spinner } from "../components/ui";
 import PlacesMap from "../components/PlacesMap";
+import TripForecast from "../components/TripForecast";
 import { useT } from "../lib/i18n.jsx";
-import { Sparkles, Lightbulb, Clock, MapPin, ExternalLink, Gift, Tag } from "lucide-react";
+import { festivalNames, isTripExpired } from "../lib/festivals";
+import { Sparkles, Lightbulb, Clock, MapPin, ExternalLink, Gift, Tag, CalendarDays, CalendarX } from "lucide-react";
 
 const RANK_TINT = {
   1: "bg-mango/20 text-amber-600 dark:text-amber-300",
@@ -19,9 +21,25 @@ function mapsUrl(p) {
   return `https://www.google.com/maps/search/?api=1&query=${q}`;
 }
 
-export default function Recommend({ preferences }) {
-  const { t } = useT();
+function formatRange(start, end, lang) {
+  const opts = { day: "numeric", month: "short", year: "numeric" };
+  const loc = lang === "en" ? "en-US" : "th-TH";
+  const s = new Date(start).toLocaleDateString(loc, opts);
+  const e = new Date(end).toLocaleDateString(loc, opts);
+  return `${s} – ${e}`;
+}
+
+export default function Recommend({ preferences, onNavigate }) {
+  const { t, lang } = useT();
   const [mode, setMode] = useState("places");
+
+  // Travel dates drive both the prompt and the on-screen summary. Once the
+  // trip is over we stop sending stale dates and nudge the user to update.
+  const dateStart = preferences?.dateStart || "";
+  const dateEnd = preferences?.dateEnd || "";
+  const tripExpired = isTripExpired(dateEnd);
+  const tripActive = !!dateStart && !!dateEnd && !tripExpired;
+  const festNames = tripActive ? festivalNames(preferences?.festivals, lang) : "";
 
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -40,10 +58,10 @@ export default function Recommend({ preferences }) {
         vibe: preferences?.vibe || "",
         budget: preferences?.budget || "ปานกลาง",
         companion: preferences?.companion || "คนเดียว",
-        duration: preferences?.duration || "",
-        date_start: preferences?.dateStart || "",
-        date_end: preferences?.dateEnd || "",
-        festivals: preferences?.festivals || "",
+        duration: tripActive ? preferences?.duration || "" : "",
+        date_start: tripActive ? dateStart : "",
+        date_end: tripActive ? dateEnd : "",
+        festivals: festNames,
         interests: preferences?.interests || "",
       });
       setPlaces(places);
@@ -98,12 +116,30 @@ export default function Recommend({ preferences }) {
                   {t("rec.basedOn")} {preferences?.categories || "—"}
                   {preferences?.vibe ? ` · ${preferences.vibe}` : ""}
                 </p>
+                {tripActive && (
+                  <p className="mt-1 flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
+                    <CalendarDays className="h-3.5 w-3.5 shrink-0 text-lagoon" />
+                    {t("rec.dates", { range: formatRange(dateStart, dateEnd, lang) })}
+                    {festNames ? ` · 🎉 ${festNames}` : ""}
+                  </p>
+                )}
               </div>
             </div>
+            {tripExpired && (
+              <button
+                onClick={() => onNavigate?.("profile")}
+                className="mt-3 flex w-full items-center gap-2 rounded-xl bg-amber-50 px-3 py-2 text-left text-sm font-semibold text-amber-700 transition hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 dark:bg-amber-500/10 dark:text-amber-300 dark:hover:bg-amber-500/20"
+              >
+                <CalendarX className="h-4 w-4 shrink-0" />
+                {t("rec.tripExpired")}
+              </button>
+            )}
             <Button onClick={fetchRecs} disabled={loading} className="mt-4 w-full">
               {loading ? t("rec.searching") : places.length ? t("rec.reroll") : t("rec.ask")}
             </Button>
           </Card>
+
+          {tripActive && <TripForecast start={dateStart} end={dateEnd} />}
 
           <ErrorBox message={error} />
           {loading && <Spinner label={t("rec.picking")} />}

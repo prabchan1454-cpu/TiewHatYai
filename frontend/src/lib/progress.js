@@ -12,7 +12,7 @@ export const LEVELS = [
 
 const DEFAULT = {
   xp: 0,
-  preferences: null, // { categories, vibe, budget, companion }
+  preferences: null, // { categories, vibe, budget, companion, dateStart, dateEnd, duration, festivals }
   started: false, // passed the landing hero page
   guest: false, // chose to continue without signing in
   onboarded: false,

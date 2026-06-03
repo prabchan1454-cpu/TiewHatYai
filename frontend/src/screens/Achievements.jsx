@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { levelFor, nextLevel } from "../lib/progress";
-import { Card, Pill } from "../components/ui";
+import { Card, Pill, Button } from "../components/ui";
 import Leaderboard from "../components/Leaderboard";
+import TripDates from "../components/TripDates";
 import { useT } from "../lib/i18n.jsx";
-import { Trophy, Flag, Award, Share2, Sunrise } from "lucide-react";
+import { tripMeta } from "../lib/festivals";
+import { Trophy, Flag, Award, Share2, Sunrise, CalendarDays } from "lucide-react";
 
 const RARITY_RING = {
   Common: "ring-slate-200 dark:ring-slate-700",
@@ -13,7 +16,31 @@ const RARITY_RING = {
 
 export default function Achievements({ progress, auth, onLogout }) {
   const { t, lang } = useT();
-  const { state, reset } = progress;
+  const { state, reset, update } = progress;
+
+  // Editable travel dates — the only way to change them after onboarding
+  // without wiping all progress via reset().
+  const [tripStart, setTripStart] = useState(state.preferences?.dateStart || "");
+  const [tripEnd, setTripEnd] = useState(state.preferences?.dateEnd || "");
+  const [tripSaved, setTripSaved] = useState(false);
+  const trip = tripMeta(tripStart, tripEnd);
+  const tripDirty =
+    tripStart !== (state.preferences?.dateStart || "") ||
+    tripEnd !== (state.preferences?.dateEnd || "");
+
+  function saveTrip() {
+    update({
+      preferences: {
+        ...state.preferences,
+        dateStart: tripStart,
+        dateEnd: tripEnd,
+        duration: t("onboard.date.days", { n: trip.days }),
+        festivals: trip.festivalKeys,
+      },
+    });
+    setTripSaved(true);
+    setTimeout(() => setTripSaved(false), 2000);
+  }
   async function shareBadge(b) {
     const text = t("ach.shareText", { title: b.badge_title, desc: b.flavor_text || b.badge_description });
     const url = typeof window !== "undefined" ? window.location.origin : "";
@@ -81,6 +108,23 @@ export default function Achievements({ progress, auth, onLogout }) {
             <p className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">{t("ach.badgesGot")}</p>
           </div>
         </div>
+      </Card>
+
+      <Card className="space-y-3">
+        <div className="flex items-center gap-2.5">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sunset/10 text-sunset">
+            <CalendarDays className="h-5 w-5" />
+          </span>
+          <h3 className="font-bold text-deep dark:text-slate-100">{t("trip.heading")}</h3>
+        </div>
+        <TripDates start={tripStart} end={tripEnd} onStart={setTripStart} onEnd={setTripEnd} />
+        <Button
+          onClick={saveTrip}
+          disabled={!trip.valid || !tripDirty}
+          className="w-full"
+        >
+          {tripSaved ? t("trip.saved") : t("trip.save")}
+        </Button>
       </Card>
 
       <Leaderboard

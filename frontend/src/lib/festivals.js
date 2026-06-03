@@ -17,6 +17,8 @@ const FESTIVALS = [
     theme: "ลอยกระทง กระทง แม่น้ำ คลองอู่ตะเภา แสงไฟยามค่ำคืน", start: [11, 22], end: [11, 26] },
 ];
 
+const FESTIVAL_BY_KEY = Object.fromEntries(FESTIVALS.map((f) => [f.key, f]));
+
 function mmdd(m, d) {
   return m * 100 + d;
 }
@@ -54,6 +56,57 @@ export function festivalsInRange(start, end) {
     guard++;
   }
   return [...found.values()];
+}
+
+// Derives trip length, validity, and overlapping festival keys from a date
+// range. Shared by the onboarding flow and the profile editor so both store
+// preferences identically (festivals as keys, not localized text).
+export function tripMeta(dateStart, dateEnd) {
+  const s = new Date(dateStart);
+  const e = new Date(dateEnd);
+  const valid = !!dateStart && !!dateEnd && !isNaN(s) && !isNaN(e) && e >= s;
+  const days = valid ? Math.round((e - s) / 86400000) + 1 : 0;
+  const festivalKeys = valid
+    ? festivalsInRange(dateStart, dateEnd)
+        .map((f) => f.key)
+        .join(",")
+    : "";
+  return { days, valid, festivalKeys };
+}
+
+// Resolves a comma-separated list of festival keys into localized display
+// names. Preferences store keys (not localized text) so the label follows the
+// current language and survives a language switch. Unknown keys are dropped.
+export function festivalNames(csvKeys, lang = "th") {
+  if (!csvKeys) return "";
+  return csvKeys
+    .split(",")
+    .map((k) => k.trim())
+    .map((k) => FESTIVAL_BY_KEY[k])
+    .filter(Boolean)
+    .map((f) => (lang === "en" ? f.en : f.th))
+    .join(", ");
+}
+
+// Picks the festival that best matches the user's trip: the first one whose
+// window overlaps the travel dates, falling back to festivalForToday() so the
+// quest screen always has something to show off-trip.
+export function festivalForTrip(dateStart, dateEnd, now = new Date()) {
+  const inTrip = festivalsInRange(dateStart, dateEnd);
+  if (inTrip.length) {
+    return { festival: inTrip[0], active: true, date: startDate(inTrip[0], now) };
+  }
+  return festivalForToday(now);
+}
+
+// True when a saved trip's last day is already in the past, so callers can stop
+// recommending against stale dates and prompt the user to update them.
+export function isTripExpired(dateEnd, now = new Date()) {
+  if (!dateEnd) return false;
+  const e = new Date(dateEnd);
+  if (isNaN(e)) return false;
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return e < today;
 }
 
 // Returns the festival happening now, or the next upcoming one, so the UI
