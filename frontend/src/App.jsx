@@ -12,6 +12,7 @@ import Quests from "./screens/Quests";
 import Recommend from "./screens/Recommend";
 import Achievements from "./screens/Achievements";
 import RewardOverlay from "./components/RewardOverlay";
+import Tutorial from "./components/Tutorial";
 import { Spinner, LangToggle, ThemeToggle } from "./components/ui";
 import { House, MessageCircle, Compass, Sparkles, Trophy, Zap } from "lucide-react";
 
@@ -147,6 +148,8 @@ export default function App() {
       </nav>
 
       <RewardOverlay reward={progress.reward} onClose={progress.clearReward} />
+
+      {!state.tutorialSeen && <Tutorial onClose={() => update({ tutorialSeen: true })} />}
     </div>
   );
 }

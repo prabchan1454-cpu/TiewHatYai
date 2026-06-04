@@ -13,7 +13,7 @@ export function LangToggle({ className = "" }) {
       className={`${ICON_TOGGLE} px-2.5 text-xs ${className}`}
       aria-label="Switch language"
     >
-      {lang === "th" ? "🇬🇧 EN" : "🇹🇭 ไทย"}
+      {lang === "th" ? "🇹🇭 ไทย" : "🇬🇧 EN"}
     </button>
   );
 }

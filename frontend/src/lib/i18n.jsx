@@ -195,6 +195,25 @@ export const STRINGS = {
     "ach.login": "เข้าสู่ระบบด้วย Google",
     "ach.resetConfirm": "ล้างความคืบหน้าทั้งหมด?",
     "ach.reset": "รีเซ็ตความคืบหน้า",
+    "ach.replayTutorial": "ดูคู่มือการใช้งานอีกครั้ง",
+
+    // Tutorial walkthrough
+    "tut.skip": "ข้าม",
+    "tut.back": "ย้อนกลับ",
+    "tut.next": "ถัดไป",
+    "tut.done": "เริ่มเลย! 🚀",
+    "tut.intro.title": "ยินดีต้อนรับสู่ เที่ยวสงขลา 🎉",
+    "tut.intro.desc": "น้องเที่ยว ไกด์ AI จะพาคุณสำรวจสงขลาแบบเกมผจญภัย มาดูวิธีใช้กันสั้น ๆ",
+    "tut.home.title": "หน้าแรก",
+    "tut.home.desc": "ดูภาพรวมทริป สภาพอากาศ และความคืบหน้าของคุณได้ที่นี่",
+    "tut.chat.title": "แชทกับน้องเที่ยว",
+    "tut.chat.desc": "ถามอะไรก็ได้เกี่ยวกับสงขลา — ที่เที่ยว ร้านอาหาร เส้นทาง น้องเที่ยวตอบให้",
+    "tut.quests.title": "เควสผจญภัย",
+    "tut.quests.desc": "รับเควส ออกไปตามหาสถานที่ เช็คอิน GPS แล้วส่งรูป เพื่อรับ XP และ badge",
+    "tut.recommend.title": "คำแนะนำเฉพาะคุณ",
+    "tut.recommend.desc": "ขอที่เที่ยวและของฝากที่ตรงใจ ปรับตามวันเดินทางและเทศกาลให้อัตโนมัติ",
+    "tut.profile.title": "โปรไฟล์และรางวัล",
+    "tut.profile.desc": "เก็บ XP เลื่อนเลเวล สะสม badge แก้วันเดินทาง และดูอันดับนักเที่ยว",
 
     // Trip (edit travel dates)
     "trip.heading": "ทริปของฉัน",
@@ -416,6 +435,25 @@ export const STRINGS = {
     "ach.login": "Sign in with Google",
     "ach.resetConfirm": "Clear all progress?",
     "ach.reset": "Reset progress",
+    "ach.replayTutorial": "Replay the tutorial",
+
+    // Tutorial walkthrough
+    "tut.skip": "Skip",
+    "tut.back": "Back",
+    "tut.next": "Next",
+    "tut.done": "Let's go! 🚀",
+    "tut.intro.title": "Welcome to Travel Songkhla 🎉",
+    "tut.intro.desc": "Nong Tiew, your AI guide, turns exploring Songkhla into an adventure game. Here's a quick tour.",
+    "tut.home.title": "Home",
+    "tut.home.desc": "See your trip overview, the weather, and your progress at a glance.",
+    "tut.chat.title": "Chat with Nong Tiew",
+    "tut.chat.desc": "Ask anything about Songkhla — spots, food, directions. Nong Tiew has answers.",
+    "tut.quests.title": "Adventure Quests",
+    "tut.quests.desc": "Take a quest, find the spot, GPS check-in and send a photo to earn XP and badges.",
+    "tut.recommend.title": "Just for You",
+    "tut.recommend.desc": "Get places and souvenirs that fit your taste, auto-tuned to your travel dates and festivals.",
+    "tut.profile.title": "Profile & Rewards",
+    "tut.profile.desc": "Earn XP, level up, collect badges, edit your travel dates, and check the leaderboard.",
 
     // Trip (edit travel dates)
     "trip.heading": "My Trip",

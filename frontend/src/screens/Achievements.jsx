@@ -5,7 +5,7 @@ import Leaderboard from "../components/Leaderboard";
 import TripDates from "../components/TripDates";
 import { useT } from "../lib/i18n.jsx";
 import { tripMeta } from "../lib/festivals";
-import { Trophy, Flag, Award, Share2, Sunrise, CalendarDays } from "lucide-react";
+import { Trophy, Flag, Award, Share2, Sunrise, CalendarDays, HelpCircle } from "lucide-react";
 
 const RARITY_RING = {
   Common: "ring-slate-200 dark:ring-slate-700",
@@ -202,6 +202,14 @@ export default function Achievements({ progress, auth, onLogout }) {
       )}
 
       <div className="space-y-1 pt-1">
+        <button
+          onClick={() => update({ tutorialSeen: false })}
+          className="flex w-full items-center justify-center gap-1.5 rounded-xl py-2 text-sm font-semibold text-slate-600 transition hover:text-sunset focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/40 dark:text-slate-400 dark:hover:text-sunset"
+        >
+          <HelpCircle className="h-4 w-4" />
+          {t("ach.replayTutorial")}
+        </button>
+
         {auth?.enabled && (
           <button
             onClick={onLogout}

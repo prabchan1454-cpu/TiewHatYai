@@ -16,6 +16,7 @@ const DEFAULT = {
   started: false, // passed the landing hero page
   guest: false, // chose to continue without signing in
   onboarded: false,
+  tutorialSeen: false, // shown the feature walkthrough once after onboarding
   activeQuest: null, // current quest object the user is working on
   completedQuests: [], // [quest_name]
   history: [], // [{ quest_name, reward_xp, completedAt, isDaily }] newest first
