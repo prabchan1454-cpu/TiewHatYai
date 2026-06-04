@@ -8,6 +8,13 @@ Difficulty = Literal["Easy", "Medium", "Hard"]
 Level = Literal["Beginner", "Explorer", "Adventurer", "Master"]
 Rarity = Literal["Common", "Rare", "Epic", "Legendary"]
 Confidence = Literal["high", "medium", "low"]
+# Thematic category for the quest banner image (frontend maps it to an
+# icon + gradient). Keep in sync with QUEST_CATEGORIES in the prompt and the
+# CATEGORY map in frontend QuestBanner.
+QuestCategory = Literal[
+    "temple", "beach", "market", "cafe", "nature",
+    "food", "souvenir", "culture", "landmark",
+]
 
 
 # ---- Structured outputs returned by Claude ----
@@ -18,6 +25,9 @@ class Quest(BaseModel):
     difficulty: Difficulty
     objective: str
     location_hint: str
+    # Free-form string (not the Literal) so an unexpected value from the model
+    # never fails validation — the frontend normalizes unknown categories.
+    category: str = "landmark"
     target_lat: Optional[float] = None
     target_lng: Optional[float] = None
     reward_xp: int

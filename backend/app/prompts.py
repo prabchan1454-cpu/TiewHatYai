@@ -132,11 +132,14 @@ Respond ONLY in this JSON format (no extra text):
   "difficulty": "Easy|Medium|Hard",
   "objective": "สิ่งที่ต้องทำหรือหา",
   "location_hint": "คำใบ้แบบปริศนา ไม่บอกตำแหน่งตรงๆ",
+  "category": "temple|beach|market|cafe|nature|food|souvenir|culture|landmark",
   "target_lat": 7.0066,
   "target_lng": 100.4717,
   "reward_xp": 50,
   "reward_badge": "ชื่อ badge ที่ได้รับ"
 }}
+
+"category" must be the SINGLE best-matching theme of the quest target, chosen ONLY from this list (do not invent others): temple (วัด/ศาลเจ้า), beach (ทะเล/หาด/แหลม), market (ตลาด/ของกินริมทาง), cafe (คาเฟ่/ร้านกาแฟ), nature (ธรรมชาติ/สวน/ภูเขา/ทะเลสาบ), food (ร้านอาหาร/เมนูเด็ด), souvenir (ของฝาก/หัตถกรรม/ผ้าทอ), culture (เมืองเก่า/พิพิธภัณฑ์/สตรีทอาร์ต), landmark (แลนด์มาร์ก/อื่น ๆ). It only hints at the TYPE of place — it must not reveal the exact location.
 
 target_lat and target_lng must be real GPS coordinates (decimal degrees) of the quest location inside Songkhla province. Approximate ranges: Hat Yai lat ~6.99–7.02 lng ~100.44–100.50; Songkhla city / Samila / Ko Yo lat ~7.18–7.22 lng ~100.56–100.62."""
 

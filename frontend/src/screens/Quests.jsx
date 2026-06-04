@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { api } from "../lib/api";
 import { levelFor, todayStr } from "../lib/progress";
 import { festivalForTrip } from "../lib/festivals";
 import { Button, Card, ErrorBox, Pill, Spinner } from "../components/ui";
+import QuestBanner from "../components/QuestBanner";
 import { useT } from "../lib/i18n.jsx";
 import {
   Sunrise,
@@ -15,6 +16,7 @@ import {
   LocateFixed,
   CheckCircle2,
   AlertCircle,
+  X,
 } from "lucide-react";
 
 function distanceKm(lat1, lng1, lat2, lng2) {
@@ -57,6 +59,11 @@ export default function Quests({ progress }) {
   const [result, setResult] = useState(null);
   const [coords, setCoords] = useState(null);
   const [geoLoading, setGeoLoading] = useState(false);
+
+  // Object URL for the attached-photo thumbnail; revoked when it changes or the
+  // component unmounts so we don't leak blobs.
+  const photoUrl = useMemo(() => (photo ? URL.createObjectURL(photo) : null), [photo]);
+  useEffect(() => () => photoUrl && URL.revokeObjectURL(photoUrl), [photoUrl]);
 
   function checkIn() {
     if (!navigator.geolocation || geoLoading) return;
@@ -272,6 +279,7 @@ export default function Quests({ progress }) {
 
       {quest && (
         <Card className="space-y-3">
+          <QuestBanner category={quest.category} />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               {quest.isDaily && (
@@ -316,18 +324,38 @@ export default function Quests({ progress }) {
                 rows={3}
                 className="w-full rounded-xl border border-slate-200 p-3 text-deep outline-none transition placeholder:text-slate-400 focus:border-sunset focus:ring-2 focus:ring-sunset/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500"
               />
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                <span className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-3 py-2 font-semibold text-deep transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">
-                  <Camera className="h-4 w-4" /> {t("quest.attachPhoto")}
-                </span>
-                <span className="truncate">{photo ? photo.name : t("quest.optional")}</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => setPhoto(e.target.files?.[0] || null)}
-                />
-              </label>
+              {photo ? (
+                <div className="flex items-center gap-3 rounded-xl border border-slate-200 p-2 dark:border-slate-700">
+                  <img
+                    src={photoUrl}
+                    alt={photo.name}
+                    className="h-12 w-12 shrink-0 rounded-lg object-cover"
+                  />
+                  <span className="flex-1 truncate text-sm text-slate-600 dark:text-slate-300">{photo.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => setPhoto(null)}
+                    aria-label={t("quest.removePhoto")}
+                    title={t("quest.removePhoto")}
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition hover:bg-rose-100 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-rose-500/15 dark:hover:text-rose-400"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                  <span className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-3 py-2 font-semibold text-deep transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">
+                    <Camera className="h-4 w-4" /> {t("quest.attachPhoto")}
+                  </span>
+                  <span className="truncate">{t("quest.optional")}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => setPhoto(e.target.files?.[0] || null)}
+                  />
+                </label>
+              )}
               {(() => {
                 const hasTarget = quest.target_lat && quest.target_lng;
                 const km = coords && hasTarget
