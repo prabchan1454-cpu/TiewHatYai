@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { api } from "../lib/api";
 import { ErrorBox } from "../components/ui";
+import Mascot from "../components/Mascot";
 import { useT } from "../lib/i18n.jsx";
 import { Trash2 } from "lucide-react";
 
@@ -77,14 +78,17 @@ export default function Chat({ greeting }) {
       <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4 no-scrollbar">
         {messages.length === 0 && (
           <div className="mt-12 flex flex-col items-center text-center text-slate-500 dark:text-slate-400">
-            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-4xl shadow-card dark:bg-slate-800 dark:shadow-none">
-              🐘
-            </span>
+            <Mascot size={104} float interactive />
             <p className="mt-3 max-w-[16rem] text-sm">{t("chat.empty")}</p>
           </div>
         )}
         {messages.map((m, i) => (
-          <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+          <div key={i} className={`flex items-end gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+            {m.role === "assistant" && (
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-sm dark:bg-slate-800 dark:shadow-none">
+                <Mascot size={30} />
+              </span>
+            )}
             <div
               className={`max-w-[80%] whitespace-pre-wrap rounded-3xl px-4 py-2.5 leading-relaxed ${
                 m.role === "user"
@@ -97,7 +101,10 @@ export default function Chat({ greeting }) {
           </div>
         ))}
         {loading && (
-          <div className="flex justify-start">
+          <div className="flex items-end gap-2 justify-start">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-sm dark:bg-slate-800 dark:shadow-none">
+              <Mascot size={30} />
+            </span>
             <div className="rounded-3xl rounded-bl-md bg-white px-4 py-3 shadow-sm dark:bg-slate-800 dark:shadow-none">
               <span className="flex gap-1">
                 <Dot /> <Dot delay="150ms" /> <Dot delay="300ms" />

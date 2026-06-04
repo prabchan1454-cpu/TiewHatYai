@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "./ui";
+import Mascot from "./Mascot";
 import { useT } from "../lib/i18n.jsx";
 import { House, MessageCircle, Compass, Sparkles, Trophy, MapPinned } from "lucide-react";
 
@@ -45,11 +46,15 @@ export default function Tutorial({ onClose }) {
           key={animKey}
           className={`pt-4 ${dir === "right" ? "animate-slide-in-right" : "animate-slide-in-left"}`}
         >
-          <span
-            className={`mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br ${step.gradient} text-white shadow-lg`}
-          >
-            <Icon className="h-10 w-10" strokeWidth={2} />
-          </span>
+          {step.key === "intro" ? (
+            <Mascot size={96} className="mx-auto block" float interactive />
+          ) : (
+            <span
+              className={`mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br ${step.gradient} text-white shadow-lg`}
+            >
+              <Icon className="h-10 w-10" strokeWidth={2} />
+            </span>
+          )}
           <h2 className="mt-4 text-center text-xl font-extrabold text-deep dark:text-slate-100">
             {t(`tut.${step.key}.title`)}
           </h2>

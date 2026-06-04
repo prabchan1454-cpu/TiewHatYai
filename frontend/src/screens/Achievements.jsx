@@ -3,6 +3,7 @@ import { levelFor, nextLevel } from "../lib/progress";
 import { Card, Pill, Button } from "../components/ui";
 import Leaderboard from "../components/Leaderboard";
 import TripDates from "../components/TripDates";
+import Mascot from "../components/Mascot";
 import { useT } from "../lib/i18n.jsx";
 import { tripMeta } from "../lib/festivals";
 import { Trophy, Flag, Award, Share2, Sunrise, CalendarDays, HelpCircle } from "lucide-react";
@@ -189,17 +190,23 @@ export default function Achievements({ progress, auth, onLogout }) {
         )}
       </section>
 
-      {auth?.user && (
-        <Card className="flex items-center gap-3">
-          {auth.user.photoURL && (
-            <img src={auth.user.photoURL} alt="" className="h-10 w-10 rounded-full ring-2 ring-slate-100 dark:ring-slate-700" />
-          )}
-          <div className="flex-1 overflow-hidden">
-            <p className="truncate font-semibold text-deep dark:text-slate-100">{auth.user.displayName}</p>
-            <p className="truncate text-xs text-slate-500 dark:text-slate-400">{auth.user.email}</p>
-          </div>
-        </Card>
-      )}
+      <Card className="flex items-center gap-3">
+        {auth?.user?.photoURL ? (
+          <img src={auth.user.photoURL} alt="" className="h-12 w-12 rounded-full ring-2 ring-slate-100 dark:ring-slate-700" />
+        ) : (
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-mango/15 ring-2 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+            <Mascot size={44} />
+          </span>
+        )}
+        <div className="flex-1 overflow-hidden">
+          <p className="truncate font-semibold text-deep dark:text-slate-100">
+            {auth?.user?.displayName || t("app.defaultName")}
+          </p>
+          <p className="truncate text-xs text-slate-500 dark:text-slate-400">
+            {auth?.user?.email || t("level." + lvl.name)}
+          </p>
+        </div>
+      </Card>
 
       <div className="space-y-1 pt-1">
         <button

@@ -13,6 +13,7 @@ import Recommend from "./screens/Recommend";
 import Achievements from "./screens/Achievements";
 import RewardOverlay from "./components/RewardOverlay";
 import Tutorial from "./components/Tutorial";
+import Mascot from "./components/Mascot";
 import { Spinner, LangToggle, ThemeToggle } from "./components/ui";
 import { House, MessageCircle, Compass, Sparkles, Trophy, Zap } from "lucide-react";
 
@@ -86,7 +87,9 @@ export default function App() {
           {auth.user?.photoURL ? (
             <img src={auth.user.photoURL} alt="" className="h-9 w-9 rounded-full ring-2 ring-slate-100 dark:ring-slate-700" />
           ) : (
-            <img src="/logo.svg" alt="Travel Songkhla" className="h-9 w-9 rounded-xl" />
+            <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-mango/15 ring-2 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+              <Mascot size={34} />
+            </span>
           )}
           <div>
             <h1 className="text-[15px] font-bold leading-tight text-deep dark:text-slate-100">{t("app.greeting", { name: displayName })}</h1>

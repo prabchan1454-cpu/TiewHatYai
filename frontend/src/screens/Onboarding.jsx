@@ -4,6 +4,7 @@ import { Button, Card, ErrorBox, Spinner, LangToggle, ThemeToggle } from "../com
 import { useT } from "../lib/i18n.jsx";
 import { tripMeta } from "../lib/festivals";
 import TripDates from "../components/TripDates";
+import Mascot from "../components/Mascot";
 import { LayoutGrid, Palette, Users, Heart } from "lucide-react";
 
 function StepHead({ Icon, title, hint }) {
@@ -141,11 +142,16 @@ export default function Onboarding({ onDone }) {
 
       {/* Greeting card */}
       <Card className="bg-gradient-to-br from-mango/20 to-lagoon/10 mb-2 dark:from-mango/10 dark:to-lagoon/5">
-        {loadingGreet ? (
-          <Spinner label={t("onboard.greeting")} />
-        ) : (
-          <p className="whitespace-pre-wrap leading-relaxed text-deep text-sm dark:text-slate-100">{greeting}</p>
-        )}
+        <div className="flex items-start gap-3">
+          <Mascot size={56} className="shrink-0" float interactive />
+          <div className="flex-1">
+            {loadingGreet ? (
+              <Spinner label={t("onboard.greeting")} />
+            ) : (
+              <p className="whitespace-pre-wrap leading-relaxed text-deep text-sm dark:text-slate-100">{greeting}</p>
+            )}
+          </div>
+        </div>
       </Card>
 
       <ErrorBox message={error} />

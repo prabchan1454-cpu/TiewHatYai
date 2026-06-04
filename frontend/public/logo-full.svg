@@ -21,6 +21,6 @@
             fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-dasharray="3 22" opacity="0.8"/>
     </g>
   </g>
-  <text x="512" y="800" text-anchor="middle" font-family="'Noto Sans Thai','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="120" fill="#ffffff" letter-spacing="-2">TiewHatyai</text>
-  <text x="512" y="872" text-anchor="middle" font-family="'Noto Sans Thai','Helvetica Neue',Arial,sans-serif" font-weight="500" font-size="46" fill="#ffb020" letter-spacing="6">เที่ยวหาดใหญ่</text>
+  <text x="512" y="800" text-anchor="middle" font-family="'Noto Sans Thai','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="104" fill="#ffffff" letter-spacing="-2">Travel Songkhla</text>
+  <text x="512" y="872" text-anchor="middle" font-family="'Noto Sans Thai','Helvetica Neue',Arial,sans-serif" font-weight="500" font-size="46" fill="#ffb020" letter-spacing="6">เที่ยวสงขลา</text>
 </svg>

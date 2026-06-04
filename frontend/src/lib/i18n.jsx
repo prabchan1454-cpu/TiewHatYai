@@ -8,6 +8,7 @@ export const STRINGS = {
     "app.title": "เที่ยวสงขลา",
     "app.greeting": "สวัสดี {name}",
     "app.defaultName": "นักเที่ยว",
+    "mascot.alt": "น้องเที่ยว",
     "app.loading": "กำลังโหลด...",
     "tab.home": "หน้าหลัก",
     "tab.chat": "น้องเที่ยว",
@@ -246,6 +247,7 @@ export const STRINGS = {
   en: {
     // App shell
     "app.title": "Travel Songkhla",
+    "mascot.alt": "Nong Tiew",
     "app.greeting": "Hi {name}",
     "app.defaultName": "Traveler",
     "app.loading": "Loading...",
