@@ -9,7 +9,6 @@ import {
   Trophy,
   Flag,
   Award,
-  Zap,
   ChevronRight,
 } from "lucide-react";
 
@@ -35,18 +34,11 @@ export default function Home({ progress, onNavigate }) {
 
       {/* Committed navy hero — the one drenched moment on this screen */}
       <section className="rounded-3xl bg-deep p-5 text-white shadow-hero dark:ring-1 dark:ring-white/10">
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="text-xs font-medium text-white/55">{t("home.yourLevel")}</p>
-            <h2 className="mt-0.5 text-2xl font-extrabold tracking-tight">
-              {t("level." + lvl.name)}
-            </h2>
-          </div>
-          <div className="flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-sm font-bold">
-            <Zap className="h-4 w-4 text-mango" fill="currentColor" />
-            <span className="tnum">{state.xp}</span>
-            <span className="text-white/45">XP</span>
-          </div>
+        <div>
+          <p className="text-xs font-medium text-white/55">{t("home.yourLevel")}</p>
+          <h2 className="mt-0.5 text-2xl font-extrabold tracking-tight">
+            {t("level." + lvl.name)}
+          </h2>
         </div>
         <div className="mt-5">
           <div className="h-2 w-full overflow-hidden rounded-full bg-white/15">

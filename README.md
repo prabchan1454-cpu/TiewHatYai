@@ -1,6 +1,6 @@
-# เที่ยวหาดใหญ่ · TiewHatyai 🗺️
+# เที่ยวสงขลา · Travel Songkhla 🧜‍♀️🗺️
 
-> แอปไกด์ท่องเที่ยวหาดใหญ่ พร้อม AI ส่วนตัว **"น้องเที่ยว"** ระบบเควสผจญภัย และสะสม Badge  
+> แอปไกด์ท่องเที่ยว **จังหวัดสงขลา** (หาดใหญ่ · เมืองเก่า · สมิหลา · เกาะยอ) พร้อม AI ส่วนตัว **"น้องเที่ยว"** ระบบเควสผจญภัย และสะสม Badge  
 > ส่งประกวดรายการ **I-New Gen**
 
 ![Stack](https://img.shields.io/badge/React-18-61DAFB?logo=react) ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi) ![Groq](https://img.shields.io/badge/AI-Groq%20Free%20Tier-F55036) ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker)
@@ -12,7 +12,7 @@
 | ฟีเจอร์ | รายละเอียด |
 |---|---|
 | 🏠 **หน้าหลัก** | Dashboard แสดง Level / XP / เควสที่กำลังทำ / Badge ที่สะสม |
-| 💬 **น้องเที่ยว** | Chatbot AI ตอบทุกเรื่องหาดใหญ่ ภาษาไทย |
+| 💬 **น้องเที่ยว** | Chatbot AI ตอบทุกเรื่องสงขลา (หาดใหญ่–เมืองสงขลา–เกาะยอ) ไทย/อังกฤษ |
 | 🎯 **เควสผจญภัย** | รับภารกิจสำรวจเมือง ส่งหลักฐาน (รูปภาพ + คำอธิบาย) AI ตรวจสอบ |
 | ⭐ **แนะนำที่เที่ยว** | AI แนะนำ 3 สถานที่ตามสไตล์และความชอบส่วนตัว |
 | 🏅 **รางวัล / Badge** | ปลดล็อก Badge หายาก 4 ระดับ (Common → Legendary) |
@@ -36,7 +36,7 @@ Deploy    │ Docker Compose  (frontend nginx + backend uvicorn)
 ## โครงสร้างโปรเจกต์
 
 ```
-TiewHatyai/
+travel-songkhla/
 ├── docker-compose.yml
 ├── backend/
 │   ├── Dockerfile
@@ -119,10 +119,10 @@ npm run dev   # http://localhost:5174
 | Beginner | นักเที่ยวมือใหม่ | 0 |
 | Explorer | นักสำรวจ | 200 |
 | Adventurer | นักผจญภัย | 600 |
-| Master | เซียนหาดใหญ่ | 1,200 |
+| Master | เซียนสงขลา | 1,200 |
 
 ---
 
 ## ทีมผู้พัฒนา
 
-โปรเจกต์นี้สร้างขึ้นเพื่อการแข่งขัน **I-New Gen** เพื่อส่งเสริมการท่องเที่ยวในจังหวัดสงขลา / หาดใหญ่
+โปรเจกต์นี้สร้างขึ้นเพื่อการแข่งขัน **I-New Gen** เพื่อส่งเสริมการท่องเที่ยวในจังหวัดสงขลา

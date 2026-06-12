@@ -10,6 +10,11 @@ backend/.env
 frontend/node_modules/
 frontend/dist/
 
+# Local env (Firebase keys etc.) — never commit real values
+frontend/.env
+frontend/.env.local
+frontend/.env*.local
+
 # OS
 .DS_Store
 Thumbs.db

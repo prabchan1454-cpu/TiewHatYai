@@ -1,6 +1,6 @@
 # Design
 
-Visual system for TiewHatyai. Register: product. Direction: refined-playful — keep the warmth, drop the AI tells (gradient-on-every-card, emoji icon system, identical big-number stat grids, uniform rounded-3xl).
+Visual system for Travel Songkhla (เที่ยวสงขลา). Register: product. Direction: refined-playful — keep the warmth, drop the AI tells (gradient-on-every-card, emoji icon system, identical big-number stat grids, uniform rounded-3xl).
 
 ## Theme
 

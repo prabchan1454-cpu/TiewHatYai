@@ -3,7 +3,7 @@ import { useTheme } from "../lib/theme";
 import { Sun, Moon } from "lucide-react";
 
 const ICON_TOGGLE =
-  "flex h-8 items-center justify-center rounded-full border border-slate-200 bg-white/80 font-bold text-deep backdrop-blur transition duration-200 hover:bg-white active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deep/40 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:hover:bg-slate-800";
+  "flex h-10 items-center justify-center rounded-full border border-slate-200 bg-white/80 font-bold text-deep backdrop-blur transition duration-200 hover:bg-white active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deep/40 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:hover:bg-slate-800";
 
 export function LangToggle({ className = "" }) {
   const { lang, toggle } = useT();
@@ -23,7 +23,7 @@ export function ThemeToggle({ className = "" }) {
   return (
     <button
       onClick={toggle}
-      className={`${ICON_TOGGLE} w-8 ${className}`}
+      className={`${ICON_TOGGLE} w-10 ${className}`}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
       {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -35,9 +35,11 @@ export function Button({ children, variant = "primary", className = "", ...props
   const base =
     "inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 font-bold transition duration-200 active:scale-95 disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900";
   const variants = {
-    primary: "bg-sunset text-white shadow-lg shadow-sunset/30 hover:brightness-105 focus-visible:ring-sunset dark:shadow-none",
+    // Navy-on-bright text keeps the vibrant brand fills while passing WCAG AA
+    // (white-on-sunset was only 2.6:1; deep-on-sunset is 5.5:1).
+    primary: "bg-sunset text-deep shadow-lg shadow-sunset/30 hover:brightness-105 focus-visible:ring-sunset dark:shadow-none",
     soft: "bg-white text-deep border border-slate-200 hover:bg-slate-50 focus-visible:ring-deep/40 dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 dark:hover:bg-slate-700",
-    lagoon: "bg-lagoon text-white shadow-lg shadow-lagoon/30 hover:brightness-105 focus-visible:ring-lagoon dark:shadow-none",
+    lagoon: "bg-lagoon text-deep shadow-lg shadow-lagoon/30 hover:brightness-105 focus-visible:ring-lagoon dark:shadow-none",
     ghost: "text-deep hover:bg-slate-100 focus-visible:ring-deep/40 dark:text-slate-100 dark:hover:bg-slate-800",
   };
   return (
@@ -74,8 +76,9 @@ const DIFFICULTY = {
 export function Pill({ children, tone = "slate" }) {
   const tones = {
     slate: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300",
-    sunset: "bg-orange-100 text-sunset dark:bg-sunset/20 dark:text-orange-300",
-    lagoon: "bg-teal-100 text-lagoon dark:bg-lagoon/20 dark:text-teal-300",
+    // Darker text on the tint passes WCAG AA (text-sunset/-lagoon were ~2.2:1).
+    sunset: "bg-orange-100 text-orange-800 dark:bg-sunset/20 dark:text-orange-200",
+    lagoon: "bg-teal-100 text-teal-800 dark:bg-lagoon/20 dark:text-teal-200",
     ...RARITY,
     ...DIFFICULTY,
   };
@@ -88,7 +91,7 @@ export function Pill({ children, tone = "slate" }) {
 
 export function Spinner({ label = "น้องเที่ยวกำลังคิด..." }) {
   return (
-    <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400">
+    <div role="status" aria-live="polite" className="flex items-center gap-3 text-slate-500 dark:text-slate-400">
       <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-sunset dark:border-slate-600 dark:border-t-sunset" />
       <span className="text-sm">{label}</span>
     </div>
@@ -98,7 +101,7 @@ export function Spinner({ label = "น้องเที่ยวกำลัง
 export function ErrorBox({ message }) {
   if (!message) return null;
   return (
-    <div className="rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-500/15 dark:text-rose-300">
+    <div role="alert" className="rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-500/15 dark:text-rose-300">
       {message}
     </div>
   );

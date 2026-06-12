@@ -100,7 +100,7 @@ class ChatRequest(BaseModel):
 
 
 class QuestRequest(BaseModel):
-    user_location_area: str = "หาดใหญ่"
+    user_location_area: str = "จังหวัดสงขลา"
     user_level: Level = "Beginner"
     completed_quests: list[str] = []
     festival: str = ""

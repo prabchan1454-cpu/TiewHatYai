@@ -1,6 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+// Firebase is optional and heavy (~200 kB). To keep it out of the main bundle,
+// the SDK is loaded *dynamically* — only when it's actually configured AND used.
+// Guest-mode users (no env vars) never download it.
 
 const config = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -9,22 +9,32 @@ const config = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-// Auth is optional — only enabled when Firebase env vars are set.
+// Auth is enabled only when the core Firebase env vars are set.
 export const firebaseEnabled = Boolean(config.apiKey && config.authDomain && config.appId);
 
-// The leaderboard needs Firestore; it lives on the same project, so it's
-// available whenever auth is. projectId is part of the config above.
+// The leaderboard needs Firestore; it lives on the same project as auth.
 export const firestoreEnabled = firebaseEnabled && Boolean(config.projectId);
 
-let auth = null;
-let googleProvider = null;
-let db = null;
+let _loaded = null;
 
-if (firebaseEnabled) {
-  const app = initializeApp(config);
-  auth = getAuth(app);
-  googleProvider = new GoogleAuthProvider();
-  if (config.projectId) db = getFirestore(app);
+// Lazily import + initialise Firebase. Resolves to null when not configured, or
+// to a bundle of the live instances and the SDK modules callers need. Memoised,
+// so the dynamic import and initializeApp happen at most once.
+export function loadFirebase() {
+  if (!firebaseEnabled) return Promise.resolve(null);
+  if (!_loaded) {
+    _loaded = (async () => {
+      const [appMod, authMod, fsMod] = await Promise.all([
+        import("firebase/app"),
+        import("firebase/auth"),
+        config.projectId ? import("firebase/firestore") : Promise.resolve(null),
+      ]);
+      const app = appMod.initializeApp(config);
+      const auth = authMod.getAuth(app);
+      const googleProvider = new authMod.GoogleAuthProvider();
+      const db = fsMod ? fsMod.getFirestore(app) : null;
+      return { app, auth, googleProvider, db, authMod, fsMod };
+    })();
+  }
+  return _loaded;
 }
-
-export { auth, googleProvider, db };

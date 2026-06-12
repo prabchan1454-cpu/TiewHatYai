@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useProgress, levelFor } from "./lib/progress";
 import { useAuth } from "./lib/auth";
 import { syncScore } from "./lib/leaderboard";
@@ -7,10 +7,11 @@ import Landing from "./screens/Landing";
 import Login from "./screens/Login";
 import Onboarding from "./screens/Onboarding";
 import Home from "./screens/Home";
-import Chat from "./screens/Chat";
-import Quests from "./screens/Quests";
-import Recommend from "./screens/Recommend";
-import Achievements from "./screens/Achievements";
+// Secondary tabs are code-split so they (and their deps) load on first visit.
+const Chat = lazy(() => import("./screens/Chat"));
+const Quests = lazy(() => import("./screens/Quests"));
+const Recommend = lazy(() => import("./screens/Recommend"));
+const Achievements = lazy(() => import("./screens/Achievements"));
 import RewardOverlay from "./components/RewardOverlay";
 import Tutorial from "./components/Tutorial";
 import Mascot from "./components/Mascot";
@@ -112,20 +113,22 @@ export default function App() {
           slideDir === "right" ? "animate-slide-in-right" : "animate-slide-in-left"
         }`}
       >
-        {tab === "home" && <Home progress={progress} onNavigate={navigate} />}
-        {tab === "chat" && <Chat greeting={null} />}
-        {tab === "quests" && <Quests progress={progress} />}
-        {tab === "recommend" && <Recommend preferences={state.preferences} onNavigate={navigate} />}
-        {tab === "profile" && (
-          <Achievements
-            progress={progress}
-            auth={auth}
-            onLogout={() => {
-              auth.logout();
-              update({ guest: false });
-            }}
-          />
-        )}
+        <Suspense fallback={<div className="flex justify-center p-10"><Spinner label={t("app.loading")} /></div>}>
+          {tab === "home" && <Home progress={progress} onNavigate={navigate} />}
+          {tab === "chat" && <Chat greeting={null} />}
+          {tab === "quests" && <Quests progress={progress} />}
+          {tab === "recommend" && <Recommend preferences={state.preferences} onNavigate={navigate} />}
+          {tab === "profile" && (
+            <Achievements
+              progress={progress}
+              auth={auth}
+              onLogout={() => {
+                auth.logout();
+                update({ guest: false });
+              }}
+            />
+          )}
+        </Suspense>
       </main>
 
       <nav className="grid grid-cols-5 border-t border-slate-100 bg-white pb-[env(safe-area-inset-bottom)] dark:border-slate-800 dark:bg-slate-900">
@@ -136,7 +139,7 @@ export default function App() {
               key={tb.id}
               onClick={() => navigate(tb.id)}
               aria-current={active ? "page" : undefined}
-              className={`relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sunset/50 ${
+              className={`relative flex flex-col items-center gap-1 py-2.5 text-[12px] font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sunset/50 ${
                 active ? "text-sunset" : "text-slate-400 hover:text-deep dark:hover:text-slate-100"
               }`}
             >

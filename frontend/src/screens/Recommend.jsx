@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { api } from "../lib/api";
 import { Button, Card, ErrorBox, Pill, Spinner } from "../components/ui";
-import PlacesMap from "../components/PlacesMap";
+// Leaflet is ~150 kB — load the map only when results actually appear.
+const PlacesMap = lazy(() => import("../components/PlacesMap"));
 import TripForecast from "../components/TripForecast";
 import { useT } from "../lib/i18n.jsx";
 import { festivalNames, isTripExpired } from "../lib/festivals";
@@ -144,7 +145,13 @@ export default function Recommend({ preferences, onNavigate }) {
           <ErrorBox message={error} />
           {loading && <Spinner label={t("rec.picking")} />}
 
-          {places.length > 0 && <PlacesMap places={places} />}
+          {places.length > 0 && (
+            <Suspense
+              fallback={<div className="h-64 animate-pulse rounded-2xl bg-slate-100 dark:bg-slate-800" />}
+            >
+              <PlacesMap places={places} />
+            </Suspense>
+          )}
 
           {places.map((p) => (
             <Card key={p.rank} className="space-y-2.5">

@@ -5,13 +5,29 @@ function currentLang() {
   return v === "en" ? "en" : "th";
 }
 
+// Users should never see "HTTP 500" or "Failed to fetch" — surface every
+// failure as น้องเที่ยว apologising in the user's language instead.
+function friendlyError() {
+  return new Error(
+    currentLang() === "en"
+      ? "Nong Tiew can't connect right now — please try again in a moment 🙏"
+      : "น้องเที่ยวติดต่อไม่ได้ชั่วคราว ลองใหม่อีกครั้งนะคะ 🙏"
+  );
+}
+
 async function post(path, body) {
   const payload = { ...(body || {}), lang: currentLang() };
-  const res = await fetch(BASE + path, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  let res;
+  try {
+    res = await fetch(BASE + path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+  } catch (e) {
+    console.error(`POST ${path} network error:`, e);
+    throw friendlyError();
+  }
   if (!res.ok) {
     let detail = `HTTP ${res.status}`;
     try {
@@ -19,7 +35,8 @@ async function post(path, body) {
     } catch {
       /* ignore */
     }
-    throw new Error(detail);
+    console.error(`POST ${path} failed:`, detail);
+    throw friendlyError();
   }
   return res.json();
 }

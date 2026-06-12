@@ -1,4 +1,4 @@
-"""Groq AI client for TiewHatyai (free tier — no credit card needed)."""
+"""Groq AI client for Travel Songkhla (free tier — no credit card needed)."""
 
 import json
 import os

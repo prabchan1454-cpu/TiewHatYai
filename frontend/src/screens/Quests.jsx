@@ -37,6 +37,12 @@ function fileToBase64(file) {
   });
 }
 
+// The model sometimes returns machine-y badge ids like "badge_ผู้ช่วยเทศกาล" —
+// show (and forward) a clean human name instead.
+function badgeLabel(name) {
+  return String(name || "").replace(/^badge[_\s-]*/i, "").replace(/_/g, " ").trim();
+}
+
 export default function Quests({ progress }) {
   const { t, lang } = useT();
   const { state, update, completeQuest, issueDaily, addBadge, celebrate, updateReward } = progress;
@@ -59,6 +65,11 @@ export default function Quests({ progress }) {
   const [result, setResult] = useState(null);
   const [coords, setCoords] = useState(null);
   const [geoLoading, setGeoLoading] = useState(false);
+  const [storyExpanded, setStoryExpanded] = useState(false);
+
+  useEffect(() => {
+    setStoryExpanded(false);
+  }, [quest?.quest_name]);
 
   // Object URL for the attached-photo thumbnail; revoked when it changes or the
   // component unmounts so we don't leak blobs.
@@ -140,16 +151,14 @@ export default function Quests({ progress }) {
   }
 
   async function submit() {
-    if (!desc.trim() || verifying) return;
+    // A real photo from the location is required — text alone is too easy to
+    // fake and punishes players who actually go.
+    if (!desc.trim() || !photo || verifying) return;
     setVerifying(true);
     setError("");
     try {
-      let photo_base64 = null;
-      let photo_media_type = "image/jpeg";
-      if (photo) {
-        photo_base64 = await fileToBase64(photo);
-        photo_media_type = photo.type || "image/jpeg";
-      }
+      const photo_base64 = await fileToBase64(photo);
+      const photo_media_type = photo.type || "image/jpeg";
       const userDescription = coords
         ? `${desc}\n\n📍 GPS check-in: ${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)}`
         : desc;
@@ -167,7 +176,7 @@ export default function Quests({ progress }) {
         celebrate({ xp: quest.reward_xp, badge: null });
         try {
           const badge = await api.badge({
-            badge_name: quest.reward_badge,
+            badge_name: badgeLabel(quest.reward_badge),
             quest_completed: quest.quest_name,
           });
           addBadge(badge);
@@ -221,13 +230,17 @@ export default function Quests({ progress }) {
               </p>
             </div>
           </div>
-          <Button onClick={getFestivalQuest} disabled={festLoading} className="mt-3 w-full">
-            {festLoading ? t("quest.rolling") : t("fest.getQuest")}
-          </Button>
+          {/* Festival quests only while the festival is actually on — an
+              upcoming banner stays informational (no off-season กินเจ quests). */}
+          {fest.active && (
+            <Button onClick={getFestivalQuest} disabled={festLoading} className="mt-3 w-full">
+              {festLoading ? t("quest.rolling") : t("fest.getQuest")}
+            </Button>
+          )}
         </Card>
       )}
 
-      {!quest?.isDaily && (
+      {!quest && (
         <Card>
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
@@ -269,7 +282,7 @@ export default function Quests({ progress }) {
           </span>
           <h2 className="mt-3 text-xl font-extrabold text-deep dark:text-slate-100">{t("quest.readyTitle")}</h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{t("quest.readyDesc")}</p>
-          <Button onClick={getQuest} disabled={loading} className="mt-4 w-full">
+          <Button variant="soft" onClick={getQuest} disabled={loading} className="mt-4 w-full">
             {loading ? t("quest.rolling") : t("quest.getNew")}
           </Button>
         </Card>
@@ -294,7 +307,19 @@ export default function Quests({ progress }) {
             <span className="tnum text-sm font-bold text-sunset">+{quest.reward_xp} XP</span>
           </div>
           <h2 className="text-xl font-extrabold leading-snug text-deep dark:text-slate-100">{quest.quest_name}</h2>
-          <p className="italic text-slate-600 dark:text-slate-300">{quest.quest_story}</p>
+          <div>
+            <p className={`italic text-slate-600 dark:text-slate-300 ${!storyExpanded ? "line-clamp-2" : ""}`}>
+              {quest.quest_story}
+            </p>
+            {!storyExpanded && (
+              <button
+                onClick={() => setStoryExpanded(true)}
+                className="mt-1 text-xs font-semibold text-lagoon hover:underline focus-visible:outline-none"
+              >
+                อ่านต่อ ▾
+              </button>
+            )}
+          </div>
 
           <div className="rounded-xl bg-slate-50 p-3 text-sm dark:bg-slate-800/60">
             <p className="flex items-center gap-1.5 font-bold text-deep dark:text-slate-100">
@@ -311,7 +336,7 @@ export default function Quests({ progress }) {
           <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
             <Award className="h-4 w-4 text-mango" />
             <span>{t("quest.reward")}</span>
-            <span className="font-semibold text-deep dark:text-slate-200">{quest.reward_badge}</span>
+            <span className="font-semibold text-deep dark:text-slate-200">{badgeLabel(quest.reward_badge)}</span>
           </div>
 
           {!result?.verified && (
@@ -320,6 +345,7 @@ export default function Quests({ progress }) {
               <textarea
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
+                aria-label={t("quest.doneQ")}
                 placeholder={t("quest.descPlaceholder")}
                 rows={3}
                 className="w-full rounded-xl border border-slate-200 p-3 text-deep outline-none transition placeholder:text-slate-400 focus:border-sunset focus:ring-2 focus:ring-sunset/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500"
@@ -347,7 +373,7 @@ export default function Quests({ progress }) {
                   <span className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-3 py-2 font-semibold text-deep transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">
                     <Camera className="h-4 w-4" /> {t("quest.attachPhoto")}
                   </span>
-                  <span className="truncate">{t("quest.optional")}</span>
+                  <span className="truncate">{t("quest.photoRequired")}</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -392,9 +418,12 @@ export default function Quests({ progress }) {
                   </>
                 );
               })()}
-              <Button variant="lagoon" onClick={submit} disabled={verifying || !desc.trim()} className="w-full">
+              <Button variant="lagoon" onClick={submit} disabled={verifying || !desc.trim() || !photo} className="w-full">
                 {verifying ? t("quest.verifying") : t("quest.submit")}
               </Button>
+              {!photo && (
+                <p className="text-center text-xs text-slate-400 dark:text-slate-500">{t("quest.photoNudge")}</p>
+              )}
             </div>
           )}
 

@@ -1,8 +1,8 @@
-"""TiewHatyai backend — a stateless Claude proxy for the 6 น้องเที่ยว prompts."""
+"""Travel Songkhla backend — a stateless Groq proxy for the 6 น้องเที่ยว prompts."""
 
 from dotenv import load_dotenv
 
-# override=True so a blank ANTHROPIC_API_KEY already in the environment
+# override=True so a blank GROQ_API_KEY already in the environment
 # can't shadow the real key in .env.
 load_dotenv(override=True)
 
@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import ai_client as ai
 from . import prompts, schemas
 
-app = FastAPI(title="TiewHatyai API", version="1.0.0")
+app = FastAPI(title="Travel Songkhla API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -88,9 +88,24 @@ def souvenirs(req: schemas.SouvenirRequest):
     return schemas.Souvenirs(items=[schemas.Souvenir(**s) for s in items])
 
 
-# Prompt 4 — Quest verification (optional photo).
+# Prompt 4 — Quest verification. A photo is REQUIRED: text alone is too easy
+# to fake, which punishes players who actually visit the place. Enforced here
+# (not only in the UI) so direct API calls can't skip it.
 @app.post("/api/verify", response_model=schemas.Verification)
 def verify(req: schemas.VerifyRequest):
+    if not req.photo_base64:
+        no_photo = (
+            "A photo taken at the location is required to verify this quest. Attach one and try again 📷"
+            if req.lang == "en"
+            else "ต้องแนบรูปถ่ายจากสถานที่จริงเพื่อยืนยันเควสนะคะ แนบรูปแล้วส่งใหม่อีกครั้ง 📷"
+        )
+        return schemas.Verification(
+            verified=False,
+            confidence="high",
+            message=no_photo,
+            partial_credit=False,
+            feedback=no_photo,
+        )
     prompt = prompts.verify_prompt(
         req.quest_name, req.quest_objective, req.location_hint, req.user_description
     )

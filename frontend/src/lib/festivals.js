@@ -1,4 +1,4 @@
-// Hat Yai / southern-Thai festivals used to theme quests.
+// Songkhla / southern-Thai festivals used to theme quests.
 //
 // Lunar-based festivals (Chinese New Year, the vegetarian festival, Loy
 // Krathong) shift a few weeks each year. The ranges below are approximate for

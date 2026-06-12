@@ -24,6 +24,20 @@ function saveMessages(msgs) {
   } catch { /* storage full — silently skip */ }
 }
 
+// The model answers in light markdown (**bold**). Render just that — as React
+// nodes, never raw HTML — so replies don't show literal asterisks.
+function renderRich(text) {
+  return String(text)
+    .split(/(\*\*[^*]+\*\*)/g)
+    .map((part, i) =>
+      part.startsWith("**") && part.endsWith("**") ? (
+        <strong key={i}>{part.slice(2, -2)}</strong>
+      ) : (
+        part
+      )
+    );
+}
+
 export default function Chat({ greeting }) {
   const { t } = useT();
   const STARTERS = [t("chat.starter.1"), t("chat.starter.2"), t("chat.starter.3")];
@@ -80,6 +94,17 @@ export default function Chat({ greeting }) {
           <div className="mt-12 flex flex-col items-center text-center text-slate-500 dark:text-slate-400">
             <Mascot size={104} float interactive />
             <p className="mt-3 max-w-[16rem] text-sm">{t("chat.empty")}</p>
+            <div className="mt-6 flex flex-wrap justify-center gap-2 px-4">
+              {STARTERS.map((s) => (
+                <button
+                  key={s}
+                  onClick={() => send(s)}
+                  className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-deep transition duration-200 hover:border-sunset hover:bg-orange-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/40 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
           </div>
         )}
         {messages.map((m, i) => (
@@ -92,11 +117,11 @@ export default function Chat({ greeting }) {
             <div
               className={`max-w-[80%] whitespace-pre-wrap rounded-3xl px-4 py-2.5 leading-relaxed ${
                 m.role === "user"
-                  ? "rounded-br-md bg-sunset text-white"
+                  ? "rounded-br-md bg-sunset text-deep"
                   : "rounded-bl-md bg-white text-deep shadow-sm dark:bg-slate-800 dark:text-slate-100 dark:shadow-none"
               }`}
             >
-              {m.content}
+              {m.role === "assistant" ? renderRich(m.content) : m.content}
             </div>
           </div>
         ))}
@@ -117,7 +142,7 @@ export default function Chat({ greeting }) {
 
       <div className="space-y-2 border-t border-slate-200 bg-white/80 px-4 py-3 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
         <ErrorBox message={error} />
-        {messages.length <= 1 && (
+        {messages.length === 1 && (
           <div className="flex flex-wrap gap-2">
             {STARTERS.map((s) => (
               <button
@@ -144,13 +169,14 @@ export default function Chat({ greeting }) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && send()}
+            aria-label={t("chat.placeholder")}
             placeholder={t("chat.placeholder")}
             className="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-deep outline-none transition placeholder:text-slate-400 focus:border-sunset focus:ring-2 focus:ring-sunset/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500"
           />
           <button
             onClick={() => send()}
             disabled={loading || !input.trim()}
-            className="rounded-2xl bg-sunset px-5 py-3 font-bold text-white shadow-lg shadow-sunset/30 transition duration-200 hover:brightness-105 active:scale-95 disabled:opacity-50 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset focus-visible:ring-offset-2"
+            className="rounded-2xl bg-sunset px-5 py-3 font-bold text-deep shadow-lg shadow-sunset/30 transition duration-200 hover:brightness-105 active:scale-95 disabled:opacity-50 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset focus-visible:ring-offset-2"
           >
             {t("chat.send")}
           </button>

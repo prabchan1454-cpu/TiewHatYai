@@ -6,7 +6,7 @@ product
 
 ## Users
 
-Thai travelers, mostly students and young adults, exploring อำเภอหาดใหญ่ (Hat Yai), Songkhla. They use the app on a phone, one-handed, often outdoors and on the move: deciding where to eat, what to see, and chasing quests for fun. Thai-first, with an English toggle. Built for the "I-New Gen" competition, so it is also judged as a portfolio piece.
+Thai travelers, mostly students and young adults, exploring จังหวัดสงขลา (Songkhla province) — from หาดใหญ่ (Hat Yai) to เมืองสงขลา (the old town and Samila Beach), เกาะยอ and nearby districts. They use the app on a phone, one-handed, often outdoors and on the move: deciding where to eat, what to see, and chasing quests for fun. Thai-first, with an English toggle. Built for the "I-New Gen" competition, so it is also judged as a portfolio piece.
 
 ## Product Purpose
 
@@ -14,7 +14,7 @@ A gamified AI travel companion. The guide "น้องเที่ยว" answe
 
 ## Brand Personality
 
-Friendly, local, energetic, trustworthy. The voice is a warm Thai friend who knows Hat Yai well, not a corporate brochure. Three words: playful, warm, guiding. It should feel designed and intentional, not like a generic template.
+Friendly, local, energetic, trustworthy. The voice is a warm Thai friend who knows Songkhla well, not a corporate brochure. Three words: playful, warm, guiding. It should feel designed and intentional, not like a generic template.
 
 ## Anti-references
 
@@ -28,7 +28,7 @@ Friendly, local, energetic, trustworthy. The voice is a warm Thai friend who kno
 2. **Built for the thumb, outdoors.** Mobile-first, high-contrast, large touch targets, readable in sunlight.
 3. **One clear action per screen.** The traveler is mid-trip; the primary thing to do should be obvious.
 4. **Reward the loop.** Quests, XP, and badges are the heart; their moments should feel earned and celebratory without becoming noise.
-5. **Local, not generic.** Lean on the Hat Yai / southern-Thai identity in copy and imagery rather than stock travel clichés.
+5. **Local, not generic.** Lean on the Songkhla / southern-Thai identity — the Golden Mermaid, the Sino-Portuguese old town, the lake and the sea — in copy and imagery rather than stock travel clichés.
 
 ## Accessibility & Inclusion
 

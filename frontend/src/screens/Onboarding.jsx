@@ -7,7 +7,7 @@ import TripDates from "../components/TripDates";
 import Mascot from "../components/Mascot";
 import { LayoutGrid, Palette, Users, Heart } from "lucide-react";
 
-function StepHead({ Icon, title, hint }) {
+function StepHead({ Icon, title, hint, optional }) {
   return (
     <div className="text-center">
       <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-sunset/10 text-sunset">
@@ -15,6 +15,11 @@ function StepHead({ Icon, title, hint }) {
       </span>
       <p className="mt-2.5 text-lg font-bold text-deep dark:text-slate-100">{title}</p>
       {hint && <p className="text-sm text-slate-500 dark:text-slate-400">{hint}</p>}
+      {optional && (
+        <span className="mt-2 inline-block rounded-full bg-slate-100 px-2.5 py-0.5 text-xs text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+          ไม่บังคับ · Optional
+        </span>
+      )}
     </div>
   );
 }
@@ -34,7 +39,7 @@ function Choice({ label, active, onClick }) {
       aria-pressed={active}
       className={`rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#0e1525] ${
         active
-          ? "bg-sunset text-white shadow-md scale-105"
+          ? "bg-sunset text-deep shadow-md scale-105"
           : "bg-white text-deep border border-slate-200 hover:border-sunset hover:bg-orange-50 active:scale-95 dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 dark:hover:bg-slate-700"
       }`}
     >
@@ -179,7 +184,7 @@ export default function Onboarding({ onDone }) {
         {/* Step 1 — สไตล์ + งบ */}
         {step === 1 && (
           <div className="space-y-5">
-            <StepHead Icon={Palette} title={t("onboard.q.vibe_budget")} />
+            <StepHead Icon={Palette} title={t("onboard.q.vibe_budget")} optional />
             <div>
               <p className="mb-2 font-semibold text-deep text-sm dark:text-slate-100">{t("onboard.q.vibe")}</p>
               <div className="flex flex-wrap gap-2">
@@ -221,7 +226,7 @@ export default function Onboarding({ onDone }) {
         {/* Step 3 — ความสนใจพิเศษ */}
         {step === 3 && (
           <div className="space-y-4">
-            <StepHead Icon={Heart} title={t("onboard.q.interests")} hint={t("onboard.q.interests.hint")} />
+            <StepHead Icon={Heart} title={t("onboard.q.interests")} hint={t("onboard.q.interests.hint")} optional />
             <div className="flex flex-wrap gap-2 justify-center pt-1">
               {INTERESTS.map((i) => (
                 <Choice key={i} label={t(i)} active={interests.includes(i)} onClick={() => toggleInterest(i)} />

@@ -1,14 +1,4 @@
-import {
-  collection,
-  doc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
-import { db, firestoreEnabled } from "./firebase";
+import { firestoreEnabled, loadFirebase } from "./firebase";
 
 const COLLECTION = "leaderboard";
 
@@ -16,10 +6,13 @@ const COLLECTION = "leaderboard";
 // enabled or the rules reject the write, we swallow the error — the leaderboard
 // is a bonus, never a blocker for gameplay.
 export async function syncScore(user, { xp, level, badges }) {
-  if (!firestoreEnabled || !db || !user?.uid) return;
+  if (!firestoreEnabled || !user?.uid) return;
+  const fb = await loadFirebase();
+  if (!fb?.db) return;
+  const { doc, setDoc, serverTimestamp } = fb.fsMod;
   try {
     await setDoc(
-      doc(db, COLLECTION, user.uid),
+      doc(fb.db, COLLECTION, user.uid),
       {
         displayName: user.displayName || "นักเที่ยว",
         photoURL: user.photoURL || null,
@@ -38,9 +31,12 @@ export async function syncScore(user, { xp, level, badges }) {
 // Read the top N players by XP. Returns [] on any failure so callers can render
 // an empty state instead of crashing.
 export async function fetchTop(n = 50) {
-  if (!firestoreEnabled || !db) return [];
+  if (!firestoreEnabled) return [];
+  const fb = await loadFirebase();
+  if (!fb?.db) return [];
+  const { collection, query, orderBy, limit, getDocs } = fb.fsMod;
   try {
-    const q = query(collection(db, COLLECTION), orderBy("xp", "desc"), limit(n));
+    const q = query(collection(fb.db, COLLECTION), orderBy("xp", "desc"), limit(n));
     const snap = await getDocs(q);
     return snap.docs.map((d) => ({ uid: d.id, ...d.data() }));
   } catch {

@@ -1,9 +1,10 @@
-// Live weather for Hat Yai via Open-Meteo — free, no API key, CORS-enabled,
-// so it's called straight from the browser (fits the zero-budget constraint).
-const HATYAI = { lat: 7.0086, lng: 100.4747 };
+// Live weather for Songkhla (sampled at the Hat Yai hub) via Open-Meteo — free,
+// no API key, CORS-enabled, so it's called straight from the browser (fits the
+// zero-budget constraint). One point is enough: the province is climatically uniform.
+const SONGKHLA = { lat: 7.0086, lng: 100.4747 };
 
 const URL =
-  `https://api.open-meteo.com/v1/forecast?latitude=${HATYAI.lat}&longitude=${HATYAI.lng}` +
+  `https://api.open-meteo.com/v1/forecast?latitude=${SONGKHLA.lat}&longitude=${SONGKHLA.lng}` +
   "&current=temperature_2m,weather_code,relative_humidity_2m" +
   "&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FBangkok&forecast_days=1";
 
@@ -61,7 +62,7 @@ export async function fetchTripWeather(dateStart, dateEnd) {
   if (to < from) return []; // trip entirely in the past or beyond the horizon
 
   const url =
-    `https://api.open-meteo.com/v1/forecast?latitude=${HATYAI.lat}&longitude=${HATYAI.lng}` +
+    `https://api.open-meteo.com/v1/forecast?latitude=${SONGKHLA.lat}&longitude=${SONGKHLA.lng}` +
     "&daily=weather_code,temperature_2m_max,temperature_2m_min" +
     `&timezone=Asia%2FBangkok&start_date=${ymd(from)}&end_date=${ymd(to)}`;
 
