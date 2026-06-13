@@ -12,6 +12,7 @@ const Chat = lazy(() => import("./screens/Chat"));
 const Quests = lazy(() => import("./screens/Quests"));
 const Recommend = lazy(() => import("./screens/Recommend"));
 const Achievements = lazy(() => import("./screens/Achievements"));
+const Passport = lazy(() => import("./screens/Passport"));
 import RewardOverlay from "./components/RewardOverlay";
 import Tutorial from "./components/Tutorial";
 import Mascot from "./components/Mascot";
@@ -115,6 +116,7 @@ export default function App() {
       >
         <Suspense fallback={<div className="flex justify-center p-10"><Spinner label={t("app.loading")} /></div>}>
           {tab === "home" && <Home progress={progress} onNavigate={navigate} />}
+          {tab === "passport" && <Passport progress={progress} onBack={() => navigate("home")} />}
           {tab === "chat" && <Chat greeting={null} />}
           {tab === "quests" && <Quests progress={progress} />}
           {tab === "recommend" && <Recommend preferences={state.preferences} onNavigate={navigate} />}

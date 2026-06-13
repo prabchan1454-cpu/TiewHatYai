@@ -1,6 +1,7 @@
 import { Card, Button } from "../components/ui";
 import WeatherCard from "../components/WeatherCard";
 import { levelFor, nextLevel } from "../lib/progress";
+import { LANDMARKS } from "../lib/landmarks";
 import { useT } from "../lib/i18n.jsx";
 import {
   MessageCircle,
@@ -10,6 +11,7 @@ import {
   Flag,
   Award,
   ChevronRight,
+  Stamp,
 } from "lucide-react";
 
 const LINKS = [
@@ -54,6 +56,26 @@ export default function Home({ progress, onNavigate }) {
           </p>
         </div>
       </section>
+
+      {/* Songkhla Passport — the signature "go there for real" feature */}
+      <button
+        onClick={() => onNavigate("passport")}
+        className="flex w-full items-center gap-3 rounded-3xl bg-gradient-to-br from-sunset to-mango p-4 text-left text-deep shadow-hero transition duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/50"
+      >
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/30">
+          <Stamp className="h-6 w-6" />
+        </span>
+        <div className="flex-1">
+          <p className="font-extrabold">{t("passport.homeCard")}</p>
+          <p className="text-xs font-semibold opacity-80">
+            {t("passport.progress", {
+              done: (state.collectedStamps || []).length,
+              total: LANDMARKS.length,
+            })}
+          </p>
+        </div>
+        <ChevronRight className="h-5 w-5 shrink-0 opacity-70" />
+      </button>
 
       {/* One stat card, split by a divider — not two identical big-number cards */}
       <Card className="flex items-stretch divide-x divide-slate-100 p-0 dark:divide-slate-800">

@@ -227,33 +227,29 @@ Return ONLY a JSON array with exactly 4 items:
 
 # Prompt 4 — Quest verification. Returns JSON.
 def verify_prompt(quest_name: str, quest_objective: str, location_hint: str, user_description: str) -> str:
-    return f"""You are verifying whether a user has completed their quest in Songkhla province.
-Fairness matters: players who actually visit the place must not lose out to players who fake submissions, so judge primarily from the ATTACHED PHOTO. The text is supporting context only — a good story with a non-matching photo is NOT verified.
+    return f"""You are a STRICT verifier checking a photo against a quest in Songkhla province.
+This guards a fair game: players who really go must not lose to fakers. Judge ONLY from the ATTACHED PHOTO. The text is context, never proof.
 
-Quest details:
-- Quest name: {quest_name}
+Quest:
+- Name: {quest_name}
 - Objective: {quest_objective}
-- Location hint given: {location_hint}
+- Location hint: {location_hint}
+- User note: {user_description}
 
-User's submission:
-- Description from user: {user_description}
-- Photo taken at location: attached
+DECISION RULES (default is verified=false; approve only when genuinely convinced):
+1. The photo must be a REAL photograph that clearly and unmistakably shows the specific place/subject in the objective.
+2. verified=false if the photo is: a cartoon, drawing, illustration, AI-generated/CGI image, logo, sticker, emoji, a screenshot, a photo of a screen, or generic/unrelated to the objective.
+3. verified=false if it is only the RIGHT TYPE of place but clearly not THIS landmark, or too blurry/dark/cropped to tell → set partial_credit=true and say what to re-shoot.
+4. Only set verified=true when you can point to concrete visual evidence in the photo that matches the specific objective. If unsure, choose false.
+5. Be honest but warm in wording; never accuse the user of cheating — just say what the photo needs to show.
 
-How to judge:
-1. Look at the photo first. Does it plausibly show the quest objective (the place, object, food, or activity)?
-2. Photo clearly shows the objective → verified true.
-3. Photo is related but unclear/partial (right kind of place, wrong angle, too dark) → verified false, partial_credit true, and tell them exactly what to re-shoot.
-4. Photo is unrelated (screenshot, random scene, stock-photo look, selfie with nothing relevant, picture of a screen) → verified false, partial_credit false. Say warmly that the photo doesn't show the objective yet.
-5. A GPS check-in line in the description is supporting evidence, not sufficient by itself.
-Stay warm and encouraging in tone — strict on evidence, gentle in wording. Never accuse the user of cheating; just say what the photo needs to show.
-
-Respond in JSON:
+Return JSON (example shows a REJECTION — decide for yourself):
 {{
-  "verified": true,
+  "verified": false,
   "confidence": "high|medium|low",
-  "message": "ข้อความสำหรับแสดงให้ผู้ใช้เห็น (ภาษาไทย, อบอุ่น, กระตุ้นใจ)",
+  "message": "ข้อความถึงผู้ใช้ (ภาษาไทย, อบอุ่น)",
   "partial_credit": false,
-  "feedback": "คำแนะนำเพิ่มเติมถ้ายังไม่สำเร็จ"
+  "feedback": "บอกชัด ๆ ว่าต้องถ่ายอะไรมาให้เห็น"
 }}"""
 
 

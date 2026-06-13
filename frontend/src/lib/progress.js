@@ -22,6 +22,7 @@ const DEFAULT = {
   history: [], // [{ quest_name, reward_xp, completedAt, isDaily }] newest first
   badges: [], // [{ badge_title, badge_description, flavor_text, rarity, earnedAt }]
   daily: { issuedDate: null, completedDate: null, streak: 0 }, // YYYY-MM-DD strings
+  collectedStamps: [], // [{ id, collectedAt }] — Songkhla Passport landmark stamps
 };
 
 export function todayStr(d = new Date()) {
@@ -98,6 +99,19 @@ export function useProgress() {
     }));
   }, []);
 
+  // Collect a Songkhla Passport stamp. Idempotent: a landmark stamps once and
+  // its XP is awarded only on the first collect.
+  const collectStamp = useCallback((id, xp) => {
+    setState((s) => {
+      if (s.collectedStamps.some((st) => st.id === id)) return s;
+      return {
+        ...s,
+        xp: s.xp + (xp || 0),
+        collectedStamps: [...s.collectedStamps, { id, collectedAt: Date.now() }],
+      };
+    });
+  }, []);
+
   const addBadge = useCallback((badge) => {
     setState((s) => {
       if (s.badges.some((b) => b.badge_title === badge.badge_title)) return s;
@@ -113,6 +127,7 @@ export function useProgress() {
     completeQuest,
     issueDaily,
     addBadge,
+    collectStamp,
     reset,
     reward,
     celebrate,
