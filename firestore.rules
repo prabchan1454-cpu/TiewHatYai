@@ -13,5 +13,13 @@ service cloud.firestore {
       allow write: if request.auth != null
                    && request.auth.uid == userId;
     }
+
+    // Community check-in feed: anyone may read; a signed-in user may create a
+    // post only as themselves (uid must match). No edits/deletes from clients.
+    match /checkins/{postId} {
+      allow read: if true;
+      allow create: if request.auth != null
+                    && request.resource.data.uid == request.auth.uid;
+    }
   }
 }

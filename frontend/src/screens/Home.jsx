@@ -12,6 +12,7 @@ import {
   Award,
   ChevronRight,
   Stamp,
+  Users,
 } from "lucide-react";
 
 const LINKS = [
@@ -75,6 +76,18 @@ export default function Home({ progress, onNavigate }) {
           </p>
         </div>
         <ChevronRight className="h-5 w-5 shrink-0 opacity-70" />
+      </button>
+
+      {/* Community check-in feed */}
+      <button
+        onClick={() => onNavigate("checkins")}
+        className="flex w-full items-center gap-3 rounded-2xl border border-slate-100 bg-white p-3.5 text-left shadow-card transition duration-200 hover:shadow-lift active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon/40 dark:border-slate-800 dark:bg-slate-900"
+      >
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-lagoon/10 text-lagoon">
+          <Users className="h-5 w-5" />
+        </span>
+        <p className="flex-1 font-semibold text-deep dark:text-slate-100">{t("checkin.homeCard")}</p>
+        <ChevronRight className="h-5 w-5 shrink-0 text-slate-300 dark:text-slate-600" />
       </button>
 
       {/* One stat card, split by a divider — not two identical big-number cards */}
