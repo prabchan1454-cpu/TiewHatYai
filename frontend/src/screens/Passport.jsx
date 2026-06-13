@@ -54,8 +54,8 @@ function CollectModal({ landmark, onClose, onCollected }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start gap-3">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-mango/15 text-2xl">
-            {landmark.emoji}
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-mango/15 text-amber-600">
+            <landmark.Icon className="h-6 w-6" strokeWidth={2} />
           </span>
           <div className="flex-1">
             <h3 className="font-bold text-deep dark:text-slate-100">{landmark.th}</h3>
@@ -104,7 +104,10 @@ function Stamp({ landmark, collected, onClick, t }) {
           : "border-slate-100 bg-white shadow-card hover:shadow-lift active:scale-95 dark:border-slate-800 dark:bg-slate-900"
       }`}
     >
-      <span className={`text-3xl ${collected ? "" : "opacity-30 grayscale"}`}>{landmark.emoji}</span>
+      <landmark.Icon
+        className={`h-8 w-8 ${collected ? "text-sunset" : "text-slate-300 dark:text-slate-600"}`}
+        strokeWidth={2}
+      />
       <span className={`text-[11px] font-bold leading-tight ${collected ? "text-deep dark:text-slate-100" : "text-slate-400 dark:text-slate-500"}`}>
         {landmark.th}
       </span>

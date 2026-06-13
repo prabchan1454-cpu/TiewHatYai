@@ -113,7 +113,7 @@ When recommending a place in casual chat, mention: place name, category, a highl
 
 
 # Prompt 2 — Quest generator. Returns JSON only.
-def quest_prompt(user_location_area: str, user_level: str, completed_quests: list[str], festival: str = "") -> str:
+def quest_prompt(user_location_area: str, user_level: str, completed_quests: list[str], festival: str = "", focus: str = "") -> str:
     completed = ", ".join(completed_quests) if completed_quests else "(none yet)"
     festival_line = (
         f"\n\n🎉 ตอนนี้ตรงกับเทศกาล \"{festival}\" — ออกแบบเควสให้เข้ากับธีมเทศกาลนี้ "
@@ -121,11 +121,18 @@ def quest_prompt(user_location_area: str, user_level: str, completed_quests: lis
         if festival
         else ""
     )
+    focus_line = (
+        "\n\n🎁 ทำให้เป็น \"เควสล่าของฝาก\" โดยเฉพาะ — ให้ผู้ใช้ออกไปตามหา/เลือกซื้อ ของฝาก ของที่ระลึก "
+        "หรือหัตถกรรมท้องถิ่นของสงขลา (เช่น ผ้าทอเกาะยอ ของฝากย่านถนนนางงาม ขนมพื้นเมือง ของทะเลแปรรูป) "
+        "และ \"category\" ต้องเป็น \"souvenir\" เท่านั้น"
+        if focus == "souvenir"
+        else ""
+    )
     return f"""The user wants to receive a new quest in จังหวัดสงขลา (Songkhla province), Thailand.
 
 User's current location area: {user_location_area}
 User's level: {user_level} (Beginner/Explorer/Adventurer/Master)
-Quests already completed: {completed}{festival_line}
+Quests already completed: {completed}{festival_line}{focus_line}
 
 Generate ONE quest appropriate for their level. The quest must:
 - Focus on discovering a real type of place or local item somewhere in จังหวัดสงขลา (Hat Yai, Songkhla city, Ko Yo, the old town, beaches, lake, etc.)

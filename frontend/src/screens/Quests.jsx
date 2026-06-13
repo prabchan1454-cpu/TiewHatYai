@@ -17,6 +17,7 @@ import {
   CheckCircle2,
   AlertCircle,
   X,
+  Gift,
 } from "lucide-react";
 
 function distanceKm(lat1, lng1, lat2, lng2) {
@@ -48,6 +49,7 @@ export default function Quests({ progress }) {
   const { state, update, completeQuest, issueDaily, addBadge, celebrate, updateReward } = progress;
   const quest = state.activeQuest;
   const [loading, setLoading] = useState(false);
+  const [souvenirLoading, setSouvenirLoading] = useState(false);
   const [dailyLoading, setDailyLoading] = useState(false);
   const [festLoading, setFestLoading] = useState(false);
   const [error, setError] = useState("");
@@ -110,6 +112,27 @@ export default function Quests({ progress }) {
       setError(e.message);
     } finally {
       setLoading(false);
+    }
+  }
+
+  // Souvenir-hunt quest — steer the generator toward local crafts/gifts so
+  // travellers spend at community shops (the creative-economy angle).
+  async function getSouvenirQuest() {
+    setSouvenirLoading(true);
+    setError("");
+    setResult(null);
+    try {
+      const q = await api.quest({
+        user_location_area: "สงขลา",
+        user_level: level,
+        completed_quests: state.completedQuests,
+        focus: "souvenir",
+      });
+      update({ activeQuest: q });
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setSouvenirLoading(false);
     }
   }
 
@@ -282,9 +305,17 @@ export default function Quests({ progress }) {
           </span>
           <h2 className="mt-3 text-xl font-extrabold text-deep dark:text-slate-100">{t("quest.readyTitle")}</h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{t("quest.readyDesc")}</p>
-          <Button variant="soft" onClick={getQuest} disabled={loading} className="mt-4 w-full">
+          <Button variant="soft" onClick={getQuest} disabled={loading || souvenirLoading} className="mt-4 w-full">
             {loading ? t("quest.rolling") : t("quest.getNew")}
           </Button>
+          <button
+            onClick={getSouvenirQuest}
+            disabled={loading || souvenirLoading}
+            className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-2xl border border-lagoon/30 bg-lagoon/5 px-5 py-3 font-bold text-lagoon transition duration-200 hover:bg-lagoon/10 active:scale-95 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon/40 dark:border-lagoon/40 dark:bg-lagoon/10"
+          >
+            <Gift className="h-4 w-4" />
+            {souvenirLoading ? t("quest.rolling") : t("quest.getSouvenir")}
+          </button>
         </Card>
       )}
 

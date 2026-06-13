@@ -104,6 +104,7 @@ class QuestRequest(BaseModel):
     user_level: Level = "Beginner"
     completed_quests: list[str] = []
     festival: str = ""
+    focus: str = ""  # optional theme to steer the quest, e.g. "souvenir"
     lang: Lang = "th"
 
 
