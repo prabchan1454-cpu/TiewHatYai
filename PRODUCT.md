@@ -10,7 +10,14 @@ Thai travelers, mostly students and young adults, exploring จังหวั�
 
 ## Product Purpose
 
-A gamified AI travel companion. The guide "น้องเที่ยว" answers questions, hands out location quests, recommends places, and awards XP and badges. All progress lives in localStorage; the backend is a thin stateless AI proxy. Success means a traveler opens it, gets a useful recommendation or quest in seconds, and wants to come back tomorrow for the daily quest.
+A gamified AI travel companion that turns sightseeing into a game you have to *actually go and play*. Where typical travel apps are passive ("read reviews and info"), Travel Songkhla is active: the guide "น้องเที่ยว" answers questions and hands out quests, but earning rewards requires **visiting the real place and submitting a photo the AI verifies** — so going-for-real beats faking it.
+
+The loop is built around three signature pillars:
+- **Photo-verified quests** (incl. souvenir-hunt quests that send travelers to local shops).
+- **Songkhla Passport** — collect a stamp at each of 12 iconic landmarks across the province, shown on a map, to spread visitors province-wide rather than clustering in Hat Yai.
+- **Community check-ins** — a shared feed + map where signed-in travelers post where they've been, so real people promote Songkhla organically.
+
+Personal progress (XP, level, badges, stamps) lives in localStorage so the app works instantly even without login; the backend is a thin stateless AI proxy, while leaderboard and check-ins use Firebase. Success means a traveler opens it, gets a useful quest or recommendation in seconds, goes somewhere real, and comes back to collect more.
 
 ## Brand Personality
 
