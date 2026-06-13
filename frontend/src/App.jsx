@@ -80,7 +80,8 @@ export default function App() {
   }
 
   const lvl = levelFor(state.xp);
-  const displayName = auth.user?.displayName?.split(" ")[0] || t("app.defaultName");
+  const displayName =
+    auth.user?.displayName?.split(" ")[0] || state.preferences?.name || t("app.defaultName");
 
   return (
     <div className="mx-auto flex h-screen max-w-md flex-col bg-canvas dark:bg-[#0e1525]">

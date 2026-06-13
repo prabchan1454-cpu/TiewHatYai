@@ -43,6 +43,10 @@ export const STRINGS = {
     // Onboarding
     "onboard.subtitle": "ผจญภัยกับน้องเที่ยว ไกด์ AI ประจำเมือง",
     "onboard.greeting": "น้องเที่ยวกำลังทักทาย...",
+    "onboard.skip": "ข้าม",
+    "onboard.q.name": "เรียกคุณว่าอะไรดี?",
+    "onboard.q.name.hint": "ใส่ชื่อเล่นไว้ทักทาย หรือข้ามก็ได้",
+    "onboard.q.name.placeholder": "ชื่อเล่นของคุณ",
     "onboard.q.categories": "ชอบเที่ยวแบบไหน?",
     "onboard.q.categories.hint": "(เลือกได้หลายอย่าง)",
     "onboard.q.vibe": "บรรยากาศที่ชอบ",
@@ -299,6 +303,10 @@ export const STRINGS = {
     // Onboarding
     "onboard.subtitle": "Adventure with Nong Tiew, the city's AI guide",
     "onboard.greeting": "Nong Tiew is saying hi...",
+    "onboard.skip": "Skip",
+    "onboard.q.name": "What should we call you?",
+    "onboard.q.name.hint": "A nickname to greet you by — or skip",
+    "onboard.q.name.placeholder": "Your nickname",
     "onboard.q.categories": "What do you enjoy?",
     "onboard.q.categories.hint": "(choose multiple)",
     "onboard.q.vibe": "Preferred vibe",

@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { api } from "../lib/api";
 import { Button, ErrorBox } from "../components/ui";
+// Leaflet is heavy — load the stamp map only when the passport is open.
+const StampMap = lazy(() => import("../components/StampMap"));
 import { LANDMARKS, DISTRICTS, STAMP_XP } from "../lib/landmarks";
 import { useT } from "../lib/i18n.jsx";
 import { ArrowLeft, Check, Camera, X, MapPin, Store } from "lucide-react";
@@ -164,6 +166,11 @@ export default function Passport({ progress, onBack }) {
         </div>
         {done === total && <p className="mt-3 text-sm font-bold">{t("passport.complete")}</p>}
       </div>
+
+      {/* Map of all stamps across the province — tap a pin to collect */}
+      <Suspense fallback={<div className="h-[260px] animate-pulse rounded-3xl bg-slate-100 dark:bg-slate-800" />}>
+        <StampMap collectedIds={collectedIds} onSelect={setSelected} />
+      </Suspense>
 
       {/* Stamps grouped by district */}
       {DISTRICTS.map((district) => {

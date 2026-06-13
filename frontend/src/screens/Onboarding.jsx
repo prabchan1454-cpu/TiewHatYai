@@ -5,7 +5,7 @@ import { useT } from "../lib/i18n.jsx";
 import { tripMeta } from "../lib/festivals";
 import TripDates from "../components/TripDates";
 import Mascot from "../components/Mascot";
-import { LayoutGrid, Palette, Users, Heart } from "lucide-react";
+import { LayoutGrid, Palette, Users, Heart, Smile } from "lucide-react";
 
 function StepHead({ Icon, title, hint, optional }) {
   return (
@@ -30,7 +30,7 @@ const BUDGETS = ["budget.cheap", "budget.medium", "budget.luxury"];
 const COMPANIONS = ["companion.solo", "companion.couple", "companion.family", "companion.friends"];
 const INTERESTS = ["interest.photo", "interest.history", "interest.shopping", "interest.spa", "interest.sport", "interest.nightlife"];
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
 
 function Choice({ label, active, onClick }) {
   return (
@@ -73,6 +73,7 @@ export default function Onboarding({ onDone }) {
   const [loadingGreet, setLoadingGreet] = useState(true);
   const [error, setError] = useState("");
 
+  const [name, setName] = useState("");
   const [categories, setCategories] = useState([]);
   const [vibe, setVibe] = useState("");
   const [budget, setBudget] = useState("budget.medium");
@@ -115,6 +116,7 @@ export default function Onboarding({ onDone }) {
 
   function finish() {
     onDone({
+      name: name.trim(),
       categories: categories.map((c) => t(c)).join(", "),
       vibe: vibe ? t(vibe) : "",
       budget: t(budget),
@@ -127,13 +129,6 @@ export default function Onboarding({ onDone }) {
     });
   }
 
-  const canNext = [
-    categories.length > 0,
-    true,
-    !!companion && datesValid,
-    true,
-  ][step];
-
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col px-5 py-8 animate-slide-up">
       {/* Header row */}
@@ -142,6 +137,12 @@ export default function Onboarding({ onDone }) {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <LangToggle />
+          <button
+            onClick={finish}
+            className="rounded-full px-3 py-1.5 text-sm font-semibold text-slate-400 transition hover:text-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deep/30 dark:text-slate-500 dark:hover:text-slate-100"
+          >
+            {t("onboard.skip")}
+          </button>
         </div>
       </div>
 
@@ -171,8 +172,23 @@ export default function Onboarding({ onDone }) {
         key={animKey}
         className={`flex-1 ${dir === "right" ? "animate-slide-in-right" : "animate-slide-in-left"}`}
       >
-        {/* Step 0 — ชอบเที่ยวแบบไหน */}
+        {/* Step 0 — ชื่อเล่น */}
         {step === 0 && (
+          <div className="space-y-4">
+            <StepHead Icon={Smile} title={t("onboard.q.name")} hint={t("onboard.q.name.hint")} optional />
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              maxLength={24}
+              aria-label={t("onboard.q.name")}
+              placeholder={t("onboard.q.name.placeholder")}
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-lg font-semibold text-deep outline-none transition placeholder:font-normal placeholder:text-slate-400 focus:border-sunset focus:ring-2 focus:ring-sunset/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+            />
+          </div>
+        )}
+
+        {/* Step 1 — ชอบเที่ยวแบบไหน */}
+        {step === 1 && (
           <div className="space-y-4">
             <StepHead Icon={LayoutGrid} title={t("onboard.q.categories")} hint={t("onboard.q.categories.hint")} />
             <div className="flex flex-wrap gap-2 justify-center pt-1">
@@ -183,8 +199,8 @@ export default function Onboarding({ onDone }) {
           </div>
         )}
 
-        {/* Step 1 — สไตล์ + งบ */}
-        {step === 1 && (
+        {/* Step 2 — สไตล์ + งบ */}
+        {step === 2 && (
           <div className="space-y-5">
             <StepHead Icon={Palette} title={t("onboard.q.vibe_budget")} optional />
             <div>
@@ -206,8 +222,8 @@ export default function Onboarding({ onDone }) {
           </div>
         )}
 
-        {/* Step 2 — มากับใคร + ระยะเวลา */}
-        {step === 2 && (
+        {/* Step 3 — มากับใคร + ระยะเวลา */}
+        {step === 3 && (
           <div className="space-y-5">
             <StepHead Icon={Users} title={t("onboard.q.companion_duration")} />
             <div>
@@ -225,8 +241,8 @@ export default function Onboarding({ onDone }) {
           </div>
         )}
 
-        {/* Step 3 — ความสนใจพิเศษ */}
-        {step === 3 && (
+        {/* Step 4 — ความสนใจพิเศษ */}
+        {step === 4 && (
           <div className="space-y-4">
             <StepHead Icon={Heart} title={t("onboard.q.interests")} hint={t("onboard.q.interests.hint")} optional />
             <div className="flex flex-wrap gap-2 justify-center pt-1">
@@ -249,11 +265,7 @@ export default function Onboarding({ onDone }) {
           </button>
         )}
         {step < TOTAL_STEPS - 1 ? (
-          <Button
-            disabled={!canNext}
-            onClick={goNext}
-            className={step === 0 ? "w-full" : "flex-1"}
-          >
+          <Button onClick={goNext} className={step === 0 ? "w-full" : "flex-1"}>
             {t("onboard.next")}
           </Button>
         ) : (
