@@ -145,19 +145,21 @@ export default function Onboarding({ onDone }) {
         </div>
       </div>
 
-      {/* Greeting card */}
-      <Card className="bg-gradient-to-br from-mango/20 to-lagoon/10 mb-2 dark:from-mango/10 dark:to-lagoon/5">
-        <div className="flex items-start gap-3">
-          <Mascot size={56} className="shrink-0" float interactive />
-          <div className="flex-1">
-            {loadingGreet ? (
-              <Spinner label={t("onboard.greeting")} />
-            ) : (
-              <p className="whitespace-pre-wrap leading-relaxed text-deep text-sm dark:text-slate-100">{greeting}</p>
-            )}
+      {/* Greeting card — only on the first step so later steps stay uncluttered. */}
+      {step === 0 && (
+        <Card className="bg-gradient-to-br from-mango/20 to-lagoon/10 mb-2 dark:from-mango/10 dark:to-lagoon/5">
+          <div className="flex items-start gap-3">
+            <Mascot size={56} className="shrink-0" float interactive />
+            <div className="flex-1">
+              {loadingGreet ? (
+                <Spinner label={t("onboard.greeting")} />
+              ) : (
+                <p className="whitespace-pre-wrap leading-relaxed text-deep text-sm dark:text-slate-100">{greeting}</p>
+              )}
+            </div>
           </div>
-        </div>
-      </Card>
+        </Card>
+      )}
 
       <ErrorBox message={error} />
 

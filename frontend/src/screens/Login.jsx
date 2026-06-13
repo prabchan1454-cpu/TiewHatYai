@@ -17,7 +17,7 @@ export default function Login({ auth, onGuest }) {
         <div className="relative mx-auto w-fit">
           <span
             aria-hidden
-            className="absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-b from-mango/30 to-sunset/15"
+            className="absolute left-1/2 top-1/2 h-36 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full bg-mango/20 blur-2xl"
           />
           <Mascot size={120} float className="relative drop-shadow-[0_8px_14px_rgba(27,42,74,0.18)]" />
         </div>

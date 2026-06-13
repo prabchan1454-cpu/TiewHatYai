@@ -88,10 +88,7 @@ export default function Home({ progress, onNavigate }) {
             <p className="text-xs font-bold">{t("home.activeQuest")}</p>
           </div>
           <h3 className="mt-2 font-bold text-deep dark:text-slate-100">{state.activeQuest.quest_name}</h3>
-          <p className="mt-1 line-clamp-2 text-sm text-slate-600 dark:text-slate-300">
-            {state.activeQuest.objective}
-          </p>
-          <Button onClick={() => onNavigate("quests")} className="mt-4 w-full">
+          <Button onClick={() => onNavigate("quests")} className="mt-3 w-full">
             {t("home.continueQuest")}
           </Button>
         </Card>
@@ -120,10 +117,7 @@ export default function Home({ progress, onNavigate }) {
               <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${l.tint}`}>
                 <l.Icon className="h-5 w-5" />
               </span>
-              <div className="flex-1">
-                <p className="font-semibold text-deep dark:text-slate-100">{t(`home.link.${l.key}.title`)}</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">{t(`home.link.${l.key}.desc`)}</p>
-              </div>
+              <p className="flex-1 font-semibold text-deep dark:text-slate-100">{t(`home.link.${l.key}.title`)}</p>
               <ChevronRight className="h-5 w-5 shrink-0 text-slate-300 dark:text-slate-600" />
             </button>
           ))}

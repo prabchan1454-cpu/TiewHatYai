@@ -34,7 +34,9 @@ export default function Landing({ onStart }) {
       {/* Hero */}
       <div className="relative z-10 flex flex-1 flex-col items-center px-6 pb-4 text-center">
         <div className="relative mt-1 animate-fade-in">
-          <span aria-hidden className="absolute left-1/2 top-1/2 h-36 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/25" />
+          {/* Soft blurred halo (no hard edge) so the mascot pops without looking
+              like a transparent disc on the gradient. */}
+          <span aria-hidden className="absolute left-1/2 top-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/20 blur-2xl" />
           <Mascot size={148} float className="relative drop-shadow-[0_10px_18px_rgba(27,42,74,0.22)]" />
         </div>
 
