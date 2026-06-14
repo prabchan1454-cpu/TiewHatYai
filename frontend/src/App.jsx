@@ -1,5 +1,6 @@
-import { useEffect, useState, lazy, Suspense } from "react";
-import { useProgress, levelFor } from "./lib/progress";
+import { useEffect, useState, lazy, Suspense, useRef } from "react";
+import { useProgress, levelFor, levelIndex, LEVELS } from "./lib/progress";
+import { frameRing, perksForLevel, TITLES } from "./lib/unlocks";
 import { useAuth } from "./lib/auth";
 import { syncScore } from "./lib/leaderboard";
 import { useT } from "./lib/i18n.jsx";
@@ -49,6 +50,21 @@ export default function App() {
     }
   }, [auth.user, state.xp, state.badges.length]);
 
+  // Celebrate when XP crosses into a new level — surfaces exactly what was
+  // unlocked. Seeded with the current level so existing players don't get a
+  // spurious popup on load.
+  const prevLevelIdx = useRef(levelIndex(state.xp));
+  useEffect(() => {
+    const idx = levelIndex(state.xp);
+    if (idx > prevLevelIdx.current) {
+      progress.celebrate({
+        levelUp: t("level." + LEVELS[idx].name),
+        unlocked: perksForLevel(idx).map((p) => t(p)),
+      });
+    }
+    prevLevelIdx.current = idx;
+  }, [state.xp, progress, t]);
+
   function navigate(newTab) {
     const oldIdx = TAB_ORDER.indexOf(tab);
     const newIdx = TAB_ORDER.indexOf(newTab);
@@ -81,6 +97,7 @@ export default function App() {
   }
 
   const lvl = levelFor(state.xp);
+  const equippedTitle = TITLES.find((x) => x.id === state.cosmetics?.title);
   const displayName =
     auth.user?.displayName?.split(" ")[0] || state.preferences?.name || t("app.defaultName");
 
@@ -89,15 +106,17 @@ export default function App() {
       <header className="flex items-center justify-between border-b border-slate-100 bg-white/90 px-4 py-3 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
         <div className="flex items-center gap-2.5">
           {auth.user?.photoURL ? (
-            <img src={auth.user.photoURL} alt="" className="h-9 w-9 rounded-full ring-2 ring-slate-100 dark:ring-slate-700" />
+            <img src={auth.user.photoURL} alt="" className={`h-9 w-9 rounded-full ring-2 ${frameRing(state.cosmetics?.frame)}`} />
           ) : (
-            <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-mango/15 ring-2 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+            <span className={`flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-mango/15 ring-2 dark:bg-slate-800 ${frameRing(state.cosmetics?.frame)}`}>
               <Mascot size={34} />
             </span>
           )}
           <div>
             <h1 className="text-[15px] font-bold leading-tight text-deep dark:text-slate-100">{t("app.greeting", { name: displayName })}</h1>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{t("level." + lvl.name)}</p>
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+              {equippedTitle ? t(equippedTitle.labelKey) : t("level." + lvl.name)}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -122,7 +141,7 @@ export default function App() {
           {tab === "checkins" && <Checkins auth={auth} onBack={() => navigate("home")} />}
           {tab === "chat" && <Chat greeting={null} />}
           {tab === "quests" && <Quests progress={progress} />}
-          {tab === "recommend" && <Recommend preferences={state.preferences} onNavigate={navigate} />}
+          {tab === "recommend" && <Recommend preferences={state.preferences} xp={state.xp} onNavigate={navigate} />}
           {tab === "profile" && (
             <Achievements
               progress={progress}

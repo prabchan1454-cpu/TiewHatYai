@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Button } from "./ui";
+import { useT } from "../lib/i18n.jsx";
 
 const COLORS = ["#ff7a45", "#ffb020", "#0fb9b1", "#1b2a4a", "#f43f5e", "#8b5cf6"];
 
@@ -40,8 +41,9 @@ function Confetti() {
 }
 
 export default function RewardOverlay({ reward, onClose }) {
+  const { t } = useT();
   if (!reward) return null;
-  const { xp, badge } = reward;
+  const { xp, badge, levelUp, unlocked } = reward;
 
   return (
     <div
@@ -53,8 +55,24 @@ export default function RewardOverlay({ reward, onClose }) {
         className="animate-reward-pop relative w-full max-w-sm rounded-3xl bg-white p-6 text-center shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="text-5xl">🎉</div>
-        <h2 className="mt-2 text-2xl font-extrabold text-deep">เควสสำเร็จ!</h2>
+        <div className="text-5xl">{levelUp ? "⭐" : "🎉"}</div>
+        <h2 className="mt-2 text-2xl font-extrabold text-deep">{levelUp ? t("reward.levelUp") : "เควสสำเร็จ!"}</h2>
+
+        {levelUp ? (
+          <>
+            <p className="mt-1 text-sm font-semibold text-slate-500">{t("reward.nowLevel", { level: levelUp })}</p>
+            {unlocked?.length ? (
+              <div className="mt-4 rounded-2xl bg-mango/10 p-4 text-left ring-2 ring-mango/30">
+                <p className="text-xs font-bold uppercase tracking-wide text-amber-600">{t("reward.unlockedNew")}</p>
+                <ul className="mt-1.5 space-y-1">
+                  {unlocked.map((u, i) => (
+                    <li key={i} className="text-sm font-semibold text-deep">🎁 {u}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </>
+        ) : null}
 
         {xp ? (
           <div className="animate-xp-float mt-3 inline-block rounded-full bg-mango/20 px-5 py-2 text-2xl font-extrabold text-sunset">

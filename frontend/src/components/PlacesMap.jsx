@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { gmapsUrl } from "../lib/landmarks";
 
 const HAT_YAI = [7.0086, 100.4747];
 
@@ -61,6 +62,15 @@ export default function PlacesMap({ places }) {
               <strong>{p.place_name}</strong>
               <br />
               {p.approximate_area}
+              <br />
+              <a
+                href={gmapsUrl({ name: `${p.place_name} ${p.approximate_area || ""}`.trim() })}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#2563eb", fontWeight: 600, fontSize: 12 }}
+              >
+                เปิดใน Google Maps ↗
+              </a>
             </Popup>
           </Marker>
         ))}

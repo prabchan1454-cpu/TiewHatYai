@@ -113,8 +113,15 @@ When recommending a place in casual chat, mention: place name, category, a highl
 
 
 # Prompt 2 — Quest generator. Returns JSON only.
-def quest_prompt(user_location_area: str, user_level: str, completed_quests: list[str], festival: str = "", focus: str = "") -> str:
+def quest_prompt(user_location_area: str, user_level: str, completed_quests: list[str], festival: str = "", focus: str = "", expert: bool = False) -> str:
     completed = ", ".join(completed_quests) if completed_quests else "(none yet)"
+    expert_line = (
+        "\n\n🔥 นี่คือ \"เควสระดับสูง\" (Expert) — ออกแบบให้ท้าทายกว่าปกติ: ยากระดับ Hard, "
+        "อาจมีหลายขั้นตอนหรือเงื่อนไขที่ต้องสังเกต/ค้นหามากขึ้น และไปยังที่ที่ลึกหรือนอกกระแสกว่าเดิม "
+        "ตั้ง \"difficulty\" เป็น \"Hard\" และ \"reward_xp\" ให้อยู่ในช่วง 90–130 (สูงกว่าเควสทั่วไป)"
+        if expert
+        else ""
+    )
     festival_line = (
         f"\n\n🎉 ตอนนี้ตรงกับเทศกาล \"{festival}\" — ออกแบบเควสให้เข้ากับธีมเทศกาลนี้ "
         "โดยอ้างอิงถึงสถานที่ กิจกรรม ประเพณี หรือของกินที่เกี่ยวข้องกับเทศกาลในจังหวัดสงขลาอย่างเป็นธรรมชาติ"
@@ -132,7 +139,7 @@ def quest_prompt(user_location_area: str, user_level: str, completed_quests: lis
 
 User's current location area: {user_location_area}
 User's level: {user_level} (Beginner/Explorer/Adventurer/Master)
-Quests already completed: {completed}{festival_line}{focus_line}
+Quests already completed: {completed}{festival_line}{focus_line}{expert_line}
 
 Generate ONE quest appropriate for their level. The quest must:
 - Focus on discovering a real type of place or local item somewhere in จังหวัดสงขลา (Hat Yai, Songkhla city, Ko Yo, the old town, beaches, lake, etc.)
@@ -171,8 +178,15 @@ def recommend_prompt(
     date_start: str = "",
     date_end: str = "",
     festivals: str = "",
+    hidden_gems: bool = False,
 ) -> str:
     extra = ""
+    if hidden_gems:
+        extra += (
+            "\n- โหมดที่เที่ยวลับ: แนะนำ \"เฉพาะ\" ที่ลับ/นอกกระแสจริง ๆ ที่คนพื้นที่รู้ "
+            "ห้ามแนะนำสถานที่ยอดนิยมหรือที่อยู่ในลิสต์ท่องเที่ยวทั่วไป (เช่น หาดสมิหลา นางเงือกทอง ตลาดกิมหยง) "
+            "เน้นอำเภอนอกหาดใหญ่และตัวเมือง (เช่น สทิงพระ ระโนด สิงหนคร จะนะ เทพา สะเดา รัตภูมิ) เป็นพิเศษ"
+        )
     if date_start and date_end:
         extra += f"\n- ช่วงวันที่มาเที่ยว: {date_start} ถึง {date_end}"
         if duration:

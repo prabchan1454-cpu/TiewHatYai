@@ -28,7 +28,7 @@ const CATEGORIES = ["cat.food", "cat.souvenir", "cat.temple", "cat.nature", "cat
 const VIBES = ["vibe.calm", "vibe.lively", "vibe.adventure"];
 const BUDGETS = ["budget.cheap", "budget.medium", "budget.luxury"];
 const COMPANIONS = ["companion.solo", "companion.couple", "companion.family", "companion.friends"];
-const INTERESTS = ["interest.photo", "interest.history", "interest.shopping", "interest.spa", "interest.sport", "interest.nightlife"];
+const INTERESTS = ["interest.photo", "interest.streetart", "interest.heritage", "interest.sea", "interest.local", "interest.culture"];
 
 const TOTAL_STEPS = 5;
 

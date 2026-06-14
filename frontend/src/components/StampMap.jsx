@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { LANDMARKS } from "../lib/landmarks";
+import { LANDMARKS, gmapsUrl } from "../lib/landmarks";
 
 // Teardrop pin — gold + check when the stamp is collected, muted grey when not.
 function pinIcon(collected) {
@@ -57,6 +57,15 @@ export default function StampMap({ collectedIds, onSelect }) {
                     เก็บดวงตรา →
                   </button>
                 )}
+                <br />
+                <a
+                  href={gmapsUrl({ name: l.th })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "#2563eb", fontWeight: 600, fontSize: 12 }}
+                >
+                  เปิดใน Google Maps ↗
+                </a>
               </Popup>
             </Marker>
           );

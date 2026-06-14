@@ -2,8 +2,9 @@ import { useEffect, useState, lazy, Suspense } from "react";
 import { Button, Card, ErrorBox, Spinner } from "../components/ui";
 import { LANDMARKS } from "../lib/landmarks";
 import { postCheckin, fetchCheckins } from "../lib/checkins";
+import { getCurrentPosition, reverseGeocode } from "../lib/geo";
 import { useT } from "../lib/i18n.jsx";
-import { ArrowLeft, Camera, X, MapPin, LogIn, RefreshCw } from "lucide-react";
+import { ArrowLeft, Camera, X, MapPin, LogIn, RefreshCw, LocateFixed, ChevronDown } from "lucide-react";
 
 const CheckinMap = lazy(() => import("../components/CheckinMap"));
 
@@ -56,7 +57,12 @@ export default function Checkins({ auth, onBack }) {
   const [posts, setPosts] = useState(null); // null = loading
   const [loading, setLoading] = useState(true);
 
-  const [landmarkId, setLandmarkId] = useState("");
+  const [place, setPlace] = useState(""); // free-text location label
+  const [coords, setCoords] = useState(null); // { lat, lng } from GPS or a landmark
+  const [landmarkId, setLandmarkId] = useState(""); // set only when a landmark chip is used
+  const [gpsTagged, setGpsTagged] = useState(false);
+  const [locating, setLocating] = useState(false);
+  const [showLandmarks, setShowLandmarks] = useState(false);
   const [message, setMessage] = useState("");
   const [photo, setPhoto] = useState(null);
   const [posting, setPosting] = useState(false);
@@ -71,28 +77,60 @@ export default function Checkins({ auth, onBack }) {
     load();
   }, []);
 
+  // Instagram-style: grab the device GPS, then suggest a place name for it.
+  async function useMyLocation() {
+    if (locating) return;
+    setLocating(true);
+    setError("");
+    try {
+      const { lat, lng } = await getCurrentPosition();
+      setCoords({ lat, lng });
+      setGpsTagged(true);
+      setLandmarkId("");
+      const name = await reverseGeocode(lat, lng);
+      if (name) setPlace(name); // editable — user can refine
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLocating(false);
+    }
+  }
+
+  function pickLandmark(l) {
+    setLandmarkId(l.id);
+    setPlace(l.th);
+    setCoords({ lat: l.lat, lng: l.lng });
+    setGpsTagged(false);
+  }
+
+  function resetCompose() {
+    setPlace("");
+    setCoords(null);
+    setLandmarkId("");
+    setGpsTagged(false);
+    setMessage("");
+    setPhoto(null);
+  }
+
   async function submit() {
-    if (!landmarkId || posting) return;
+    if (!place.trim() || posting) return;
     setPosting(true);
     setError("");
     try {
-      const lm = LANDMARKS.find((l) => l.id === landmarkId);
       const image = photo ? await downscaleImage(photo) : null;
       const ok = await postCheckin({
         user: auth.user,
-        landmarkId,
-        place: lm?.th || "",
-        lat: lm?.lat,
-        lng: lm?.lng,
+        landmarkId: landmarkId || null,
+        place: place.trim(),
+        lat: coords?.lat,
+        lng: coords?.lng,
         message: message.trim(),
         image,
       });
       if (!ok) {
         setError(t("checkin.failed"));
       } else {
-        setLandmarkId("");
-        setMessage("");
-        setPhoto(null);
+        resetCompose();
         await load();
       }
     } catch (e) {
@@ -122,20 +160,64 @@ export default function Checkins({ auth, onBack }) {
       {auth?.user ? (
         <Card className="space-y-3">
           <p className="font-bold text-deep dark:text-slate-100">{t("checkin.composeTitle")}</p>
-          <div className="flex flex-wrap gap-1.5">
-            {LANDMARKS.map((l) => (
-              <button
-                key={l.id}
-                onClick={() => setLandmarkId(l.id)}
-                className={`rounded-full px-2.5 py-1 text-xs font-semibold transition ${
-                  landmarkId === l.id
-                    ? "bg-lagoon text-white"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300"
-                }`}
-              >
-                {l.th}
-              </button>
-            ))}
+
+          {/* Use my location (GPS) — Instagram-style */}
+          <button
+            onClick={useMyLocation}
+            disabled={locating}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-lagoon/10 py-2.5 text-sm font-semibold text-lagoon transition hover:bg-lagoon/20 disabled:opacity-60"
+          >
+            <LocateFixed className={`h-4 w-4 ${locating ? "animate-pulse" : ""}`} />
+            {locating ? t("checkin.locating") : t("checkin.useLocation")}
+          </button>
+
+          {/* Place name — free text, prefilled by GPS or a landmark, always editable */}
+          <div className="relative">
+            <MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              value={place}
+              onChange={(e) => {
+                setPlace(e.target.value);
+                setLandmarkId("");
+              }}
+              maxLength={80}
+              aria-label={t("checkin.placePlaceholder")}
+              placeholder={t("checkin.placePlaceholder")}
+              className="w-full rounded-xl border border-slate-200 py-2.5 pl-9 pr-3 text-sm text-deep outline-none transition placeholder:text-slate-400 focus:border-lagoon focus:ring-2 focus:ring-lagoon/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+            />
+          </div>
+          {gpsTagged && coords && (
+            <p className="-mt-1 flex items-center gap-1 text-xs text-slate-400">
+              <LocateFixed className="h-3 w-3" /> {t("checkin.gpsTagged")} · {coords.lat.toFixed(4)}, {coords.lng.toFixed(4)}
+            </p>
+          )}
+
+          {/* Optional: pick from the curated landmarks instead */}
+          <div>
+            <button
+              onClick={() => setShowLandmarks((v) => !v)}
+              className="flex items-center gap-1 text-xs font-semibold text-slate-500 dark:text-slate-400"
+            >
+              <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showLandmarks ? "rotate-180" : ""}`} />
+              {t("checkin.orPickLandmark")}
+            </button>
+            {showLandmarks && (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {LANDMARKS.map((l) => (
+                  <button
+                    key={l.id}
+                    onClick={() => pickLandmark(l)}
+                    className={`rounded-full px-2.5 py-1 text-xs font-semibold transition ${
+                      landmarkId === l.id
+                        ? "bg-lagoon text-white"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300"
+                    }`}
+                  >
+                    {l.th}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           <textarea
             value={message}
@@ -163,7 +245,7 @@ export default function Checkins({ auth, onBack }) {
             </label>
           )}
           <ErrorBox message={error} />
-          <Button variant="lagoon" onClick={submit} disabled={!landmarkId || posting} className="w-full">
+          <Button variant="lagoon" onClick={submit} disabled={!place.trim() || posting} className="w-full">
             {posting ? t("checkin.posting") : t("checkin.post")}
           </Button>
         </Card>

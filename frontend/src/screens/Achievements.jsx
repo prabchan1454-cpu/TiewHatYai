@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { levelFor, nextLevel } from "../lib/progress";
+import { getUnlocks, LADDER, TITLES, FRAMES, COVERS, frameRing } from "../lib/unlocks";
 import { Card, Pill, Button } from "../components/ui";
 import Leaderboard from "../components/Leaderboard";
 import TripDates from "../components/TripDates";
 import Mascot from "../components/Mascot";
 import { useT } from "../lib/i18n.jsx";
 import { tripMeta } from "../lib/festivals";
-import { Trophy, Flag, Award, Share2, Sunrise, CalendarDays, HelpCircle } from "lucide-react";
+import { Trophy, Flag, Award, Share2, Sunrise, CalendarDays, HelpCircle, Gift, Lock, Check } from "lucide-react";
 
 const RARITY_RING = {
   Common: "ring-slate-200 dark:ring-slate-700",
@@ -14,6 +15,104 @@ const RARITY_RING = {
   Epic: "ring-violet-300 dark:ring-violet-500/40",
   Legendary: "ring-amber-300 dark:ring-amber-500/40",
 };
+
+// Level-unlock rewards: a ladder of what each level grants, plus pickers to
+// equip the cosmetics the player has already unlocked.
+function RewardsCard({ state, update, t }) {
+  const u = getUnlocks(state.xp);
+  const cosmetics = state.cosmetics || {};
+  const setC = (key, val) => update({ cosmetics: { ...cosmetics, [key]: val } });
+
+  const chip = (active) =>
+    `rounded-full px-3 py-1 text-xs font-semibold transition ${
+      active
+        ? "bg-sunset text-deep shadow-sm"
+        : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300"
+    }`;
+
+  return (
+    <section>
+      <h3 className="mb-2.5 flex items-center gap-1.5 px-1 text-sm font-bold text-deep dark:text-slate-100">
+        <Gift className="h-4 w-4 text-sunset" /> {t("ach.rewards")}
+      </h3>
+
+      {/* Ladder: every level that grants something */}
+      <Card className="space-y-2.5">
+        {LADDER.map((row) => {
+          const reached = u.levelIndex >= row.level;
+          return (
+            <div key={row.level} className="flex items-start gap-3">
+              <span
+                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${
+                  reached ? "bg-mango text-deep" : "bg-slate-100 text-slate-400 dark:bg-slate-800"
+                }`}
+              >
+                {reached ? <Check className="h-4 w-4" strokeWidth={3} /> : <Lock className="h-3.5 w-3.5" />}
+              </span>
+              <div className="flex-1">
+                <p className={`text-sm font-bold ${reached ? "text-deep dark:text-slate-100" : "text-slate-400 dark:text-slate-500"}`}>
+                  {t("level." + (["Beginner", "Explorer", "Adventurer", "Master", "Legend", "Ambassador"][row.level]))}
+                  {!reached && <span className="ml-1.5 font-medium">· {t("ach.lockAt", { xp: row.xp })}</span>}
+                </p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  {row.perks.map((p) => t(p)).join(" · ")}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </Card>
+
+      {/* Equip what you've unlocked */}
+      <Card className="mt-2.5 space-y-3">
+        <div>
+          <p className="mb-1.5 text-xs font-bold text-slate-500 dark:text-slate-400">{t("ach.equipTitle")}</p>
+          <div className="flex flex-wrap gap-1.5">
+            <button onClick={() => setC("title", null)} className={chip(!cosmetics.title)}>{t("ach.equipNone")}</button>
+            {u.titles.map((it) => (
+              <button key={it.id} onClick={() => setC("title", it.id)} className={chip(cosmetics.title === it.id)}>
+                {t(it.labelKey)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <p className="mb-1.5 text-xs font-bold text-slate-500 dark:text-slate-400">{t("ach.equipFrame")}</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <button onClick={() => setC("frame", null)} className={chip(!cosmetics.frame)}>{t("ach.equipNone")}</button>
+            {u.frames.map((it) => (
+              <button
+                key={it.id}
+                onClick={() => setC("frame", it.id)}
+                aria-label={t(it.labelKey)}
+                className={`h-7 w-7 rounded-full bg-slate-200 ring-2 ring-offset-2 dark:bg-slate-700 dark:ring-offset-slate-900 ${it.ring} ${
+                  cosmetics.frame === it.id ? "ring-offset-2" : "opacity-70"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <p className="mb-1.5 text-xs font-bold text-slate-500 dark:text-slate-400">{t("ach.equipCover")}</p>
+          <div className="flex flex-wrap items-center gap-2">
+            {u.covers.map((it) => (
+              <button
+                key={it.id}
+                onClick={() => setC("cover", it.id === "default" ? null : it.id)}
+                aria-label={t(it.labelKey)}
+                className={`h-7 w-12 rounded-lg bg-gradient-to-br ${it.gradient} ${
+                  (cosmetics.cover || "default") === it.id ? "ring-2 ring-deep ring-offset-2 dark:ring-white dark:ring-offset-slate-900" : "opacity-80"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </Card>
+    </section>
+  );
+}
 
 export default function Achievements({ progress, auth, onLogout }) {
   const { t, lang } = useT();
@@ -59,6 +158,7 @@ export default function Achievements({ progress, auth, onLogout }) {
 
   const lvl = levelFor(state.xp);
   const next = nextLevel(state.xp);
+  const equippedTitle = TITLES.find((x) => x.id === state.cosmetics?.title);
   const pct = next
     ? Math.min(100, Math.round(((state.xp - lvl.min) / (next.min - lvl.min)) * 100))
     : 100;
@@ -73,6 +173,11 @@ export default function Achievements({ progress, auth, onLogout }) {
           <div>
             <p className="text-xs font-medium text-white/55">{t("ach.yourLevel")}</p>
             <h2 className="text-2xl font-extrabold tracking-tight">{t("level." + lvl.name)}</h2>
+            {equippedTitle && (
+              <span className="mt-1 inline-block rounded-full bg-mango/25 px-2.5 py-0.5 text-xs font-bold text-mango">
+                {t(equippedTitle.labelKey)}
+              </span>
+            )}
           </div>
         </div>
         <div className="mt-5">
@@ -89,6 +194,8 @@ export default function Achievements({ progress, auth, onLogout }) {
           </div>
         </div>
       </section>
+
+      <RewardsCard state={state} update={update} t={t} />
 
       <Card className="flex items-stretch divide-x divide-slate-100 p-0 dark:divide-slate-800">
         <div className="flex flex-1 items-center gap-3 p-4">
@@ -192,9 +299,9 @@ export default function Achievements({ progress, auth, onLogout }) {
 
       <Card className="flex items-center gap-3">
         {auth?.user?.photoURL ? (
-          <img src={auth.user.photoURL} alt="" className="h-12 w-12 rounded-full ring-2 ring-slate-100 dark:ring-slate-700" />
+          <img src={auth.user.photoURL} alt="" className={`h-12 w-12 rounded-full ring-2 ${frameRing(state.cosmetics?.frame)}`} />
         ) : (
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-mango/15 ring-2 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+          <span className={`flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-mango/15 ring-2 dark:bg-slate-800 ${frameRing(state.cosmetics?.frame)}`}>
             <Mascot size={44} />
           </span>
         )}

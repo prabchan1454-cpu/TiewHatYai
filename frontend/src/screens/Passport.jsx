@@ -4,6 +4,7 @@ import { Button, ErrorBox } from "../components/ui";
 // Leaflet is heavy — load the stamp map only when the passport is open.
 const StampMap = lazy(() => import("../components/StampMap"));
 import { LANDMARKS, DISTRICTS, STAMP_XP } from "../lib/landmarks";
+import { coverGradient } from "../lib/unlocks";
 import { useT } from "../lib/i18n.jsx";
 import { ArrowLeft, Check, Camera, X, MapPin, Store } from "lucide-react";
 
@@ -155,7 +156,7 @@ export default function Passport({ progress, onBack }) {
       </div>
 
       {/* Progress hero */}
-      <div className="rounded-3xl bg-gradient-to-br from-sunset to-mango p-5 text-deep shadow-hero">
+      <div className={`rounded-3xl bg-gradient-to-br ${coverGradient(state.cosmetics?.cover)} p-5 text-deep shadow-hero`}>
         <p className="flex items-center gap-1.5 text-sm font-bold">
           <MapPin className="h-4 w-4" /> {t("passport.tagline")}
         </p>

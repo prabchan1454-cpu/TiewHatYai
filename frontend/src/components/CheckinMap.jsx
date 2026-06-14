@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { gmapsUrl } from "../lib/landmarks";
 
 function pinIcon() {
   return L.divIcon({
@@ -46,6 +47,15 @@ export default function CheckinMap({ checkins }) {
               <strong>{c.place || "เช็คอิน"}</strong>
               <br />
               {c.displayName}
+              <br />
+              <a
+                href={gmapsUrl({ lat: c.lat, lng: c.lng })}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#2563eb", fontWeight: 600, fontSize: 12 }}
+              >
+                เปิดใน Google Maps ↗
+              </a>
             </Popup>
           </Marker>
         ))}

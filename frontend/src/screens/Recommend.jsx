@@ -6,7 +6,8 @@ const PlacesMap = lazy(() => import("../components/PlacesMap"));
 import TripForecast from "../components/TripForecast";
 import { useT } from "../lib/i18n.jsx";
 import { festivalNames, isTripExpired } from "../lib/festivals";
-import { Sparkles, Lightbulb, Clock, MapPin, ExternalLink, Gift, Tag, CalendarDays, CalendarX } from "lucide-react";
+import { getUnlocks } from "../lib/unlocks";
+import { Sparkles, Lightbulb, Clock, MapPin, ExternalLink, Gift, Tag, CalendarDays, CalendarX, Compass, Lock } from "lucide-react";
 
 const RANK_TINT = {
   1: "bg-mango/20 text-amber-600 dark:text-amber-300",
@@ -30,9 +31,11 @@ function formatRange(start, end, lang) {
   return `${s} – ${e}`;
 }
 
-export default function Recommend({ preferences, onNavigate }) {
+export default function Recommend({ preferences, xp = 0, onNavigate }) {
   const { t, lang } = useT();
   const [mode, setMode] = useState("places");
+  const unlocks = getUnlocks(xp);
+  const [hiddenGems, setHiddenGems] = useState(false);
 
   // Travel dates drive both the prompt and the on-screen summary. Once the
   // trip is over we stop sending stale dates and nudge the user to update.
@@ -64,6 +67,7 @@ export default function Recommend({ preferences, onNavigate }) {
         date_end: tripActive ? dateEnd : "",
         festivals: festNames,
         interests: preferences?.interests || "",
+        hidden_gems: unlocks.hiddenGems && hiddenGems,
       });
       setPlaces(places);
     } catch (e) {
@@ -134,6 +138,30 @@ export default function Recommend({ preferences, onNavigate }) {
                 <CalendarX className="h-4 w-4 shrink-0" />
                 {t("rec.tripExpired")}
               </button>
+            )}
+            {unlocks.hiddenGems ? (
+              <button
+                onClick={() => setHiddenGems((v) => !v)}
+                aria-pressed={hiddenGems}
+                className={`mt-3 flex w-full items-center gap-2 rounded-xl border px-3 py-2.5 text-left text-sm font-semibold transition ${
+                  hiddenGems
+                    ? "border-lagoon bg-lagoon/10 text-lagoon"
+                    : "border-slate-200 text-slate-600 hover:border-lagoon dark:border-slate-700 dark:text-slate-300"
+                }`}
+              >
+                <Compass className="h-4 w-4 shrink-0" />
+                <span className="flex-1">
+                  {t("rec.hiddenGems")}
+                  <span className="block text-xs font-normal opacity-70">{t("rec.hiddenGemsOn")}</span>
+                </span>
+                <span className={`h-5 w-9 shrink-0 rounded-full p-0.5 transition ${hiddenGems ? "bg-lagoon" : "bg-slate-300 dark:bg-slate-600"}`}>
+                  <span className={`block h-4 w-4 rounded-full bg-white transition-transform ${hiddenGems ? "translate-x-4" : ""}`} />
+                </span>
+              </button>
+            ) : (
+              <p className="mt-3 flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500">
+                <Lock className="h-3.5 w-3.5" /> {t("rec.hiddenGems")} · {t("rec.hiddenGemsLock")}
+              </p>
             )}
             <Button onClick={fetchRecs} disabled={loading} className="mt-4 w-full">
               {loading ? t("rec.searching") : places.length ? t("rec.reroll") : t("rec.ask")}

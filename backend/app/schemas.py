@@ -105,6 +105,7 @@ class QuestRequest(BaseModel):
     completed_quests: list[str] = []
     festival: str = ""
     focus: str = ""  # optional theme to steer the quest, e.g. "souvenir"
+    expert: bool = False  # high-level quest: harder + more XP (unlocked by level)
     lang: Lang = "th"
 
 
@@ -123,6 +124,7 @@ class RecommendRequest(BaseModel):
     date_end: str = ""
     festivals: str = ""
     interests: str = ""
+    hidden_gems: bool = False  # only deep-cut secret spots (unlocked by level)
     lang: Lang = "th"
 
 

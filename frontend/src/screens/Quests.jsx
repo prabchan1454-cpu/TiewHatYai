@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { api } from "../lib/api";
 import { levelFor, todayStr } from "../lib/progress";
+import { getUnlocks } from "../lib/unlocks";
 import { festivalForTrip } from "../lib/festivals";
 import { Button, Card, ErrorBox, Pill, Spinner } from "../components/ui";
 import QuestBanner from "../components/QuestBanner";
@@ -18,6 +19,7 @@ import {
   AlertCircle,
   X,
   Gift,
+  Lock,
 } from "lucide-react";
 
 function distanceKm(lat1, lng1, lat2, lng2) {
@@ -50,6 +52,7 @@ export default function Quests({ progress }) {
   const quest = state.activeQuest;
   const [loading, setLoading] = useState(false);
   const [souvenirLoading, setSouvenirLoading] = useState(false);
+  const [expertLoading, setExpertLoading] = useState(false);
   const [dailyLoading, setDailyLoading] = useState(false);
   const [festLoading, setFestLoading] = useState(false);
   const [error, setError] = useState("");
@@ -96,6 +99,27 @@ export default function Quests({ progress }) {
   }
 
   const level = levelFor(state.xp).name;
+  const unlocks = getUnlocks(state.xp);
+
+  // Expert quest — harder, multi-step, worth more XP. Unlocked at Master level.
+  async function getExpertQuest() {
+    setExpertLoading(true);
+    setError("");
+    setResult(null);
+    try {
+      const q = await api.quest({
+        user_location_area: "สงขลา",
+        user_level: level,
+        completed_quests: state.completedQuests,
+        expert: true,
+      });
+      update({ activeQuest: q });
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setExpertLoading(false);
+    }
+  }
 
   async function getQuest() {
     setLoading(true);
@@ -316,6 +340,20 @@ export default function Quests({ progress }) {
             <Gift className="h-4 w-4" />
             {souvenirLoading ? t("quest.rolling") : t("quest.getSouvenir")}
           </button>
+          {unlocks.expertQuests ? (
+            <button
+              onClick={getExpertQuest}
+              disabled={loading || souvenirLoading || expertLoading}
+              className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-2xl border border-sunset/40 bg-sunset/5 px-5 py-3 font-bold text-sunset transition duration-200 hover:bg-sunset/10 active:scale-95 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/40 dark:border-sunset/40 dark:bg-sunset/10"
+            >
+              <Flame className="h-4 w-4" />
+              {expertLoading ? t("quest.rolling") : t("quest.getExpert")}
+            </button>
+          ) : (
+            <p className="mt-2 flex items-center justify-center gap-1.5 text-xs text-slate-400 dark:text-slate-500">
+              <Lock className="h-3.5 w-3.5" /> {t("quest.getExpert")} · {t("quest.expertLock")}
+            </p>
+          )}
         </Card>
       )}
 

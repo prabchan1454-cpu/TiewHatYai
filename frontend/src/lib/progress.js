@@ -8,7 +8,18 @@ export const LEVELS = [
   { name: "Explorer", thai: "นักสำรวจ", min: 200 },
   { name: "Adventurer", thai: "นักผจญภัย", min: 600 },
   { name: "Master", thai: "เซียนสงขลา", min: 1200 },
+  { name: "Legend", thai: "ตำนานสงขลา", min: 2000 },
+  { name: "Ambassador", thai: "ทูตสงขลา", min: 3000 },
 ];
+
+// Index of the level for a given XP — the basis for level-gated unlocks.
+export function levelIndex(xp) {
+  let idx = 0;
+  LEVELS.forEach((lvl, i) => {
+    if (xp >= lvl.min) idx = i;
+  });
+  return idx;
+}
 
 const DEFAULT = {
   xp: 0,
@@ -23,6 +34,7 @@ const DEFAULT = {
   badges: [], // [{ badge_title, badge_description, flavor_text, rarity, earnedAt }]
   daily: { issuedDate: null, completedDate: null, streak: 0 }, // YYYY-MM-DD strings
   collectedStamps: [], // [{ id, collectedAt }] — Songkhla Passport landmark stamps
+  cosmetics: { title: null, frame: null, cover: null }, // chosen level-unlocked cosmetics
 };
 
 export function todayStr(d = new Date()) {
