@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { LANDMARKS, DISTRICTS, gmapsUrl } from "../lib/landmarks";
+import { LANDMARKS, DISTRICTS, gmapsUrl, landmarkImageUrl } from "../lib/landmarks";
 import { useT } from "../lib/i18n.jsx";
 import { ArrowLeft, LocateFixed } from "lucide-react";
 
@@ -173,6 +173,14 @@ export default function AdventureMap({ progress, onNavigate, onBack }) {
             return (
               <Marker key={l.id} position={[l.lat, l.lng]} icon={pinIcon(st)}>
                 <Popup>
+                  {landmarkImageUrl(l.id) && (
+                    <img
+                      src={landmarkImageUrl(l.id, 400)}
+                      alt={nameOf(l)}
+                      loading="lazy"
+                      style={{ width: "100%", height: 110, objectFit: "cover", borderRadius: 8, marginBottom: 6, display: "block" }}
+                    />
+                  )}
                   <strong>{nameOf(l)}</strong>
                   <br />
                   <span style={{ color: "#64748b", fontSize: 12 }}>{l.district}{l.community ? ` · ${t("passport.community")}` : ""}</span>

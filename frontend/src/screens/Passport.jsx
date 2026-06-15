@@ -2,7 +2,7 @@ import { useState, lazy, Suspense } from "react";
 import { api } from "../lib/api";
 import { Button, ErrorBox } from "../components/ui";
 const StampMap = lazy(() => import("../components/StampMap"));
-import { LANDMARKS, DISTRICTS, STAMP_XP } from "../lib/landmarks";
+import { LANDMARKS, DISTRICTS, STAMP_XP, landmarkImageUrl } from "../lib/landmarks";
 import { coverGradient } from "../lib/unlocks";
 import { useT } from "../lib/i18n.jsx";
 import { ArrowLeft, Check, Camera, X, MapPin, Store, Lock } from "lucide-react";
@@ -49,13 +49,22 @@ function CollectModal({ landmark, onClose, onCollected }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-4 backdrop-blur-sm sm:items-center" onClick={onClose}>
+    <div className="fixed inset-0 z-[1000] flex items-end justify-center bg-black/60 p-4 backdrop-blur-sm sm:items-center" onClick={onClose}>
       <div
         className="w-full max-w-sm overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 shadow-xl animate-slide-up dark:border-white/15 dark:bg-[#0e1a2e] dark:shadow-[0_0_40px_rgba(15,185,177,0.2)]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top glow line */}
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-lagoon/50 to-transparent" />
+
+        {landmarkImageUrl(landmark.id) && (
+          <img
+            src={landmarkImageUrl(landmark.id, 600)}
+            alt={landmark.th}
+            loading="lazy"
+            className="mb-4 -mx-5 -mt-5 h-32 w-[calc(100%+2.5rem)] object-cover"
+          />
+        )}
 
         <div className="flex items-start gap-3">
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-lagoon/20 text-lagoon">

@@ -273,6 +273,43 @@ export function landmarkById(id) {
   return LANDMARKS.find((l) => l.id === id) || null;
 }
 
+// Curated, verified Wikimedia Commons photos (filename only). Referenced via the
+// stable Special:FilePath redirect so we never hardcode brittle hashed thumbnail
+// URLs. Landmarks without a confirmed free photo fall back to their icon.
+const LANDMARK_PHOTOS = {
+  "samila-beach":        "Songkhla, Thailand, Samila Beach, 2024.jpg",
+  "cat-mouse":           "Songkhla Laem Samila.jpg",
+  "khao-tang-kuan":      "ยอดเขาตังกวน - panoramio (1).jpg",
+  "old-town":            "Songkhla Old Town Shophouse (II).jpg",
+  "national-museum":     "Songkhla National Museum - front.jpg",
+  "ko-yo":               "Ko Yo, Mueang Songkhla District, Songkhla, Thailand - panoramio (3).jpg",
+  "tinsulanonda-bridge": "Tinsulanonda Bridge 1.jpg",
+  "cable-car":           "May 2025 - Road to Hat Yai cable car and Kho Hong Viewpoint, Hat Yai Park.jpg",
+  "khlong-hae":          "Hat-Yai-Klonghae-Floating-Market 15.jpg",
+  "central-mosque":      "Masjid Pusat Songkhla (1).jpg",
+  "hatyai-station":      "Thamnoonvithi 1.jpg",
+  "wat-pha-kho":         "Pha-Ko Songkhla.jpg",
+  "wat-cha-thing-phra":  "Cha-Ting-Pra Temple.JPG",
+  "khao-nam-khang":      "Khao Nam Khang National Park in Songkhla, Thailand.jpg",
+  "dan-nok":             "Padang Besar 27.jpg",
+  // Added via geosearch / article images (verified to resolve)
+  "golden-mermaid":      "Songkhla mermaid - panoramio.jpg",
+  "kao-seng":            "หัวนายแรง - panoramio.jpg",
+  "ton-nga-chang":       "น้ำตกโตนงาช้าง - panoramio.jpg",
+  "hat-sakom":           "Sakom, Thepha District, Songkhla, Thailand - panoramio.jpg",
+  "kim-yong-market":     "Kimyong 1.jpg",
+  "wat-khu-tao":         "Ubosod-01.jpg",
+  "wat-hat-yai-nai":     "AT HAT YAI NAI.jpg",
+};
+
+// Build a Commons image URL for a landmark id, or null if we have no photo.
+export function landmarkImageUrl(id, width = 600) {
+  const file = LANDMARK_PHOTOS[id];
+  return file
+    ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=${width}`
+    : null;
+}
+
 // Link to the real Google Maps place. Prefer the name (so Google resolves its
 // own canonical pin — accurate even if our stored lat/lng is only approximate);
 // fall back to coordinates when there's no name (e.g. user check-ins).
