@@ -88,6 +88,19 @@ export const STRINGS = {
     "survey.next": "ถัดไป →",
     "survey.finish": "เสร็จสิ้น",
 
+    // Adventure map
+    "map.title": "แผนที่ผจญภัย",
+    "map.homeCard": "แผนที่ผจญภัยสงขลา",
+    "map.homeCardDesc": "สำรวจแลนด์มาร์กทั่วทั้งจังหวัด",
+    "map.explored": "สำรวจแล้ว {done}/{total} จุด",
+    "map.allDistricts": "ทุกอำเภอ",
+    "map.locate": "ตำแหน่งของฉัน",
+    "map.collected": "เก็บแล้ว",
+    "map.uncollected": "ยังไม่เก็บ",
+    "map.community": "ชุมชน",
+    "map.go": "ไปเก็บดวงตรา",
+    "map.openMaps": "เปิดใน Google Maps",
+
     // Login
     "login.subtitle": "เข้าสู่ระบบเพื่อเริ่มผจญภัยกับน้องเที่ยว",
     "login.google": "เข้าสู่ระบบด้วย Google",
@@ -418,6 +431,19 @@ export const STRINGS = {
     "survey.back": "← Back",
     "survey.next": "Next →",
     "survey.finish": "Done",
+
+    // Adventure map
+    "map.title": "Adventure Map",
+    "map.homeCard": "Songkhla Adventure Map",
+    "map.homeCardDesc": "Explore landmarks across the whole province",
+    "map.explored": "{done}/{total} places explored",
+    "map.allDistricts": "All",
+    "map.locate": "My location",
+    "map.collected": "Collected",
+    "map.uncollected": "Not yet",
+    "map.community": "Community",
+    "map.go": "Collect stamp",
+    "map.openMaps": "Open in Google Maps",
 
     // Login
     "login.subtitle": "Sign in to start your adventure with Nong Tiew",

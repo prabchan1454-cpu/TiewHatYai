@@ -15,6 +15,7 @@ const Recommend = lazy(() => import("./screens/Recommend"));
 const Achievements = lazy(() => import("./screens/Achievements"));
 const Passport = lazy(() => import("./screens/Passport"));
 const Checkins = lazy(() => import("./screens/Checkins"));
+const AdventureMap = lazy(() => import("./screens/AdventureMap"));
 import RewardOverlay from "./components/RewardOverlay";
 import Tutorial from "./components/Tutorial";
 import Mascot from "./components/Mascot";
@@ -156,6 +157,7 @@ export default function App() {
           {tab === "home"      && <Home progress={progress} onNavigate={navigate} />}
           {tab === "passport"  && <Passport progress={progress} onBack={() => navigate("home")} />}
           {tab === "checkins"  && <Checkins auth={auth} onBack={() => navigate("home")} />}
+          {tab === "map"       && <AdventureMap progress={progress} onNavigate={navigate} onBack={() => navigate("home")} />}
           {tab === "chat"      && <Chat greeting={null} />}
           {tab === "quests"    && <Quests progress={progress} />}
           {tab === "recommend" && <Recommend preferences={state.preferences} xp={state.xp} onNavigate={navigate} />}

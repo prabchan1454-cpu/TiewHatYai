@@ -181,3 +181,15 @@ body {
     display: none;
   }
 }
+
+/* --- Adventure map (Leaflet) dark mode + quest pulse --- */
+.dark .adventure-map .leaflet-tile { filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(1.05); }
+.dark .adventure-map .leaflet-container { background: #0a1120; }
+.leaflet-container { font-family: 'Noto Sans Thai', sans-serif; }
+@keyframes map-quest-pulse { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(2.2); opacity: 0; } }
+.map-quest-dot { position: relative; }
+.map-quest-dot::after {
+  content: ""; position: absolute; inset: 0; border-radius: 9999px;
+  background: rgba(255,122,69,0.55); animation: map-quest-pulse 1.8s ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce) { .map-quest-dot::after { animation: none; } }

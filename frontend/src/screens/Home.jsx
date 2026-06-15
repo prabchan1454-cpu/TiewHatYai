@@ -122,6 +122,21 @@ export default function Home({ progress, onNavigate }) {
         </div>
       </section>
 
+      {/* ── Adventure Map CTA ────────────────────────────────────── */}
+      <button
+        onClick={() => onNavigate("map")}
+        className="group flex w-full items-center gap-3 rounded-3xl bg-gradient-to-br from-lagoon to-deep p-4 text-left text-white shadow-[0_8px_24px_rgba(15,185,177,0.3)] transition duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon/50"
+      >
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/20 transition group-hover:bg-white/30">
+          <MapPin className="h-6 w-6" />
+        </span>
+        <div className="flex-1">
+          <p className="font-extrabold">{t("map.homeCard")}</p>
+          <p className="mt-0.5 text-xs font-semibold opacity-80">{t("map.explored", { done: stampsCount, total: LANDMARKS.length })}</p>
+        </div>
+        <ChevronRight className="h-5 w-5 shrink-0 opacity-70" />
+      </button>
+
       {/* ── Passport CTA ─────────────────────────────────────────── */}
       <button
         onClick={() => onNavigate("passport")}
