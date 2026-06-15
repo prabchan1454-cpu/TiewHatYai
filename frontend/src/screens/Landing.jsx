@@ -1,85 +1,115 @@
 import { Button, LangToggle, ThemeToggle } from "../components/ui";
 import Mascot from "../components/Mascot";
 import { useT } from "../lib/i18n.jsx";
-import { MessageCircle, Compass, Sparkles, Trophy } from "lucide-react";
+import { MessageCircle, Compass, Sparkles, Trophy, MapPin } from "lucide-react";
 
+// Feature ribbon — a row of capability chips (not a boxed card grid).
 const FEATURES = [
-  { Icon: MessageCircle, key: "chat" },
-  { Icon: Compass, key: "quest" },
-  { Icon: Sparkles, key: "places" },
-  { Icon: Trophy, key: "rewards" },
+  { Icon: MessageCircle, key: "chat", tone: "lagoon" },
+  { Icon: Compass, key: "quest", tone: "sunset" },
+  { Icon: Sparkles, key: "places", tone: "mango" },
+  { Icon: Trophy, key: "rewards", tone: "sunset" },
 ];
+
+const CHIP_TONE = {
+  lagoon: "text-lagoon",
+  sunset: "text-sunset",
+  mango: "text-[#e0930a] dark:text-mango",
+};
 
 export default function Landing({ onStart }) {
   const { t } = useT();
+
   return (
-    <div className="relative mx-auto flex min-h-screen max-w-md flex-col overflow-hidden bg-gradient-to-b from-sunset via-[#ff9442] to-mango text-deep">
-      {/* Atmosphere: a soft sunrise glow + a stage disc behind น้องเที่ยว, and a
-          couple of drifting "sea bubbles" — the one warm, local delight moment. */}
+    <div className="relative mx-auto flex min-h-screen max-w-md flex-col overflow-hidden bg-[linear-gradient(to_bottom,#ff8a52_0%,#ffac6e_18%,#ffd9b0_48%,#fff4e8_82%)] text-deep dark:bg-[linear-gradient(to_bottom,#0a1120_0%,#13203c_55%,#2c1c34_100%)] dark:text-white">
+      {/* ---- Sky: the rising/setting sun over the two seas ---- */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-20 h-80 w-80 -translate-x-1/2 rounded-full opacity-90 blur-2xl"
+        className="pointer-events-none absolute left-1/2 top-24 h-72 w-72 -translate-x-1/2 rounded-full opacity-90 blur-2xl motion-reduce:animate-none animate-glow-pulse"
         style={{ background: "radial-gradient(circle, rgba(255,231,168,0.95) 0%, rgba(255,231,168,0) 70%)" }}
       />
-      <div aria-hidden className="pointer-events-none absolute left-8 top-32 h-3 w-3 rounded-full bg-white/40 animate-bob" style={{ animationDelay: "0.4s" }} />
-      <div aria-hidden className="pointer-events-none absolute right-10 top-24 h-2 w-2 rounded-full bg-white/50 animate-bob" style={{ animationDelay: "1.1s" }} />
-      <div aria-hidden className="pointer-events-none absolute right-16 top-48 h-4 w-4 rounded-full bg-white/25 animate-bob" style={{ animationDelay: "0.7s" }} />
+      {/* drifting sea-spray motes */}
+      <div aria-hidden className="pointer-events-none absolute left-8 top-32 h-3 w-3 rounded-full bg-white/40 motion-reduce:animate-none animate-bob" style={{ animationDelay: "0.4s" }} />
+      <div aria-hidden className="pointer-events-none absolute right-10 top-24 h-2 w-2 rounded-full bg-white/50 motion-reduce:animate-none animate-bob" style={{ animationDelay: "1.1s" }} />
+      <div aria-hidden className="pointer-events-none absolute right-16 top-48 h-4 w-4 rounded-full bg-white/25 motion-reduce:animate-none animate-bob" style={{ animationDelay: "0.7s" }} />
 
-      {/* Top bar */}
-      <div className="relative z-10 flex justify-end gap-2 px-6 pt-7">
-        <ThemeToggle />
-        <LangToggle />
+      {/* ---- Top bar ---- */}
+      <div className="relative z-10 flex items-center justify-between px-6 pt-7">
+        <span className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-deep/70 dark:text-white/60">
+          Travel&nbsp;Songkhla
+        </span>
+        <div className="flex gap-2">
+          <ThemeToggle />
+          <LangToggle />
+        </div>
       </div>
 
-      {/* Hero */}
-      <div className="relative z-10 flex flex-1 flex-col items-center px-6 pb-4 text-center">
+      {/* ---- Hero ---- */}
+      <div className="relative z-10 flex flex-1 flex-col items-center px-6 pb-2 text-center">
+        {/* Mascot — Samila's golden mermaid — on a glowing tide disc */}
         <div className="relative mt-1 animate-fade-in">
-          {/* Soft blurred halo (no hard edge) so the mascot pops without looking
-              like a transparent disc on the gradient. */}
-          <span aria-hidden className="absolute left-1/2 top-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/20 blur-2xl" />
-          <Mascot size={148} float className="relative drop-shadow-[0_10px_18px_rgba(27,42,74,0.22)]" />
+          <span aria-hidden className="absolute left-1/2 top-1/2 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/45 blur-2xl dark:bg-mango/20" />
+          <span aria-hidden className="absolute left-1/2 top-[58%] h-12 w-40 -translate-x-1/2 rounded-[100%] bg-deep/10 blur-md dark:bg-black/40" />
+          <Mascot size={140} float interactive className="relative drop-shadow-[0_12px_20px_rgba(27,42,74,0.28)]" />
         </div>
 
-        <p className="mt-2 animate-slide-up text-[11px] font-extrabold uppercase tracking-[0.32em] text-deep/55" style={{ animationDelay: "40ms" }}>
-          Travel&nbsp;Songkhla
-        </p>
-        <h1 className="mt-0.5 animate-slide-up text-[2.7rem] font-extrabold leading-none tracking-tight" style={{ animationDelay: "90ms" }}>
+        <h1 className="mt-3 animate-slide-up text-[2.8rem] font-extrabold leading-none tracking-tight" style={{ animationDelay: "90ms" }}>
           {t("app.title")}
         </h1>
-        <span aria-hidden className="mt-2.5 h-1.5 w-12 animate-slide-up rounded-full bg-deep/30" style={{ animationDelay: "120ms" }} />
-        <p className="mt-3 max-w-[17rem] animate-slide-up text-[15px] font-medium leading-relaxed text-deep/75" style={{ animationDelay: "150ms" }}>
+        <span aria-hidden className="mt-3 h-1.5 w-12 animate-slide-up rounded-full bg-deep/30 dark:bg-mango/60" style={{ animationDelay: "120ms" }} />
+        <p className="mt-3 max-w-[18rem] animate-slide-up text-[15px] font-medium leading-relaxed text-deep/80 dark:text-white/75" style={{ animationDelay: "150ms" }}>
           {t("landing.subtitle")}
         </p>
 
-        {/* Feature cards */}
-        <div className="mt-6 grid w-full grid-cols-2 gap-3">
+        {/* Feature ribbon — capability chips */}
+        <div className="mt-5 flex max-w-[20rem] flex-wrap justify-center gap-2">
           {FEATURES.map((f, i) => (
-            <div
+            <span
               key={f.key}
-              className="animate-slide-up rounded-2xl bg-white/95 p-4 text-left shadow-lift ring-1 ring-white/70"
-              style={{ animationDelay: `${190 + i * 70}ms` }}
+              className="flex animate-slide-up items-center gap-1.5 rounded-full bg-white py-1.5 pl-2 pr-3.5 text-[13px] font-bold text-deep shadow-lift ring-1 ring-deep/10 dark:bg-white/10 dark:text-white dark:ring-white/10"
+              style={{ animationDelay: `${190 + i * 60}ms` }}
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-mango/20">
-                <f.Icon className="h-5 w-5 text-sunset" strokeWidth={2.4} />
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-mango/15 dark:bg-white/10">
+                <f.Icon className={`h-3.5 w-3.5 ${CHIP_TONE[f.tone]}`} strokeWidth={2.6} />
               </span>
-              <p className="mt-2.5 font-bold text-deep">{t(`landing.feat.${f.key}.title`)}</p>
-              <p className="mt-0.5 text-xs leading-snug text-slate-600">{t(`landing.feat.${f.key}.desc`)}</p>
-            </div>
+              {t(`landing.feat.${f.key}.title`)}
+            </span>
           ))}
+        </div>
+
+        {/* Passport-stamp motif — the signature collectible loop */}
+        <div className="mt-5 flex animate-slide-up flex-col items-center gap-2" style={{ animationDelay: "470ms" }}>
+          <div className="flex items-center -space-x-2.5">
+            {[0, 1, 2, 3].map((i) => (
+              <span
+                key={i}
+                className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-dashed border-deep/35 bg-white/70 shadow-card dark:border-mango/45 dark:bg-white/10"
+                style={{ transform: `rotate(${(i - 1.5) * 7}deg)` }}
+              >
+                <MapPin className="h-4 w-4 text-sunset" strokeWidth={2.6} fill={i < 2 ? "currentColor" : "none"} />
+              </span>
+            ))}
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-mango/90 text-sm font-extrabold text-deep shadow-lift ring-2 ring-white/70 dark:ring-white/15" style={{ transform: "rotate(10deg)" }}>
+              +20
+            </span>
+          </div>
+          <p className="text-[12px] font-semibold text-deep/65 dark:text-white/65">{t("landing.stamps")}</p>
         </div>
       </div>
 
-      {/* Beach-foam footer — the CTA rests on a white "shore" wave */}
-      <div className="relative z-10 mt-6">
-        <svg viewBox="0 0 390 48" preserveAspectRatio="none" className="block h-9 w-full" aria-hidden>
-          <path d="M0,30 C70,6 130,6 200,26 C265,44 330,44 390,22 L390,48 L0,48 Z" fill="#ffffff" />
+      {/* ---- Beach-foam shore + CTA ---- */}
+      <div className="relative z-10 mt-4">
+        {/* lagoon tide line just above the foam */}
+        <svg viewBox="0 0 390 56" preserveAspectRatio="none" className="block h-10 w-full -mb-px" aria-hidden>
+          <path d="M0,34 C70,10 130,10 200,30 C265,48 330,48 390,26 L390,56 L0,56 Z" fill="#0fb9b1" opacity="0.35" />
+          <path d="M0,40 C70,18 130,18 200,36 C265,52 330,52 390,32 L390,56 L0,56 Z" className="fill-white dark:fill-[#0e1525]" />
         </svg>
-        <div className="bg-white px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-1">
+        <div className="bg-white px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-2 dark:bg-[#0e1525]">
           <Button
             onClick={onStart}
-            variant="primary"
+            variant="game"
             className="w-full animate-slide-up py-4 text-lg"
-            style={{ animationDelay: "470ms" }}
+            style={{ animationDelay: "560ms" }}
           >
             {t("landing.cta")}
           </Button>

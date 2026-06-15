@@ -36,8 +36,8 @@ export default function TripForecast({ start, end }) {
   const loc = lang === "en" ? "en-US" : "th-TH";
 
   return (
-    <Card className="space-y-2.5">
-      <p className="text-sm font-bold text-deep dark:text-slate-100">{t("weather.tripTitle")}</p>
+    <Card variant="game" className="space-y-2.5">
+      <p className="text-sm font-bold text-white">{t("weather.tripTitle")}</p>
       <div className="flex gap-2 overflow-x-auto no-scrollbar">
         {days.map((d) => {
           const desc = describeWeather(d.code);
@@ -45,13 +45,13 @@ export default function TripForecast({ start, end }) {
           return (
             <div
               key={d.date}
-              className="flex min-w-[64px] flex-col items-center gap-1 rounded-xl bg-slate-50 px-2.5 py-2 dark:bg-slate-800/60"
+              className="flex min-w-[64px] flex-col items-center gap-1 rounded-xl bg-white/8 px-2.5 py-2"
             >
-              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+              <span className="text-xs font-semibold text-slate-400">
                 {new Date(d.date).toLocaleDateString(loc, { day: "numeric", month: "short" })}
               </span>
               <Icon className="h-5 w-5 text-lagoon" />
-              <span className="tnum text-xs font-bold text-deep dark:text-slate-100">
+              <span className="tnum text-xs font-bold text-white">
                 {d.high}° / {d.low}°
               </span>
             </div>

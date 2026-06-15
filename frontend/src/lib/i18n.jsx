@@ -63,7 +63,10 @@ export const STRINGS = {
     "reward.unlockedNew": "ปลดล็อกใหม่",
 
     // Landing
+    "landing.eyebrow": "เที่ยวสงขลาแบบเกมผจญภัย",
     "landing.subtitle": "ผจญภัยทั่วสงขลากับน้องเที่ยว ไกด์ AI ส่วนตัวของคุณ",
+    "landing.stamps": "เก็บดวงตราให้ครบทั่วเมือง",
+    "landing.reassure": "ไม่ต้องสมัครก็เริ่มได้ · ฟรี",
     "landing.feat.chat.title": "น้องเที่ยว",
     "landing.feat.chat.desc": "ไกด์ AI ตอบทุกเรื่องสงขลา",
     "landing.feat.quest.title": "เควสผจญภัย",
@@ -73,6 +76,17 @@ export const STRINGS = {
     "landing.feat.rewards.title": "สะสมรางวัล",
     "landing.feat.rewards.desc": "ปลดล็อกตราสัญลักษณ์หายาก",
     "landing.cta": "เริ่มผจญภัย 🚀",
+
+    // Survey — "รู้จักสงขลามากแค่ไหน?" (first-login, after onboarding)
+    "survey.title": "แบบสอบถาม",
+    "survey.skip": "ข้าม",
+    "survey.heroTitle": "รู้จักสงขลามากแค่ไหน?",
+    "survey.subtitle": "ตอบคำถามสั้นๆ 5 ข้อ เพื่อให้น้องเที่ยวรู้จักคุณและแนะนำได้ตรงใจมากขึ้น",
+    "survey.start": "เริ่มทำแบบสอบถาม",
+    "survey.progress": "ข้อ {n}/{total}",
+    "survey.back": "← ย้อนกลับ",
+    "survey.next": "ถัดไป →",
+    "survey.finish": "เสร็จสิ้น",
 
     // Login
     "login.subtitle": "เข้าสู่ระบบเพื่อเริ่มผจญภัยกับน้องเที่ยว",
@@ -234,6 +248,7 @@ export const STRINGS = {
     "daily.doneToday": "ทำเควสวันนี้สำเร็จแล้ว! 🎉",
     "daily.comeBack": "กลับมาใหม่พรุ่งนี้เพื่อรักษาสตรีค",
     "daily.badge": "รายวัน",
+    "daily.bonus": "โบนัสสตรีควันนี้ +{xp} XP",
 
     // Recommend
     "rec.title": "แนะนำเฉพาะคุณ",
@@ -379,7 +394,10 @@ export const STRINGS = {
     "reward.unlockedNew": "Newly unlocked",
 
     // Landing
+    "landing.eyebrow": "Explore Songkhla like an adventure game",
     "landing.subtitle": "Adventure across Songkhla with Nong Tiew, your personal AI guide",
+    "landing.stamps": "Collect every stamp across the city",
+    "landing.reassure": "Start as a guest, no signup · free",
     "landing.feat.chat.title": "Nong Tiew",
     "landing.feat.chat.desc": "An AI guide for everything Songkhla",
     "landing.feat.quest.title": "Adventure Quests",
@@ -389,6 +407,17 @@ export const STRINGS = {
     "landing.feat.rewards.title": "Collect Rewards",
     "landing.feat.rewards.desc": "Unlock rare badges",
     "landing.cta": "Start Adventure 🚀",
+
+    // Survey — "How well do you know Songkhla?" (first-login, after onboarding)
+    "survey.title": "Quick survey",
+    "survey.skip": "Skip",
+    "survey.heroTitle": "How well do you know Songkhla?",
+    "survey.subtitle": "Answer 5 short questions so Nong Tiew can get to know you and recommend better.",
+    "survey.start": "Start survey",
+    "survey.progress": "Question {n}/{total}",
+    "survey.back": "← Back",
+    "survey.next": "Next →",
+    "survey.finish": "Done",
 
     // Login
     "login.subtitle": "Sign in to start your adventure with Nong Tiew",
@@ -550,6 +579,7 @@ export const STRINGS = {
     "daily.doneToday": "Today's quest is done! 🎉",
     "daily.comeBack": "Come back tomorrow to keep your streak",
     "daily.badge": "Daily",
+    "daily.bonus": "Today's streak bonus +{xp} XP",
 
     // Recommend
     "rec.title": "Just for you",

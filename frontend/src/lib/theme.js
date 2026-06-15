@@ -6,7 +6,7 @@ function initialTheme() {
   try {
     const saved = localStorage.getItem(KEY);
     if (saved === "dark" || saved === "light") return saved;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return "dark"; // default to dark for the adventure-game aesthetic
   } catch {
     return "light";
   }

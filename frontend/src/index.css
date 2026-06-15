@@ -135,7 +135,38 @@ body {
   transform-origin: 50% 70%;
 }
 
-/* Respect users who ask for less motion: keep state changes, drop choreography. */
+/* ── Glassmorphism panels ──────────────────────────────────────── */
+.glass {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.13);
+}
+.glass-dark {
+  background: rgba(14,21,37,0.70);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+
+/* ── RPG rarity glow borders ───────────────────────────────────── */
+.rarity-common    { border: 1px solid rgba(148,163,184,0.35); box-shadow: 0 0 12px rgba(148,163,184,0.12); }
+.rarity-rare      { border: 1px solid rgba(96,165,250,0.45);  box-shadow: 0 0 16px rgba(96,165,250,0.18); }
+.rarity-epic      { border: 1px solid rgba(168,85,247,0.50);  box-shadow: 0 0 20px rgba(168,85,247,0.22); }
+.rarity-legendary { border: 1px solid rgba(251,191,36,0.55);  box-shadow: 0 0 24px rgba(251,191,36,0.30); }
+
+/* ── Navigation glow dots ──────────────────────────────────────── */
+.nav-glow-sunset { box-shadow: 0 0 12px 3px rgba(255,122,69,0.55); }
+.nav-glow-lagoon { box-shadow: 0 0 12px 3px rgba(15,185,177,0.55); }
+
+/* ── Shimmer for Legendary badges / locked states ─────────────── */
+.shimmer-bg {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.07) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s linear infinite;
+}
+
+/* ── Respect users who ask for less motion: keep state changes, drop choreography. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

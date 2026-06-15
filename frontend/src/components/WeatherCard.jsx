@@ -44,11 +44,11 @@ export default function WeatherCard() {
 
   if (!w) {
     return (
-      <Card className="flex h-[76px] animate-pulse items-center gap-3">
-        <div className="h-12 w-12 shrink-0 rounded-2xl bg-slate-100 dark:bg-slate-800" />
+      <Card variant="game" className="flex h-[76px] animate-pulse items-center gap-3">
+        <div className="h-12 w-12 shrink-0 rounded-2xl bg-slate-200 dark:bg-white/10" />
         <div className="space-y-2">
-          <div className="h-4 w-24 rounded bg-slate-100 dark:bg-slate-800" />
-          <div className="h-3 w-16 rounded bg-slate-100 dark:bg-slate-800" />
+          <div className="h-4 w-24 rounded bg-slate-200 dark:bg-white/10" />
+          <div className="h-3 w-16 rounded bg-slate-200 dark:bg-white/10" />
         </div>
       </Card>
     );
@@ -59,13 +59,13 @@ export default function WeatherCard() {
   const condition = lang === "en" ? desc.en : desc.th;
 
   return (
-    <Card className="flex items-center gap-3">
+    <Card variant="game" className="flex items-center gap-3">
       <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${TINT[desc.key] || TINT.cloudy}`}>
         <Icon className="h-6 w-6" />
       </span>
       <div className="flex-1">
         <div className="flex items-baseline gap-1.5">
-          <span className="tnum text-2xl font-extrabold leading-none text-deep dark:text-slate-100">{w.temp}°</span>
+          <span className="tnum text-2xl font-extrabold leading-none text-slate-900 dark:text-white">{w.temp}°</span>
           <span className="text-sm text-slate-500 dark:text-slate-400">{condition}</span>
         </div>
         <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{t("weather.location")}</p>

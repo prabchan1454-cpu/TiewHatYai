@@ -3,14 +3,31 @@ import { useCallback, useEffect, useState } from "react";
 const KEY = "travelsongkhla_progress_v1";
 
 // XP thresholds -> level. Index = level tier.
+// Tuned for a short-trip travel companion, not a long-lived grind game: the
+// first tier lands in ~1 quest for instant momentum, and the top tier is
+// reachable over a dedicated trip (mixing quests, daily streaks, and stamps).
 export const LEVELS = [
   { name: "Beginner", thai: "นักเที่ยวมือใหม่", min: 0 },
-  { name: "Explorer", thai: "นักสำรวจ", min: 200 },
-  { name: "Adventurer", thai: "นักผจญภัย", min: 600 },
-  { name: "Master", thai: "เซียนสงขลา", min: 1200 },
-  { name: "Legend", thai: "ตำนานสงขลา", min: 2000 },
-  { name: "Ambassador", thai: "ทูตสงขลา", min: 3000 },
+  { name: "Explorer", thai: "นักสำรวจ", min: 120 },
+  { name: "Adventurer", thai: "นักผจญภัย", min: 320 },
+  { name: "Master", thai: "เซียนสงขลา", min: 580 },
+  { name: "Legend", thai: "ตำนานสงขลา", min: 880 },
+  { name: "Ambassador", thai: "ทูตสงขลา", min: 1250 },
 ];
+
+// Daily streak bonus: returning a few days running beats grinding many quests
+// in one sitting. Escalates with the streak and caps so it stays balanced.
+export const STREAK_BONUS_STEP = 15;
+export const STREAK_BONUS_CAP = 5; // bonus stops growing after a 5-day streak
+export function streakBonus(streak) {
+  return Math.min(Math.max(streak, 0), STREAK_BONUS_CAP) * STREAK_BONUS_STEP;
+}
+// The streak value a daily completion *will* produce, given today's state —
+// lets the UI preview the bonus before the state update lands.
+export function nextStreak(daily) {
+  if (!daily) return 1;
+  return daily.completedDate === yesterdayStr() ? daily.streak + 1 : 1;
+}
 
 // Index of the level for a given XP — the basis for level-gated unlocks.
 export function levelIndex(xp) {
@@ -35,6 +52,8 @@ const DEFAULT = {
   daily: { issuedDate: null, completedDate: null, streak: 0 }, // YYYY-MM-DD strings
   collectedStamps: [], // [{ id, collectedAt }] — Songkhla Passport landmark stamps
   cosmetics: { title: null, frame: null, cover: null }, // chosen level-unlocked cosmetics
+  surveyDone: false, // "รู้จักสงขลา" self-assessment survey shown once after onboarding
+  surveyResponses: null, // { [questionId]: optionIndex }
 };
 
 export function todayStr(d = new Date()) {
@@ -87,15 +106,18 @@ export function useProgress() {
   const completeQuest = useCallback((questName, xp, { isDaily = false } = {}) => {
     setState((s) => {
       const already = s.completedQuests.includes(questName);
-      const entry = { quest_name: questName, reward_xp: xp || 0, completedAt: Date.now(), isDaily };
       let daily = s.daily;
+      let bonus = 0;
       if (isDaily) {
         const streak = s.daily.completedDate === yesterdayStr() ? s.daily.streak + 1 : 1;
+        if (!already) bonus = streakBonus(streak);
         daily = { ...s.daily, completedDate: todayStr(), streak };
       }
+      const base = already ? 0 : xp || 0;
+      const entry = { quest_name: questName, reward_xp: base, bonus_xp: bonus, completedAt: Date.now(), isDaily };
       return {
         ...s,
-        xp: s.xp + (already ? 0 : xp || 0),
+        xp: s.xp + base + bonus,
         completedQuests: already ? s.completedQuests : [...s.completedQuests, questName],
         history: [entry, ...s.history],
         daily,

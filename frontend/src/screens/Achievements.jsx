@@ -1,125 +1,21 @@
 import { useState } from "react";
 import { levelFor, nextLevel } from "../lib/progress";
-import { getUnlocks, LADDER, TITLES, FRAMES, COVERS, frameRing } from "../lib/unlocks";
-import { Card, Pill, Button } from "../components/ui";
+import { TITLES, frameRing } from "../lib/unlocks";
+import { Button, XpBar, RarityBadge } from "../components/ui";
 import Leaderboard from "../components/Leaderboard";
 import TripDates from "../components/TripDates";
 import Mascot from "../components/Mascot";
 import { useT } from "../lib/i18n.jsx";
 import { tripMeta } from "../lib/festivals";
-import { Trophy, Flag, Award, Share2, Sunrise, CalendarDays, HelpCircle, Gift, Lock, Check } from "lucide-react";
-
-const RARITY_RING = {
-  Common: "ring-slate-200 dark:ring-slate-700",
-  Rare: "ring-sky-300 dark:ring-sky-500/40",
-  Epic: "ring-violet-300 dark:ring-violet-500/40",
-  Legendary: "ring-amber-300 dark:ring-amber-500/40",
-};
-
-// Level-unlock rewards: a ladder of what each level grants, plus pickers to
-// equip the cosmetics the player has already unlocked.
-function RewardsCard({ state, update, t }) {
-  const u = getUnlocks(state.xp);
-  const cosmetics = state.cosmetics || {};
-  const setC = (key, val) => update({ cosmetics: { ...cosmetics, [key]: val } });
-
-  const chip = (active) =>
-    `rounded-full px-3 py-1 text-xs font-semibold transition ${
-      active
-        ? "bg-sunset text-deep shadow-sm"
-        : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300"
-    }`;
-
-  return (
-    <section>
-      <h3 className="mb-2.5 flex items-center gap-1.5 px-1 text-sm font-bold text-deep dark:text-slate-100">
-        <Gift className="h-4 w-4 text-sunset" /> {t("ach.rewards")}
-      </h3>
-
-      {/* Ladder: every level that grants something */}
-      <Card className="space-y-2.5">
-        {LADDER.map((row) => {
-          const reached = u.levelIndex >= row.level;
-          return (
-            <div key={row.level} className="flex items-start gap-3">
-              <span
-                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${
-                  reached ? "bg-mango text-deep" : "bg-slate-100 text-slate-400 dark:bg-slate-800"
-                }`}
-              >
-                {reached ? <Check className="h-4 w-4" strokeWidth={3} /> : <Lock className="h-3.5 w-3.5" />}
-              </span>
-              <div className="flex-1">
-                <p className={`text-sm font-bold ${reached ? "text-deep dark:text-slate-100" : "text-slate-400 dark:text-slate-500"}`}>
-                  {t("level." + (["Beginner", "Explorer", "Adventurer", "Master", "Legend", "Ambassador"][row.level]))}
-                  {!reached && <span className="ml-1.5 font-medium">· {t("ach.lockAt", { xp: row.xp })}</span>}
-                </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  {row.perks.map((p) => t(p)).join(" · ")}
-                </p>
-              </div>
-            </div>
-          );
-        })}
-      </Card>
-
-      {/* Equip what you've unlocked */}
-      <Card className="mt-2.5 space-y-3">
-        <div>
-          <p className="mb-1.5 text-xs font-bold text-slate-500 dark:text-slate-400">{t("ach.equipTitle")}</p>
-          <div className="flex flex-wrap gap-1.5">
-            <button onClick={() => setC("title", null)} className={chip(!cosmetics.title)}>{t("ach.equipNone")}</button>
-            {u.titles.map((it) => (
-              <button key={it.id} onClick={() => setC("title", it.id)} className={chip(cosmetics.title === it.id)}>
-                {t(it.labelKey)}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <p className="mb-1.5 text-xs font-bold text-slate-500 dark:text-slate-400">{t("ach.equipFrame")}</p>
-          <div className="flex flex-wrap items-center gap-2">
-            <button onClick={() => setC("frame", null)} className={chip(!cosmetics.frame)}>{t("ach.equipNone")}</button>
-            {u.frames.map((it) => (
-              <button
-                key={it.id}
-                onClick={() => setC("frame", it.id)}
-                aria-label={t(it.labelKey)}
-                className={`h-7 w-7 rounded-full bg-slate-200 ring-2 ring-offset-2 dark:bg-slate-700 dark:ring-offset-slate-900 ${it.ring} ${
-                  cosmetics.frame === it.id ? "ring-offset-2" : "opacity-70"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <p className="mb-1.5 text-xs font-bold text-slate-500 dark:text-slate-400">{t("ach.equipCover")}</p>
-          <div className="flex flex-wrap items-center gap-2">
-            {u.covers.map((it) => (
-              <button
-                key={it.id}
-                onClick={() => setC("cover", it.id === "default" ? null : it.id)}
-                aria-label={t(it.labelKey)}
-                className={`h-7 w-12 rounded-lg bg-gradient-to-br ${it.gradient} ${
-                  (cosmetics.cover || "default") === it.id ? "ring-2 ring-deep ring-offset-2 dark:ring-white dark:ring-offset-slate-900" : "opacity-80"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </Card>
-    </section>
-  );
-}
+import {
+  Trophy, Flag, Award, Share2, Sunrise, CalendarDays,
+  HelpCircle, Zap,
+} from "lucide-react";
 
 export default function Achievements({ progress, auth, onLogout }) {
   const { t, lang } = useT();
   const { state, reset, update } = progress;
 
-  // Editable travel dates — the only way to change them after onboarding
-  // without wiping all progress via reset().
   const [tripStart, setTripStart] = useState(state.preferences?.dateStart || "");
   const [tripEnd, setTripEnd] = useState(state.preferences?.dateEnd || "");
   const [tripSaved, setTripSaved] = useState(false);
@@ -141,6 +37,7 @@ export default function Achievements({ progress, auth, onLogout }) {
     setTripSaved(true);
     setTimeout(() => setTripSaved(false), 2000);
   }
+
   async function shareBadge(b) {
     const text = t("ach.shareText", { title: b.badge_title, desc: b.flavor_text || b.badge_description });
     const url = typeof window !== "undefined" ? window.location.origin : "";
@@ -151,37 +48,39 @@ export default function Achievements({ progress, auth, onLogout }) {
         await navigator.clipboard.writeText(`${text} ${url}`.trim());
         alert(t("ach.copied"));
       }
-    } catch {
-      /* user cancelled the share sheet — ignore */
-    }
+    } catch { /* user cancelled */ }
   }
 
   const lvl = levelFor(state.xp);
   const next = nextLevel(state.xp);
   const equippedTitle = TITLES.find((x) => x.id === state.cosmetics?.title);
-  const pct = next
-    ? Math.min(100, Math.round(((state.xp - lvl.min) / (next.min - lvl.min)) * 100))
-    : 100;
 
   return (
     <div className="space-y-4 p-4 pb-6">
-      <section className="rounded-3xl bg-deep p-5 text-white shadow-hero dark:ring-1 dark:ring-white/10">
+      {/* Hero level card */}
+      <section className="relative overflow-hidden rounded-3xl bg-hero-mesh-light p-5 shadow-hero dark:bg-hero-mesh">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-mango/50 to-transparent" />
         <div className="flex items-center gap-4">
-          <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-mango">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-mango/20 text-mango shadow-[0_0_16px_rgba(255,176,32,0.3)]">
             <Trophy className="h-7 w-7" />
-          </span>
+          </div>
           <div>
-            <p className="text-xs font-medium text-white/55">{t("ach.yourLevel")}</p>
-            <h2 className="text-2xl font-extrabold tracking-tight">{t("level." + lvl.name)}</h2>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-deep/40 dark:text-white/40">{t("ach.yourLevel")}</p>
+            <h2 className="text-2xl font-extrabold tracking-tight text-deep dark:text-white">{t("level." + lvl.name)}</h2>
             {equippedTitle && (
-              <span className="mt-1 inline-block rounded-full bg-mango/25 px-2.5 py-0.5 text-xs font-bold text-mango">
+              <span className="mt-1 inline-block rounded-full border border-mango/30 bg-mango/15 px-2.5 py-0.5 text-[11px] font-bold text-mango">
                 {t(equippedTitle.labelKey)}
               </span>
             )}
           </div>
+          <div className="ml-auto flex flex-col items-end gap-1">
+            <span className="flex items-center gap-1 rounded-full bg-mango/20 px-3 py-1 text-sm font-extrabold text-mango">
+              <Zap className="h-3.5 w-3.5" fill="currentColor" /> {state.xp}
+            </span>
+          </div>
         </div>
         <div className="mt-5">
-          <div className="flex justify-between text-xs text-white/60">
+          <div className="flex justify-between text-[11px] text-deep/40 dark:text-white/40 mb-1.5">
             <span className="tnum">{state.xp} XP</span>
             <span>
               {next
@@ -189,136 +88,142 @@ export default function Achievements({ progress, auth, onLogout }) {
                 : t("ach.max")}
             </span>
           </div>
-          <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-white/15">
-            <div className="h-full rounded-full bg-mango transition-all duration-500" style={{ width: `${pct}%` }} />
-          </div>
+          <XpBar xp={state.xp} min={lvl.min} max={next?.min ?? lvl.min + 1} />
         </div>
       </section>
 
-      <RewardsCard state={state} update={update} t={t} />
-
-      <Card className="flex items-stretch divide-x divide-slate-100 p-0 dark:divide-slate-800">
-        <div className="flex flex-1 items-center gap-3 p-4">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sunset/10 text-sunset">
-            <Flag className="h-5 w-5" />
-          </span>
-          <div>
-            <p className="tnum text-xl font-extrabold leading-none text-deep dark:text-slate-100">{state.completedQuests.length}</p>
-            <p className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">{t("ach.questsDone")}</p>
+      {/* Stats */}
+      <div className="grid grid-cols-2 gap-2.5">
+        {[
+          { Icon: Flag,  value: state.completedQuests.length, label: t("ach.questsDone"), color: "text-sunset", bg: "bg-sunset/15" },
+          { Icon: Award, value: state.badges.length,          label: t("ach.badgesGot"),  color: "text-lagoon",  bg: "bg-lagoon/15" },
+        ].map(({ Icon, value, label, color, bg }) => (
+          <div key={label} className="flex items-center gap-3 rounded-2xl bg-white border border-slate-200 p-4 dark:bg-[#0e1a2e] dark:border-white/10">
+            <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${bg} ${color}`}>
+              <Icon className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="tnum text-xl font-extrabold leading-none text-slate-900 dark:text-white">{value}</p>
+              <p className="mt-1 text-xs font-medium text-slate-500">{label}</p>
+            </div>
           </div>
-        </div>
-        <div className="flex flex-1 items-center gap-3 p-4">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-lagoon/10 text-lagoon">
-            <Award className="h-5 w-5" />
-          </span>
-          <div>
-            <p className="tnum text-xl font-extrabold leading-none text-deep dark:text-slate-100">{state.badges.length}</p>
-            <p className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">{t("ach.badgesGot")}</p>
-          </div>
-        </div>
-      </Card>
+        ))}
+      </div>
 
-      <Card className="space-y-3">
+      {/* Trip dates */}
+      <div className="rounded-3xl bg-white border border-slate-200 p-4 space-y-3 dark:bg-[#0e1a2e] dark:border-white/10">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sunset/10 text-sunset">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sunset/15 text-sunset">
             <CalendarDays className="h-5 w-5" />
           </span>
-          <h3 className="font-bold text-deep dark:text-slate-100">{t("trip.heading")}</h3>
+          <h3 className="font-bold text-slate-900 dark:text-white">{t("trip.heading")}</h3>
         </div>
         <TripDates start={tripStart} end={tripEnd} onStart={setTripStart} onEnd={setTripEnd} />
-        <Button
-          onClick={saveTrip}
-          disabled={!trip.valid || !tripDirty}
-          className="w-full"
-        >
+        <Button onClick={saveTrip} disabled={!trip.valid || !tripDirty} variant="game" className="w-full">
           {tripSaved ? t("trip.saved") : t("trip.save")}
         </Button>
-      </Card>
+      </div>
 
-      <Leaderboard
-        auth={auth}
-        self={{ xp: state.xp, level: lvl.name }}
-        onLogin={auth?.signInGoogle}
-      />
+      {/* Leaderboard */}
+      <Leaderboard auth={auth} self={{ xp: state.xp, level: lvl.name }} onLogin={auth?.signInGoogle} />
 
+      {/* Badges */}
       <section>
-        <h3 className="mb-2.5 px-1 text-sm font-bold text-deep dark:text-slate-100">{t("ach.heading")}</h3>
+        <h3 className="mb-3 px-1 text-xs font-bold uppercase tracking-widest text-slate-500">
+          {t("ach.heading")}
+        </h3>
         {state.badges.length === 0 ? (
-          <Card className="text-center text-sm text-slate-500 dark:text-slate-400">{t("ach.noBadges")}</Card>
+          <div className="rounded-2xl bg-white border border-slate-200 p-4 text-center text-sm text-slate-500 dark:bg-[#0e1a2e] dark:border-white/8">
+            {t("ach.noBadges")}
+          </div>
         ) : (
-          <div className="space-y-2.5">
+          <div className="grid grid-cols-2 gap-2.5">
             {state.badges.map((b) => (
-              <Card key={b.badge_title} className={`ring-1 ${RARITY_RING[b.rarity] || "ring-slate-200 dark:ring-slate-700"}`}>
-                <div className="flex items-start justify-between gap-3">
-                  <h4 className="text-base font-extrabold text-deep dark:text-slate-100">{b.badge_title}</h4>
-                  <Pill>{b.rarity}</Pill>
+              <div
+                key={b.badge_title}
+                className={`rounded-2xl p-4 ${
+                  b.rarity === "Legendary" ? "rarity-legendary bg-amber-50 dark:bg-[#1a0e00]" :
+                  b.rarity === "Epic"      ? "rarity-epic bg-purple-50 dark:bg-[#140e2a]" :
+                  b.rarity === "Rare"      ? "rarity-rare bg-blue-50 dark:bg-[#0d1e35]" :
+                                             "rarity-common bg-slate-50 dark:bg-[#0e1a2e]"
+                } ${b.rarity === "Legendary" ? "shimmer-bg" : ""}`}
+              >
+                <div className="flex items-start justify-between gap-1">
+                  <span className="text-2xl">🏅</span>
+                  <RarityBadge rarity={b.rarity} />
                 </div>
-                <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{b.badge_description}</p>
-                <p className="mt-1.5 text-sm italic text-sunset">“{b.flavor_text}”</p>
+                <h4 className="mt-2 text-sm font-extrabold text-slate-900 leading-tight dark:text-white">{b.badge_title}</h4>
+                <p className="mt-1 text-[11px] text-slate-500 line-clamp-2 dark:text-slate-400">{b.badge_description}</p>
+                {b.flavor_text && (
+                  <p className="mt-1 text-[11px] italic text-sunset line-clamp-1">"{b.flavor_text}"</p>
+                )}
                 <button
                   onClick={() => shareBadge(b)}
-                  className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-deep transition hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deep/30 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                  className="mt-2.5 inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-500 transition hover:bg-slate-200 focus-visible:outline-none dark:border-white/10 dark:bg-white/5 dark:text-slate-400 dark:hover:bg-white/10"
                 >
-                  <Share2 className="h-3.5 w-3.5" />
+                  <Share2 className="h-3 w-3" />
                   {t("ach.share")}
                 </button>
-              </Card>
+              </div>
             ))}
           </div>
         )}
       </section>
 
+      {/* History */}
       <section>
-        <h3 className="mb-2.5 px-1 text-sm font-bold text-deep dark:text-slate-100">{t("ach.history")}</h3>
+        <h3 className="mb-3 px-1 text-xs font-bold uppercase tracking-widest text-slate-500">
+          {t("ach.history")}
+        </h3>
         {state.history.length === 0 ? (
-          <Card className="text-center text-sm text-slate-500 dark:text-slate-400">{t("ach.noHistory")}</Card>
+          <div className="rounded-2xl bg-white border border-slate-200 p-4 text-center text-sm text-slate-500 dark:bg-[#0e1a2e] dark:border-white/8">
+            {t("ach.noHistory")}
+          </div>
         ) : (
           <div className="space-y-2">
             {state.history.map((h, i) => (
-              <Card key={i} className="flex items-center justify-between py-3">
-                <div className="flex items-center gap-2.5 overflow-hidden">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
-                    {h.isDaily ? <Sunrise className="h-4 w-4" /> : <Flag className="h-4 w-4" />}
-                  </span>
-                  <div className="overflow-hidden">
-                    <p className="truncate font-semibold text-deep dark:text-slate-100">{h.quest_name}</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      {new Date(h.completedAt).toLocaleDateString(
-                        lang === "en" ? "en-US" : "th-TH",
-                        { day: "numeric", month: "short", year: "numeric" }
-                      )}
-                    </p>
-                  </div>
+              <div key={i} className="flex items-center gap-3 rounded-2xl bg-white border border-slate-200 px-4 py-3 dark:bg-[#0e1a2e] dark:border-white/8">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500 dark:bg-white/8 dark:text-slate-400">
+                  {h.isDaily ? <Sunrise className="h-4 w-4" /> : <Flag className="h-4 w-4" />}
+                </span>
+                <div className="flex-1 overflow-hidden">
+                  <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{h.quest_name}</p>
+                  <p className="text-xs text-slate-500">
+                    {new Date(h.completedAt).toLocaleDateString(
+                      lang === "en" ? "en-US" : "th-TH",
+                      { day: "numeric", month: "short", year: "numeric" }
+                    )}
+                  </p>
                 </div>
-                <span className="tnum shrink-0 text-sm font-bold text-sunset">+{h.reward_xp} XP</span>
-              </Card>
+                <span className="tnum shrink-0 flex items-center gap-0.5 text-sm font-bold text-mango">
+                  <Zap className="h-3 w-3" /> +{h.reward_xp}
+                </span>
+              </div>
             ))}
           </div>
         )}
       </section>
 
-      <Card className="flex items-center gap-3">
+      {/* User card */}
+      <div className="flex items-center gap-3 rounded-2xl bg-white border border-slate-200 p-4 dark:bg-[#0e1a2e] dark:border-white/10">
         {auth?.user?.photoURL ? (
-          <img src={auth.user.photoURL} alt="" className={`h-12 w-12 rounded-full ring-2 ${frameRing(state.cosmetics?.frame)}`} />
+          <img src={auth.user.photoURL} alt="" className={`h-12 w-12 rounded-full ring-2 ring-offset-2 ring-offset-white dark:ring-offset-[#0e1a2e] ${frameRing(state.cosmetics?.frame)}`} />
         ) : (
-          <span className={`flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-mango/15 ring-2 dark:bg-slate-800 ${frameRing(state.cosmetics?.frame)}`}>
+          <span className={`flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-mango/15 ring-2 ring-offset-2 ring-offset-white dark:ring-offset-[#0e1a2e] ${frameRing(state.cosmetics?.frame)}`}>
             <Mascot size={44} />
           </span>
         )}
         <div className="flex-1 overflow-hidden">
-          <p className="truncate font-semibold text-deep dark:text-slate-100">
-            {auth?.user?.displayName || t("app.defaultName")}
-          </p>
-          <p className="truncate text-xs text-slate-500 dark:text-slate-400">
-            {auth?.user?.email || t("level." + lvl.name)}
-          </p>
+          <p className="truncate font-semibold text-slate-900 dark:text-white">{auth?.user?.displayName || t("app.defaultName")}</p>
+          <p className="truncate text-xs text-slate-500">{auth?.user?.email || t("level." + lvl.name)}</p>
         </div>
-      </Card>
+      </div>
 
+      {/* Footer actions */}
       <div className="space-y-1 pt-1">
         <button
           onClick={() => update({ tutorialSeen: false })}
-          className="flex w-full items-center justify-center gap-1.5 rounded-xl py-2 text-sm font-semibold text-slate-600 transition hover:text-sunset focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/40 dark:text-slate-400 dark:hover:text-sunset"
+          className="flex w-full items-center justify-center gap-1.5 rounded-xl py-2 text-sm font-semibold text-slate-500 transition hover:text-slate-700 dark:hover:text-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/30"
         >
           <HelpCircle className="h-4 w-4" />
           {t("ach.replayTutorial")}
@@ -327,17 +232,15 @@ export default function Achievements({ progress, auth, onLogout }) {
         {auth?.enabled && (
           <button
             onClick={onLogout}
-            className="w-full rounded-xl py-2 text-sm font-semibold text-slate-600 transition hover:text-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 dark:text-slate-400 dark:hover:text-slate-100"
+            className="w-full rounded-xl py-2 text-sm font-semibold text-slate-500 transition hover:text-slate-700 dark:hover:text-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/30"
           >
             {auth.user ? t("ach.logout") : t("ach.login")}
           </button>
         )}
 
         <button
-          onClick={() => {
-            if (confirm(t("ach.resetConfirm"))) reset();
-          }}
-          className="w-full rounded-xl py-2 text-sm text-slate-500 transition hover:text-rose-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300 dark:text-slate-400"
+          onClick={() => { if (confirm(t("ach.resetConfirm"))) reset(); }}
+          className="w-full rounded-xl py-2 text-sm text-slate-600 transition hover:text-rose-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/30"
         >
           {t("ach.reset")}
         </button>

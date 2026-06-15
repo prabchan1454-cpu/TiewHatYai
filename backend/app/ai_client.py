@@ -39,9 +39,13 @@ def _extract_json(raw: str):
     raise ValueError(f"Model did not return valid JSON: {raw[:200]}")
 
 
-def _call(messages: list[dict], max_tokens: int = 1024, json_mode: bool = False, model: str = MODEL) -> str:
-    """Call Groq with simple retry on transient 429/5xx."""
-    kwargs = dict(model=model, messages=messages, max_tokens=max_tokens)
+def _call(messages: list[dict], max_tokens: int = 1024, json_mode: bool = False, model: str = MODEL, temperature: float = 0.7) -> str:
+    """Call Groq with simple retry on transient 429/5xx.
+
+    A modest temperature (default 0.7, lower for chat) keeps llama-3.3 grounded —
+    it reduces both made-up details and random code-switching into other scripts.
+    """
+    kwargs = dict(model=model, messages=messages, max_tokens=max_tokens, temperature=temperature)
     if json_mode:
         kwargs["response_format"] = {"type": "json_object"}
     last = None
@@ -58,12 +62,40 @@ def _call(messages: list[dict], max_tokens: int = 1024, json_mode: bool = False,
     raise last
 
 
+# Unicode blocks for scripts น้องเที่ยว should never output (Thai ฀-๿
+# and Latin stay). Catches the occasional stray CJK/Lao/Khmer/etc. from llama.
+_FOREIGN_SCRIPT = re.compile(
+    "[຀-໿"  # Lao
+    "ༀ-࿿"  # Tibetan
+    "က-႟"  # Myanmar
+    "ᄀ-ᇿ"  # Hangul Jamo
+    "ក-៿"  # Khmer
+    "぀-ヿ"  # Hiragana + Katakana
+    "㐀-䶿"  # CJK Ext A
+    "一-鿿"  # CJK Unified
+    "가-힯"  # Hangul Syllables
+    "豈-﫿"  # CJK Compatibility
+    "؀-ۿ]+"  # Arabic
+)
+
+
+def _strip_foreign(text: str) -> str:
+    """Safety net: drop stray characters from unwanted scripts and tidy spaces."""
+    cleaned = _FOREIGN_SCRIPT.sub("", text)
+    # Collapse any double spaces / space-before-punctuation left behind.
+    cleaned = re.sub(r"[ \t]{2,}", " ", cleaned)
+    cleaned = re.sub(r" +([,.!?])", r"\1", cleaned)
+    return cleaned.strip()
+
+
 def chat(messages: list[dict], lang: str = "th", max_tokens: int = 4096) -> str:
     """Multi-turn chat with the น้องเที่ยว system prompt."""
     history = [{"role": "system", "content": SYSTEM_PROMPT + lang_directive(lang)}] + [
         {"role": m["role"], "content": m["content"]} for m in messages
     ]
-    return _call(history, max_tokens=max_tokens).strip()
+    # Lower temperature for chat: more grounded, less likely to invent details
+    # or drift into another language.
+    return _strip_foreign(_call(history, max_tokens=max_tokens, temperature=0.5).strip())
 
 
 def complete_text(user_prompt: str, max_tokens: int = 512, system: str | None = None) -> str:
