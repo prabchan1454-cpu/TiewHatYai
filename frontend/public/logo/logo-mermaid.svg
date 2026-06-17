@@ -1,0 +1,18 @@
+<svg width="512" height="512" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bdeeff"/><stop offset="1" stop-color="#eafaff"/></linearGradient>
+<linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe48f"/><stop offset="1" stop-color="#f59e0b"/></linearGradient>
+<clipPath id="sq"><rect x="0" y="0" width="140" height="140" rx="38"/></clipPath>
+</defs>
+<g clip-path="url(#sq)">
+  <rect x="0" y="0" width="140" height="140" fill="url(#gSky)"/>
+  <circle cx="112" cy="40" r="14" fill="#ffd24d"/>
+  <path d="M0,118 Q35,108 70,118 T140,118 L140,140 L0,140 Z" fill="#56e0d2"/>
+  <path d="M0,128 Q35,120 70,128 T140,128 L140,140 L0,140 Z" fill="#0fb9b1"/>
+  <path d="M70,122 C63,100 58,84 63,68 C52,56 40,40 38,30 C51,37 64,50 70,66 C76,50 89,37 102,30 C100,40 88,56 77,68 C82,84 77,100 70,122 Z" fill="url(#gGold)" stroke="#d9831f" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M70,116 L70,74" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+  <circle cx="70" cy="118" r="6" fill="#ffffff"/><circle cx="70" cy="118" r="6" fill="none" stroke="#cfe9ff" stroke-width="1.5"/>
+  <path d="M50,52 L52,57 L57,59 L52,61 L50,66 L48,61 L43,59 L48,57 Z" fill="#ffffff"/>
+  <path d="M92,58 L93,62 L97,63 L93,64 L92,68 L91,64 L87,63 L91,62 Z" fill="#ffffff"/>
+</g>
+</svg>
