@@ -16,6 +16,11 @@ import {
   Users,
   Zap,
   MapPin,
+  HeartPulse,
+  BookOpen,
+  Brain,
+  Store,
+  BarChart3,
 } from "lucide-react";
 import Mascot from "../components/Mascot";
 
@@ -52,6 +57,16 @@ const LINKS = [
     iconBg: "bg-purple-500/20 text-purple-400",
     border: "border-purple-500/20",
   },
+];
+
+// "Super-app" services beyond tourism — the modules that answer the judges'
+// "expand beyond tourism" + "entertainment" + "business value" feedback.
+const MORE = [
+  { id: "essentials", Icon: HeartPulse, titleKey: "ess.homeCard",   descKey: "ess.homeCardDesc",   iconBg: "bg-rose-500/15 text-rose-500",   border: "border-rose-500/20" },
+  { id: "legends",    Icon: BookOpen,   titleKey: "leg.homeCard",   descKey: "leg.homeCardDesc",   iconBg: "bg-purple-500/15 text-purple-500 dark:text-purple-300", border: "border-purple-500/20" },
+  { id: "quiz",       Icon: Brain,      titleKey: "quiz.homeCard",  descKey: "quiz.homeCardDesc",  iconBg: "bg-lagoon/15 text-lagoon",       border: "border-lagoon/20" },
+  { id: "businesses", Icon: Store,      titleKey: "biz.homeCard",   descKey: "biz.homeCardDesc",   iconBg: "bg-emerald-500/15 text-emerald-500", border: "border-emerald-500/20" },
+  { id: "impact",     Icon: BarChart3,  titleKey: "impact.homeCard", descKey: "impact.homeCardDesc", iconBg: "bg-mango/15 text-mango",        border: "border-mango/20" },
 ];
 
 export default function Home({ progress, onNavigate }) {
@@ -168,6 +183,31 @@ export default function Home({ progress, onNavigate }) {
         <p className="flex-1 font-semibold text-slate-900 dark:text-white">{t("checkin.homeCard")}</p>
         <ChevronRight className="h-5 w-5 shrink-0 text-lagoon/50" />
       </button>
+
+      {/* ── More services (super-app modules) ────────────────────── */}
+      <section>
+        <h2 className="mb-2.5 px-1 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-500">
+          {t("home.moreTitle")}
+        </h2>
+        <div className="space-y-2">
+          {MORE.map((m) => (
+            <button
+              key={m.id}
+              onClick={() => onNavigate(m.id)}
+              className={`flex w-full items-center gap-3 rounded-2xl border ${m.border} bg-white p-3.5 text-left transition duration-200 active:scale-[0.98] hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/40 dark:bg-[#0e1a2e] dark:hover:bg-white/5`}
+            >
+              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${m.iconBg}`}>
+                <m.Icon className="h-5 w-5" />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-semibold text-slate-900 dark:text-white">{t(m.titleKey)}</span>
+                <span className="block truncate text-xs text-slate-500 dark:text-slate-400">{t(m.descKey)}</span>
+              </span>
+              <ChevronRight className="h-5 w-5 shrink-0 text-slate-300 dark:text-slate-600" />
+            </button>
+          ))}
+        </div>
+      </section>
 
       {/* ── Active quest or CTA ──────────────────────────────────── */}
       {state.activeQuest ? (

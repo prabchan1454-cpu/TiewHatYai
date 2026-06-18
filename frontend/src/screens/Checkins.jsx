@@ -1,10 +1,10 @@
 import { useEffect, useState, lazy, Suspense } from "react";
 import { Button, ErrorBox, Spinner } from "../components/ui";
 import { LANDMARKS } from "../lib/landmarks";
-import { postCheckin, fetchCheckins } from "../lib/checkins";
+import { postCheckin, fetchCheckins, toggleLike, isLiked, displayLikes, getLocalReplies, addReply } from "../lib/checkins";
 import { getCurrentPosition, reverseGeocode } from "../lib/geo";
 import { useT } from "../lib/i18n.jsx";
-import { ArrowLeft, Camera, X, MapPin, LogIn, RefreshCw, LocateFixed, ChevronDown, Heart } from "lucide-react";
+import { ArrowLeft, Camera, X, MapPin, LogIn, RefreshCw, LocateFixed, ChevronDown, Heart, MessageCircle, Send } from "lucide-react";
 
 const CheckinMap = lazy(() => import("../components/CheckinMap"));
 
@@ -289,40 +289,115 @@ export default function Checkins({ auth, onBack }) {
       ) : (
         <div className="space-y-3">
           {posts.map((p) => (
-            <div key={p.id} className="rounded-3xl border border-slate-200 bg-white overflow-hidden dark:border-white/8 dark:bg-[#0e1525]">
-              {/* Post header */}
-              <div className="flex items-center gap-2.5 p-4 pb-3">
-                <Avatar src={p.photoURL} name={p.displayName} />
-                <div className="flex-1 overflow-hidden">
-                  <p className="truncate text-sm font-bold text-slate-900 dark:text-white">{p.displayName}</p>
-                  <p className="flex items-center gap-1 text-[11px] text-lagoon">
-                    <MapPin className="h-3 w-3" /> {p.place}
-                  </p>
-                </div>
-                <span className="shrink-0 text-[11px] text-slate-500">{timeAgo(p.createdAt, lang)}</span>
-              </div>
-
-              {/* Message */}
-              {p.message && (
-                <p className="px-4 pb-3 text-sm text-slate-600 dark:text-slate-300">{p.message}</p>
-              )}
-
-              {/* Photo */}
-              {p.image && (
-                <img src={p.image} alt="" className="w-full object-cover max-h-56" />
-              )}
-
-              {/* Footer */}
-              <div className="flex items-center gap-3 px-4 py-2.5">
-                <span className="inline-flex items-center gap-1 rounded-full border border-lagoon/25 bg-lagoon/10 px-2.5 py-1 text-[11px] font-semibold text-lagoon">
-                  <MapPin className="h-3 w-3" /> {p.place}
-                </span>
-                <span className="ml-auto flex items-center gap-1 text-[11px] text-slate-600">
-                  <Heart className="h-3 w-3" />
-                </span>
-              </div>
-            </div>
+            <PostCard key={p.id} p={p} auth={auth} t={t} lang={lang} />
           ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// A single check-in with a working like button and a lightweight reply thread.
+// Likes/replies are local-first (work for guests & offline) and best-effort
+// synced to Firestore when signed in.
+function PostCard({ p, auth, t, lang }) {
+  const [liked, setLiked] = useState(() => isLiked(p.id));
+  const [likes, setLikes] = useState(() => displayLikes(p));
+  const [replies, setReplies] = useState(() => getLocalReplies(p.id));
+  const [showReply, setShowReply] = useState(false);
+  const [text, setText] = useState("");
+
+  async function onLike() {
+    const now = await toggleLike(p.id, auth?.user);
+    setLiked(now);
+    setLikes((n) => n + (now ? 1 : -1));
+  }
+
+  async function sendReply() {
+    const v = text.trim();
+    if (!v) return;
+    setText("");
+    setReplies(await addReply(p.id, auth?.user, v));
+  }
+
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white overflow-hidden dark:border-white/8 dark:bg-[#0e1525]">
+      {/* Post header */}
+      <div className="flex items-center gap-2.5 p-4 pb-3">
+        <Avatar src={p.photoURL} name={p.displayName} />
+        <div className="flex-1 overflow-hidden">
+          <p className="truncate text-sm font-bold text-slate-900 dark:text-white">{p.displayName}</p>
+          <p className="flex items-center gap-1 text-[11px] text-lagoon">
+            <MapPin className="h-3 w-3" /> {p.place}
+          </p>
+        </div>
+        <span className="shrink-0 text-[11px] text-slate-500">{timeAgo(p.createdAt, lang)}</span>
+      </div>
+
+      {/* Message */}
+      {p.message && (
+        <p className="px-4 pb-3 text-sm text-slate-600 dark:text-slate-300">{p.message}</p>
+      )}
+
+      {/* Photo */}
+      {p.image && (
+        <img src={p.image} alt="" className="w-full object-cover max-h-56" />
+      )}
+
+      {/* Action bar */}
+      <div className="flex items-center gap-2 px-4 py-2.5">
+        <span className="inline-flex items-center gap-1 rounded-full border border-lagoon/25 bg-lagoon/10 px-2.5 py-1 text-[11px] font-semibold text-lagoon">
+          <MapPin className="h-3 w-3" /> {p.place}
+        </span>
+        <div className="ml-auto flex items-center gap-1">
+          <button
+            onClick={onLike}
+            aria-pressed={liked}
+            className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold transition active:scale-90 ${
+              liked ? "bg-rose-500/12 text-rose-500" : "text-slate-500 hover:bg-slate-100 dark:hover:bg-white/8"
+            }`}
+          >
+            <Heart className="h-3.5 w-3.5" fill={liked ? "currentColor" : "none"} />
+            {likes > 0 && <span className="tnum">{likes}</span>}
+          </button>
+          <button
+            onClick={() => setShowReply((v) => !v)}
+            className="flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold text-slate-500 transition hover:bg-slate-100 active:scale-90 dark:hover:bg-white/8"
+          >
+            <MessageCircle className="h-3.5 w-3.5" />
+            {replies.length > 0 && <span className="tnum">{replies.length}</span>}
+          </button>
+        </div>
+      </div>
+
+      {/* Replies */}
+      {(showReply || replies.length > 0) && (
+        <div className="space-y-2 border-t border-slate-100 px-4 py-3 dark:border-white/8">
+          {replies.map((r, i) => (
+            <p key={i} className="text-[12px] leading-snug text-slate-600 dark:text-slate-300">
+              <span className="font-bold text-slate-800 dark:text-white">{r.name}</span> {r.text}
+            </p>
+          ))}
+          {showReply && (
+            <div className="flex items-center gap-2 pt-1">
+              <input
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && sendReply()}
+                maxLength={140}
+                placeholder={lang === "en" ? "Write a reply..." : "ตอบกลับ..."}
+                className="flex-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-900 outline-none focus:border-lagoon/60 focus:ring-2 focus:ring-lagoon/20 dark:border-white/10 dark:bg-white/5 dark:text-white"
+              />
+              <button
+                onClick={sendReply}
+                disabled={!text.trim()}
+                aria-label="send reply"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lagoon text-white transition active:scale-90 disabled:opacity-40"
+              >
+                <Send className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

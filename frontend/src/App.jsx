@@ -16,6 +16,11 @@ const Achievements = lazy(() => import("./screens/Achievements"));
 const Passport = lazy(() => import("./screens/Passport"));
 const Checkins = lazy(() => import("./screens/Checkins"));
 const AdventureMap = lazy(() => import("./screens/AdventureMap"));
+const Essentials = lazy(() => import("./screens/Essentials"));
+const Legends = lazy(() => import("./screens/Legends"));
+const Quiz = lazy(() => import("./screens/Quiz"));
+const Businesses = lazy(() => import("./screens/Businesses"));
+const Impact = lazy(() => import("./screens/Impact"));
 import RewardOverlay from "./components/RewardOverlay";
 import Tutorial from "./components/Tutorial";
 import Mascot from "./components/Mascot";
@@ -158,6 +163,11 @@ export default function App() {
           {tab === "passport"  && <Passport progress={progress} onBack={() => navigate("home")} />}
           {tab === "checkins"  && <Checkins auth={auth} onBack={() => navigate("home")} />}
           {tab === "map"       && <AdventureMap progress={progress} onNavigate={navigate} onBack={() => navigate("home")} />}
+          {tab === "essentials" && <Essentials onBack={() => navigate("home")} />}
+          {tab === "legends"   && <Legends progress={progress} onNavigate={navigate} onBack={() => navigate("home")} />}
+          {tab === "quiz"      && <Quiz progress={progress} onBack={() => navigate("home")} />}
+          {tab === "businesses" && <Businesses auth={auth} onBack={() => navigate("home")} />}
+          {tab === "impact"    && <Impact progress={progress} onBack={() => navigate("home")} />}
           {tab === "chat"      && <Chat greeting={null} />}
           {tab === "quests"    && <Quests progress={progress} />}
           {tab === "recommend" && <Recommend preferences={state.preferences} xp={state.xp} onNavigate={navigate} />}

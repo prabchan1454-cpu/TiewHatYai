@@ -51,6 +51,7 @@ const DEFAULT = {
   badges: [], // [{ badge_title, badge_description, flavor_text, rarity, earnedAt }]
   daily: { issuedDate: null, completedDate: null, streak: 0 }, // YYYY-MM-DD strings
   collectedStamps: [], // [{ id, collectedAt }] — Songkhla Passport landmark stamps
+  unlockedLegends: [], // [{ id, unlockedAt }] — Legends & Mysteries visited/unlocked
   cosmetics: { title: null, frame: null, cover: null }, // chosen level-unlocked cosmetics
   surveyDone: false, // "รู้จักสงขลา" self-assessment survey shown once after onboarding
   surveyResponses: null, // { [questionId]: optionIndex }
@@ -146,6 +147,20 @@ export function useProgress() {
     });
   }, []);
 
+  // Unlock a Legends & Mysteries story by visiting it. Idempotent: a story
+  // unlocks once and its XP is awarded only on the first unlock.
+  const unlockLegend = useCallback((id, xp) => {
+    setState((s) => {
+      const list = s.unlockedLegends || [];
+      if (list.some((u) => u.id === id)) return s;
+      return {
+        ...s,
+        xp: s.xp + (xp || 0),
+        unlockedLegends: [...list, { id, unlockedAt: Date.now() }],
+      };
+    });
+  }, []);
+
   const addBadge = useCallback((badge) => {
     setState((s) => {
       if (s.badges.some((b) => b.badge_title === badge.badge_title)) return s;
@@ -162,6 +177,7 @@ export function useProgress() {
     issueDaily,
     addBadge,
     collectStamp,
+    unlockLegend,
     reset,
     reward,
     celebrate,

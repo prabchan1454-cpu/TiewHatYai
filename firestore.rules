@@ -15,11 +15,30 @@ service cloud.firestore {
     }
 
     // Community check-in feed: anyone may read; a signed-in user may create a
-    // post only as themselves (uid must match). No edits/deletes from clients.
+    // post only as themselves (uid must match). Signed-in users may also like a
+    // post: an update is allowed only when it touches the `likes` field alone
+    // (so no one can rewrite someone else's post content). No deletes.
     match /checkins/{postId} {
       allow read: if true;
       allow create: if request.auth != null
                     && request.resource.data.uid == request.auth.uid;
+      allow update: if request.auth != null
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes']);
+
+      // Replies: anyone may read; a signed-in user may add a reply as themselves.
+      match /replies/{replyId} {
+        allow read: if true;
+        allow create: if request.auth != null
+                      && request.resource.data.uid == request.auth.uid;
+      }
+    }
+
+    // Self-service business directory: anyone may read; a signed-in user may
+    // create a listing they own. Edits/deletes only via console for now.
+    match /businesses/{bizId} {
+      allow read: if true;
+      allow create: if request.auth != null
+                    && request.resource.data.ownerUid == request.auth.uid;
     }
   }
 }
