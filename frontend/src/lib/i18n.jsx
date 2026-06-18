@@ -5,7 +5,7 @@ const KEY = "travelsongkhla_lang";
 export const STRINGS = {
   th: {
     // App shell
-    "app.title": "เที่ยวหาดใหญ่",
+    "app.title": "เที่ยวสงขลา",
     "app.tagline": "หาดใหญ่ · สงขลา",
     "app.greeting": "สวัสดี {name}",
     "app.defaultName": "นักเที่ยว",
@@ -64,7 +64,7 @@ export const STRINGS = {
     "reward.unlockedNew": "ปลดล็อกใหม่",
 
     // Landing
-    "landing.eyebrow": "เที่ยวหาดใหญ่–สงขลาแบบเกมผจญภัย",
+    "landing.eyebrow": "เที่ยวสงขลาแบบเกมผจญภัย",
     "landing.subtitle": "ผจญภัยทั่วหาดใหญ่และสงขลากับน้องเที่ยว ไกด์ AI ส่วนตัวของคุณ พร้อมข้อมูลที่พัก โรงพยาบาล และเหตุฉุกเฉิน",
     "landing.stamps": "เก็บดวงตราให้ครบทั่วเมือง",
     "landing.reassure": "ไม่ต้องสมัครก็เริ่มได้ · ฟรี",
@@ -294,7 +294,7 @@ export const STRINGS = {
     "ach.history": "ประวัติเควส",
     "ach.noHistory": "ยังไม่มีประวัติ — เริ่มผจญภัยกันเลย!",
     "ach.share": "แชร์",
-    "ach.shareText": "ฉันปลดล็อก badge “{title}” ใน เที่ยวหาดใหญ่! 🏅 {desc}",
+    "ach.shareText": "ฉันปลดล็อก badge “{title}” ใน เที่ยวสงขลา! 🏅 {desc}",
     "ach.copied": "คัดลอกแล้ว! ไปแชร์ได้เลย ✨",
     "ach.logout": "ออกจากระบบ",
     "ach.login": "เข้าสู่ระบบด้วย Google",
@@ -307,7 +307,7 @@ export const STRINGS = {
     "tut.back": "ย้อนกลับ",
     "tut.next": "ถัดไป",
     "tut.done": "เริ่มเลย! 🚀",
-    "tut.intro.title": "ยินดีต้อนรับสู่ เที่ยวหาดใหญ่ 🎉",
+    "tut.intro.title": "ยินดีต้อนรับสู่ เที่ยวสงขลา 🎉",
     "tut.intro.desc": "น้องเที่ยว ไกด์ AI จะพาคุณสำรวจสงขลาแบบเกมผจญภัย มาดูวิธีใช้กันสั้น ๆ",
     "tut.home.title": "หน้าแรก",
     "tut.home.desc": "ดูภาพรวมทริป สภาพอากาศ และความคืบหน้าของคุณได้ที่นี่",
@@ -454,7 +454,7 @@ export const STRINGS = {
   },
   en: {
     // App shell
-    "app.title": "TiewHatyai",
+    "app.title": "Travel Songkhla",
     "app.tagline": "Hat Yai · Songkhla",
     "mascot.alt": "Nong Tiew",
     "app.greeting": "Hi {name}",
@@ -743,7 +743,7 @@ export const STRINGS = {
     "ach.history": "Quest history",
     "ach.noHistory": "No history yet — start your adventure!",
     "ach.share": "Share",
-    "ach.shareText": "I unlocked the “{title}” badge in TiewHatyai! 🏅 {desc}",
+    "ach.shareText": "I unlocked the “{title}” badge in Travel Songkhla! 🏅 {desc}",
     "ach.copied": "Copied! Paste it anywhere to share ✨",
     "ach.logout": "Sign out",
     "ach.login": "Sign in with Google",
@@ -756,7 +756,7 @@ export const STRINGS = {
     "tut.back": "Back",
     "tut.next": "Next",
     "tut.done": "Let's go! 🚀",
-    "tut.intro.title": "Welcome to TiewHatyai 🎉",
+    "tut.intro.title": "Welcome to Travel Songkhla 🎉",
     "tut.intro.desc": "Nong Tiew, your AI guide, turns exploring Songkhla into an adventure game. Here's a quick tour.",
     "tut.home.title": "Home",
     "tut.home.desc": "See your trip overview, the weather, and your progress at a glance.",

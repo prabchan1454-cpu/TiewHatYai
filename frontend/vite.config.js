@@ -9,9 +9,9 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon-32.png", "apple-touch-icon.png", "logo.svg"],
       manifest: {
-        name: "TiewHatyai · เที่ยวหาดใหญ่",
-        short_name: "เที่ยวหาดใหญ่",
-        description: "ซูเปอร์แอปเที่ยวหาดใหญ่–สงขลา พร้อมผู้ช่วย AI น้องเที่ยว ภารกิจ เหรียญรางวัล โรงพยาบาลและเหตุฉุกเฉิน",
+        name: "Travel Songkhla · เที่ยวสงขลา",
+        short_name: "เที่ยวสงขลา",
+        description: "ซูเปอร์แอปเที่ยวสงขลา พร้อมผู้ช่วย AI น้องเที่ยว ภารกิจ เหรียญรางวัล โรงพยาบาลและเหตุฉุกเฉิน",
         lang: "th",
         start_url: "/",
         scope: "/",
