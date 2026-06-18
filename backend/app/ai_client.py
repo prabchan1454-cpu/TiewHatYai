@@ -89,13 +89,24 @@ def _strip_foreign(text: str) -> str:
 
 
 def chat(messages: list[dict], lang: str = "th", max_tokens: int = 4096) -> str:
-    """Multi-turn chat with the น้องเที่ยว system prompt."""
-    history = [{"role": "system", "content": SYSTEM_PROMPT + lang_directive(lang)}] + [
-        {"role": m["role"], "content": m["content"]} for m in messages
-    ]
-    # Lower temperature for chat: more grounded, less likely to invent details
-    # or drift into another language.
-    return _strip_foreign(_call(history, max_tokens=max_tokens, temperature=0.5).strip())
+    """Multi-turn chat with the น้องเที่ยว system prompt. Supports image attachments."""
+    history = [{"role": "system", "content": SYSTEM_PROMPT + lang_directive(lang)}]
+    has_image = False
+    for m in messages:
+        if m.get("image_base64"):
+            has_image = True
+            data_url = f"data:{m.get('image_mime', 'image/jpeg')};base64,{m['image_base64']}"
+            history.append({
+                "role": m["role"],
+                "content": [
+                    {"type": "image_url", "image_url": {"url": data_url}},
+                    {"type": "text", "text": m["content"] or "ช่วยอธิบายรูปภาพนี้ในบริบทของสงขลาหาดใหญ่ด้วยนะคะ"},
+                ],
+            })
+        else:
+            history.append({"role": m["role"], "content": m["content"]})
+    model = VISION_MODEL if has_image else MODEL
+    return _strip_foreign(_call(history, max_tokens=max_tokens, temperature=0.5, model=model).strip())
 
 
 def complete_text(user_prompt: str, max_tokens: int = 512, system: str | None = None) -> str:

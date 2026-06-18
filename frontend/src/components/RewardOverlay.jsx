@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
+import { sfxQuestComplete, sfxLevelUp } from "../lib/sfx";
 import { Button, RarityBadge } from "./ui";
 import { useT } from "../lib/i18n.jsx";
 import { Zap, Gift } from "lucide-react";
@@ -40,8 +41,15 @@ function Confetti() {
 
 export default function RewardOverlay({ reward, onClose }) {
   const { t } = useT();
+  const { xp, badge, levelUp, unlocked } = reward || {};
+
+  useEffect(() => {
+    if (!reward) return;
+    if (levelUp) sfxLevelUp();
+    else sfxQuestComplete();
+  }, [reward]);
+
   if (!reward) return null;
-  const { xp, badge, levelUp, unlocked } = reward;
 
   return (
     <div

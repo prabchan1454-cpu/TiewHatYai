@@ -2,17 +2,43 @@ import { useState } from "react";
 import { Button } from "./ui";
 import Mascot from "./Mascot";
 import { useT } from "../lib/i18n.jsx";
-import { House, MessageCircle, Compass, Sparkles, Trophy, MapPinned } from "lucide-react";
+import { House, MessageCircle, Compass, Sparkles, Trophy, MapPinned, Camera, Star } from "lucide-react";
 
 // Walkthrough steps. `key` maps to i18n entries tut.<key>.title / tut.<key>.desc.
 const STEPS = [
-  { Icon: MapPinned, gradient: "from-sunset to-mango", key: "intro" },
-  { Icon: House, gradient: "from-lagoon to-deep", key: "home" },
-  { Icon: MessageCircle, gradient: "from-sky-400 to-lagoon", key: "chat" },
-  { Icon: Compass, gradient: "from-amber-500 to-sunset", key: "quests" },
-  { Icon: Sparkles, gradient: "from-violet-400 to-fuchsia-400", key: "recommend" },
-  { Icon: Trophy, gradient: "from-mango to-sunset", key: "profile" },
+  { Icon: MapPinned,      gradient: "from-sunset to-mango",          key: "intro" },
+  { Icon: Camera,         gradient: "from-emerald-400 to-lagoon",     key: "gameloop" },
+  { Icon: House,          gradient: "from-lagoon to-deep",            key: "home" },
+  { Icon: MessageCircle,  gradient: "from-sky-400 to-lagoon",         key: "chat" },
+  { Icon: Compass,        gradient: "from-amber-500 to-sunset",       key: "quests" },
+  { Icon: Sparkles,       gradient: "from-violet-400 to-fuchsia-400", key: "recommend" },
+  { Icon: Trophy,         gradient: "from-mango to-sunset",           key: "profile" },
 ];
+
+function GameLoopDiagram({ t }) {
+  const steps = [
+    { emoji: "📍", label: t("tut.gameloop.step1") },
+    { emoji: "📸", label: t("tut.gameloop.step2") },
+    { emoji: "⚡", label: t("tut.gameloop.step3") },
+  ];
+  return (
+    <div className="mx-auto flex max-w-xs items-center justify-center gap-1">
+      {steps.map((s, i) => (
+        <div key={i} className="flex items-center gap-1">
+          <div className="flex flex-col items-center gap-1">
+            <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-lagoon text-2xl shadow-md">
+              {s.emoji}
+            </span>
+            <span className="text-center text-[10px] font-bold text-slate-600 dark:text-slate-300 leading-tight max-w-[56px]">{s.label}</span>
+          </div>
+          {i < steps.length - 1 && (
+            <span className="mb-5 text-lg font-extrabold text-mango">→</span>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 // First-run feature walkthrough, also replayable from the profile screen.
 // Mirrors the onboarding step UI (icon + dots + back/next).
@@ -48,6 +74,8 @@ export default function Tutorial({ onClose }) {
         >
           {step.key === "intro" ? (
             <Mascot size={96} className="mx-auto block" float interactive />
+          ) : step.key === "gameloop" ? (
+            <GameLoopDiagram t={t} />
           ) : (
             <span
               className={`mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br ${step.gradient} text-white shadow-lg`}

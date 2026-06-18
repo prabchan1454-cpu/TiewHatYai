@@ -85,6 +85,8 @@ class Badge(BaseModel):
 class ChatMessage(BaseModel):
     role: Literal["user", "assistant"]
     content: str
+    image_base64: Optional[str] = None
+    image_mime: str = "image/jpeg"
 
 
 Lang = Literal["th", "en"]

@@ -1,4 +1,5 @@
-import { useState, lazy, Suspense } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
+import { sfxStamp } from "../lib/sfx";
 import { api } from "../lib/api";
 import { Button, ErrorBox } from "../components/ui";
 const StampMap = lazy(() => import("../components/StampMap"));
@@ -106,7 +107,34 @@ function CollectModal({ landmark, onClose, onCollected }) {
   );
 }
 
-function Stamp({ landmark, collected, onClick, t }) {
+// 8 sparkles flung in different directions when a stamp is collected
+const SPARK_DIRS = [
+  { sx: "0px",   sy: "-26px" }, { sx: "18px",  sy: "-20px" },
+  { sx: "26px",  sy: "0px"   }, { sx: "18px",  sy: "20px"  },
+  { sx: "0px",   sy: "26px"  }, { sx: "-18px", sy: "20px"  },
+  { sx: "-26px", sy: "0px"   }, { sx: "-18px", sy: "-20px" },
+];
+const SPARK_COLORS = ["#ffb020", "#ff7a45", "#0fb9b1", "#fff", "#ffd700"];
+
+function SparkBurst() {
+  return (
+    <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+      {SPARK_DIRS.map((d, i) => (
+        <span
+          key={i}
+          className="absolute h-2 w-2 rounded-full animate-sparkle-fly"
+          style={{
+            "--sx": d.sx, "--sy": d.sy,
+            background: SPARK_COLORS[i % SPARK_COLORS.length],
+            animationDelay: `${i * 18}ms`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function Stamp({ landmark, collected, justCollected, onClick, t }) {
   return (
     <button
       onClick={onClick}
@@ -115,7 +143,7 @@ function Stamp({ landmark, collected, onClick, t }) {
         collected
           ? "border-mango/40 bg-gradient-to-br from-mango/20 to-sunset/10 shadow-[0_0_12px_rgba(255,176,32,0.2)]"
           : "border-slate-200 bg-slate-100/70 opacity-60 hover:opacity-90 active:scale-95 dark:border-white/10 dark:bg-[#0e1a2e]/70"
-      }`}
+      } ${justCollected ? "animate-stamp-pop" : ""}`}
     >
       {/* Lock overlay for uncollected */}
       {!collected && (
@@ -140,6 +168,7 @@ function Stamp({ landmark, collected, onClick, t }) {
           <Check className="h-3.5 w-3.5" strokeWidth={3} />
         </span>
       )}
+      {justCollected && <SparkBurst />}
     </button>
   );
 }
@@ -148,6 +177,9 @@ export default function Passport({ progress, onBack }) {
   const { t } = useT();
   const { state, collectStamp, celebrate } = progress;
   const [selected, setSelected] = useState(null);
+  const [justCollectedId, setJustCollectedId] = useState(null);
+  const [floatingXp, setFloatingXp] = useState(null); // { id, key }
+  const timerRef = useRef(null);
 
   const collectedIds = new Set((state.collectedStamps || []).map((s) => s.id));
   const done = collectedIds.size;
@@ -157,8 +189,15 @@ export default function Passport({ progress, onBack }) {
   function handleCollected(landmark) {
     collectStamp(landmark.id, STAMP_XP);
     setSelected(null);
+    sfxStamp();
+    setJustCollectedId(landmark.id);
+    setFloatingXp({ id: landmark.id, key: Date.now() });
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setJustCollectedId(null), 700);
     celebrate({ xp: STAMP_XP, badge: null });
   }
+
+  useEffect(() => () => clearTimeout(timerRef.current), []);
 
   return (
     <div className="space-y-4 p-4 pb-6">
@@ -235,7 +274,23 @@ export default function Passport({ progress, onBack }) {
             </div>
             <div className="grid grid-cols-3 gap-2">
               {items.map((l) => (
-                <Stamp key={l.id} landmark={l} collected={collectedIds.has(l.id)} onClick={() => setSelected(l)} t={t} />
+                <div key={l.id} className="relative">
+                  <Stamp
+                    landmark={l}
+                    collected={collectedIds.has(l.id)}
+                    justCollected={justCollectedId === l.id}
+                    onClick={() => setSelected(l)}
+                    t={t}
+                  />
+                  {floatingXp?.id === l.id && (
+                    <span
+                      key={floatingXp.key}
+                      className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm font-extrabold text-mango animate-xp-float"
+                    >
+                      +{STAMP_XP} XP
+                    </span>
+                  )}
+                </div>
               ))}
             </div>
           </section>
