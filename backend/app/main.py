@@ -1,16 +1,22 @@
-"""Travel Songkhla backend — a stateless Groq proxy for the 6 น้องเที่ยว prompts."""
+"""Travel Songkhla backend — a stateless Gemini proxy for the 6 น้องเที่ยว prompts."""
 
 from dotenv import load_dotenv
 
-# override=True so a blank GROQ_API_KEY already in the environment
+# override=True so a blank GEMINI_API_KEY already in the environment
 # can't shadow the real key in .env.
 load_dotenv(override=True)
+
+import logging
+import uuid
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import ai_client as ai
 from . import prompts, schemas
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Travel Songkhla API", version="1.0.0")
 
@@ -24,10 +30,12 @@ app.add_middleware(
 
 def _guard(fn):
     """Run an AI call and turn failures into clean HTTP errors."""
+    req_id = str(uuid.uuid4())[:8]
     try:
         return fn()
-    except Exception as exc:  # noqa: BLE001 — surface a friendly message to the demo UI
-        raise HTTPException(status_code=502, detail=f"AI error: {exc}") from exc
+    except Exception as exc:
+        logger.error("AI error [%s]: %s", req_id, exc)
+        raise HTTPException(status_code=502, detail=f"AI error [{req_id}]: {exc}") from exc
 
 
 @app.get("/api/health")
@@ -54,7 +62,11 @@ def onboard(req: schemas.OnboardRequest | None = None):
 def chat(req: schemas.ChatRequest):
     if not req.messages:
         raise HTTPException(status_code=400, detail="messages cannot be empty")
-    history = [{"role": m.role, "content": m.content} for m in req.messages]
+    history = [
+        {"role": m.role, "content": m.content,
+         "image_base64": m.image_base64, "image_mime": m.image_mime}
+        for m in req.messages
+    ]
     reply = _guard(lambda: ai.chat(history, lang=req.lang))
     return {"reply": reply}
 

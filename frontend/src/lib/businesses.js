@@ -3,7 +3,7 @@
 // economic value). Mirrors the checkins.js Firestore pattern, but falls back to
 // localStorage when Firestore isn't configured so the directory is always
 // demoable (and works offline as a guest).
-import { firestoreEnabled, loadFirebase } from "./firebase";
+import { firestoreEnabled, loadFirestore } from "./firebase";
 
 const COLLECTION = "businesses";
 const LOCAL_KEY = "tiewhatyai_businesses_v1";
@@ -36,7 +36,7 @@ export async function addBusiness(biz) {
   };
 
   if (firestoreEnabled && biz.ownerUid) {
-    const fb = await loadFirebase();
+    const fb = await loadFirestore();
     if (fb?.db) {
       const { collection, addDoc, serverTimestamp } = fb.fsMod;
       try {
@@ -62,7 +62,7 @@ export async function fetchBusinesses(n = 50) {
   const local = readLocal();
   let remote = [];
   if (firestoreEnabled) {
-    const fb = await loadFirebase();
+    const fb = await loadFirestore();
     if (fb?.db) {
       const { collection, query, orderBy, limit, getDocs } = fb.fsMod;
       try {

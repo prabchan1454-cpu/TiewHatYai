@@ -1,24 +1,48 @@
-"""Groq AI client for Travel Songkhla (free tier — no credit card needed)."""
+"""Google Gemini AI client for Travel Songkhla (น้องเที่ยว)."""
 
+import base64
 import json
+import logging
 import os
 import re
 import time
-from functools import lru_cache
 
-from groq import Groq, APIStatusError
+from google import genai
+from google.genai import types
 
 from .prompts import SYSTEM_PROMPT, lang_directive
 
-# llama-3.3-70b-versatile: fast, great Thai, generous free quota
-MODEL = "llama-3.3-70b-versatile"
-# Use vision model only when a photo is attached
-VISION_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct"
+logger = logging.getLogger(__name__)
+
+# gemini-2.0-flash: fast, excellent Thai, multimodal, generous free quota (1500 req/day)
+MODEL = "gemini-2.0-flash"
+
+# Unicode blocks น้องเที่ยว should never output
+_FOREIGN_SCRIPT = re.compile(
+    "[຀-໿"  # Lao
+    "ༀ-࿿"  # Tibetan
+    "က-႟"  # Myanmar
+    "ᄀ-ᇿ"  # Hangul Jamo
+    "ក-៿"  # Khmer
+    "぀-ヿ"  # Hiragana + Katakana
+    "㐀-䶿"  # CJK Ext A
+    "一-鿿"  # CJK Unified
+    "가-힯"  # Hangul Syllables
+    "豈-﫿"  # CJK Compatibility
+    "؀-ۿ]+"  # Arabic
+)
 
 
-@lru_cache(maxsize=1)
-def get_client() -> Groq:
-    return Groq(api_key=os.environ.get("GROQ_API_KEY"))
+def get_client() -> genai.Client:
+    return genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+
+
+def _strip_foreign(text: str) -> str:
+    """Safety net: drop stray characters from unwanted scripts."""
+    cleaned = _FOREIGN_SCRIPT.sub("", text)
+    cleaned = re.sub(r"[ \t]{2,}", " ", cleaned)
+    cleaned = re.sub(r" +([,.!?])", r"\1", cleaned)
+    return cleaned.strip()
 
 
 def _extract_json(raw: str):
@@ -39,83 +63,95 @@ def _extract_json(raw: str):
     raise ValueError(f"Model did not return valid JSON: {raw[:200]}")
 
 
-def _call(messages: list[dict], max_tokens: int = 1024, json_mode: bool = False, model: str = MODEL, temperature: float = 0.7) -> str:
-    """Call Groq with simple retry on transient 429/5xx.
-
-    A modest temperature (default 0.7, lower for chat) keeps llama-3.3 grounded —
-    it reduces both made-up details and random code-switching into other scripts.
-    """
-    kwargs = dict(model=model, messages=messages, max_tokens=max_tokens, temperature=temperature)
-    if json_mode:
-        kwargs["response_format"] = {"type": "json_object"}
+def _call_with_retry(fn, retries: int = 4):
+    """Call fn() with exponential backoff on transient 429/503 errors."""
     last = None
-    for attempt in range(4):
+    for attempt in range(retries):
         try:
-            resp = get_client().chat.completions.create(**kwargs)
-            return resp.choices[0].message.content or ""
-        except APIStatusError as exc:
-            if exc.status_code in (429, 503) and attempt < 3:
+            return fn()
+        except Exception as exc:
+            # Try to detect rate-limit / server errors from google-genai exceptions
+            msg = str(exc).lower()
+            is_transient = "429" in msg or "503" in msg or "resource_exhausted" in msg
+            if is_transient and attempt < retries - 1:
                 last = exc
-                time.sleep(1.5 * (attempt + 1))
+                wait = 1.5 * (attempt + 1)
+                logger.warning("Transient AI error (attempt %d), retrying in %.1fs: %s", attempt + 1, wait, exc)
+                time.sleep(wait)
                 continue
             raise
     raise last
 
 
-# Unicode blocks for scripts น้องเที่ยว should never output (Thai ฀-๿
-# and Latin stay). Catches the occasional stray CJK/Lao/Khmer/etc. from llama.
-_FOREIGN_SCRIPT = re.compile(
-    "[຀-໿"  # Lao
-    "ༀ-࿿"  # Tibetan
-    "က-႟"  # Myanmar
-    "ᄀ-ᇿ"  # Hangul Jamo
-    "ក-៿"  # Khmer
-    "぀-ヿ"  # Hiragana + Katakana
-    "㐀-䶿"  # CJK Ext A
-    "一-鿿"  # CJK Unified
-    "가-힯"  # Hangul Syllables
-    "豈-﫿"  # CJK Compatibility
-    "؀-ۿ]+"  # Arabic
-)
-
-
-def _strip_foreign(text: str) -> str:
-    """Safety net: drop stray characters from unwanted scripts and tidy spaces."""
-    cleaned = _FOREIGN_SCRIPT.sub("", text)
-    # Collapse any double spaces / space-before-punctuation left behind.
-    cleaned = re.sub(r"[ \t]{2,}", " ", cleaned)
-    cleaned = re.sub(r" +([,.!?])", r"\1", cleaned)
-    return cleaned.strip()
+def _gemini_role(role: str) -> str:
+    """Gemini accepts only 'user' and 'model'. The frontend uses 'assistant'
+    for AI turns, so map it (and anything non-user) to 'model'."""
+    return "user" if role == "user" else "model"
 
 
 def chat(messages: list[dict], lang: str = "th", max_tokens: int = 4096) -> str:
     """Multi-turn chat with the น้องเที่ยว system prompt. Supports image attachments."""
-    history = [{"role": "system", "content": SYSTEM_PROMPT + lang_directive(lang)}]
-    has_image = False
-    for m in messages:
+    client = get_client()
+    system = SYSTEM_PROMPT + lang_directive(lang)
+
+    history = []
+    for m in messages[:-1]:
         if m.get("image_base64"):
-            has_image = True
-            data_url = f"data:{m.get('image_mime', 'image/jpeg')};base64,{m['image_base64']}"
-            history.append({
-                "role": m["role"],
-                "content": [
-                    {"type": "image_url", "image_url": {"url": data_url}},
-                    {"type": "text", "text": m["content"] or "ช่วยอธิบายรูปภาพนี้ในบริบทของสงขลาหาดใหญ่ด้วยนะคะ"},
-                ],
-            })
+            image_bytes = base64.b64decode(m["image_base64"])
+            history.append(
+                types.Content(
+                    role=_gemini_role(m["role"]),
+                    parts=[
+                        types.Part.from_bytes(data=image_bytes, mime_type=m.get("image_mime", "image/jpeg")),
+                        types.Part.from_text(text=m["content"] or "ช่วยอธิบายรูปภาพนี้ในบริบทของสงขลาหาดใหญ่ด้วยนะคะ"),
+                    ],
+                )
+            )
         else:
-            history.append({"role": m["role"], "content": m["content"]})
-    model = VISION_MODEL if has_image else MODEL
-    return _strip_foreign(_call(history, max_tokens=max_tokens, temperature=0.5, model=model).strip())
+            history.append(types.Content(role=_gemini_role(m["role"]), parts=[types.Part.from_text(text=m["content"])]))
+
+    last = messages[-1]
+    if last.get("image_base64"):
+        image_bytes = base64.b64decode(last["image_base64"])
+        last_parts = [
+            types.Part.from_bytes(data=image_bytes, mime_type=last.get("image_mime", "image/jpeg")),
+            types.Part.from_text(text=last["content"] or "ช่วยอธิบายรูปภาพนี้ในบริบทของสงขลาหาดใหญ่ด้วยนะคะ"),
+        ]
+    else:
+        last_parts = [types.Part.from_text(text=last["content"])]
+
+    def _do():
+        resp = client.models.generate_content(
+            model=MODEL,
+            contents=history + [types.Content(role="user", parts=last_parts)],
+            config=types.GenerateContentConfig(
+                system_instruction=system,
+                max_output_tokens=max_tokens,
+                temperature=0.5,
+            ),
+        )
+        return resp.text or ""
+
+    return _strip_foreign(_call_with_retry(_do).strip())
 
 
 def complete_text(user_prompt: str, max_tokens: int = 512, system: str | None = None) -> str:
     """One-shot text reply (e.g. onboarding greeting)."""
-    msgs = []
-    if system:
-        msgs.append({"role": "system", "content": system})
-    msgs.append({"role": "user", "content": user_prompt})
-    return _call(msgs, max_tokens=max_tokens).strip()
+    client = get_client()
+
+    def _do():
+        resp = client.models.generate_content(
+            model=MODEL,
+            contents=user_prompt,
+            config=types.GenerateContentConfig(
+                system_instruction=system,
+                max_output_tokens=max_tokens,
+                temperature=0.7,
+            ),
+        )
+        return resp.text or ""
+
+    return _call_with_retry(_do).strip()
 
 
 def complete_json(
@@ -125,17 +161,28 @@ def complete_json(
     image_mime: str = "image/jpeg",
 ):
     """One-shot JSON completion, optionally with an attached image."""
+    client = get_client()
+
     if image_base64:
-        data_url = f"data:{image_mime};base64,{image_base64}"
-        msgs = [{
-            "role": "user",
-            "content": [
-                {"type": "image_url", "image_url": {"url": data_url}},
-                {"type": "text", "text": prompt},
-            ],
-        }]
-        raw = _call(msgs, max_tokens=max_tokens, json_mode=True, model=VISION_MODEL)
+        parts = [
+            types.Part.from_bytes(data=base64.b64decode(image_base64), mime_type=image_mime),
+            types.Part.from_text(text=prompt),
+        ]
     else:
-        msgs = [{"role": "user", "content": prompt}]
-        raw = _call(msgs, max_tokens=max_tokens, json_mode=True)
+        parts = [types.Part.from_text(text=prompt)]
+
+    def _do():
+        resp = client.models.generate_content(
+            model=MODEL,
+            contents=[types.Content(role="user", parts=parts)],
+            config=types.GenerateContentConfig(
+                system_instruction=SYSTEM_PROMPT,
+                max_output_tokens=max_tokens,
+                temperature=0.7,
+                response_mime_type="application/json",
+            ),
+        )
+        return resp.text or ""
+
+    raw = _call_with_retry(_do)
     return _extract_json(raw)

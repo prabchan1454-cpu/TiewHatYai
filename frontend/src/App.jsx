@@ -4,6 +4,7 @@ import { frameRing, perksForLevel, TITLES } from "./lib/unlocks";
 import { useAuth } from "./lib/auth";
 import { syncScore } from "./lib/leaderboard";
 import { useT } from "./lib/i18n.jsx";
+import { initAudioUnlock } from "./lib/sfx";
 import Landing from "./screens/Landing";
 import Login from "./screens/Login";
 import Onboarding from "./screens/Onboarding";
@@ -43,6 +44,10 @@ export default function App() {
   const { t } = useT();
   const [tab, setTab] = useState("home");
   const [slideDir, setSlideDir] = useState("right");
+
+  // Unlock Web Audio on the first user gesture so effect-triggered SFX
+  // (reward overlay, level-up) aren't silenced by the autoplay policy.
+  useEffect(() => { initAudioUnlock(); }, []);
 
   useEffect(() => {
     if (auth.user) {

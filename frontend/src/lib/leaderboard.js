@@ -1,4 +1,4 @@
-import { firestoreEnabled, loadFirebase } from "./firebase";
+import { firestoreEnabled, loadFirestore } from "./firebase";
 
 const COLLECTION = "leaderboard";
 
@@ -7,7 +7,7 @@ const COLLECTION = "leaderboard";
 // is a bonus, never a blocker for gameplay.
 export async function syncScore(user, { xp, level, badges }) {
   if (!firestoreEnabled || !user?.uid) return;
-  const fb = await loadFirebase();
+  const fb = await loadFirestore();
   if (!fb?.db) return;
   const { doc, setDoc, serverTimestamp } = fb.fsMod;
   try {
@@ -32,7 +32,7 @@ export async function syncScore(user, { xp, level, badges }) {
 // an empty state instead of crashing.
 export async function fetchTop(n = 50) {
   if (!firestoreEnabled) return [];
-  const fb = await loadFirebase();
+  const fb = await loadFirestore();
   if (!fb?.db) return [];
   const { collection, query, orderBy, limit, getDocs } = fb.fsMod;
   try {

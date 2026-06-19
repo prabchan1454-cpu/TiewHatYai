@@ -1,4 +1,4 @@
-import { firestoreEnabled, loadFirebase } from "./firebase";
+import { firestoreEnabled, loadFirestore } from "./firebase";
 
 const COLLECTION = "checkins";
 
@@ -7,7 +7,7 @@ const COLLECTION = "checkins";
 // or the write is rejected. `image` is a small base64 data-URL thumbnail.
 export async function postCheckin({ user, landmarkId, place, lat, lng, message, image }) {
   if (!firestoreEnabled || !user?.uid) return false;
-  const fb = await loadFirebase();
+  const fb = await loadFirestore();
   if (!fb?.db) return false;
   const { collection, addDoc, serverTimestamp } = fb.fsMod;
   try {
@@ -34,7 +34,7 @@ export async function postCheckin({ user, landmarkId, place, lat, lng, message, 
 // feed renders an empty state instead of crashing.
 export async function fetchCheckins(n = 50) {
   if (!firestoreEnabled) return [];
-  const fb = await loadFirebase();
+  const fb = await loadFirestore();
   if (!fb?.db) return [];
   const { collection, query, orderBy, limit, getDocs } = fb.fsMod;
   try {
@@ -73,7 +73,7 @@ export async function toggleLike(postId, user) {
   writeMap(LIKES_KEY, map);
 
   if (firestoreEnabled && user?.uid) {
-    const fb = await loadFirebase();
+    const fb = await loadFirestore();
     if (fb?.db) {
       const { doc, updateDoc, increment } = fb.fsMod;
       try {
@@ -106,7 +106,7 @@ export async function addReply(postId, user, text) {
   writeMap(REPLIES_KEY, map);
 
   if (firestoreEnabled && user?.uid) {
-    const fb = await loadFirebase();
+    const fb = await loadFirestore();
     if (fb?.db) {
       const { collection, addDoc, serverTimestamp } = fb.fsMod;
       try {

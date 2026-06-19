@@ -12,6 +12,27 @@ function ctx() {
   return _ctx;
 }
 
+// Browsers block Web Audio until a real user gesture. Many of our sounds fire
+// from a useEffect (reward overlay, level-up) which is NOT a gesture, so on
+// iOS Safari they'd stay silent. Create + resume the context on the first
+// pointer/touch/key event so later effect-triggered sounds can play.
+let _unlockBound = false;
+export function initAudioUnlock() {
+  if (_unlockBound || typeof window === "undefined") return;
+  _unlockBound = true;
+  const unlock = () => {
+    const c = ctx(); // creates + resumes within the gesture
+    // A silent 1-sample blip nudges iOS into the "running" state reliably.
+    if (c) { try { tone(1, 0.001, "sine", 0.0001); } catch { /* ignore */ } }
+    window.removeEventListener("pointerdown", unlock);
+    window.removeEventListener("touchstart", unlock);
+    window.removeEventListener("keydown", unlock);
+  };
+  window.addEventListener("pointerdown", unlock, { once: false });
+  window.addEventListener("touchstart", unlock, { once: false });
+  window.addEventListener("keydown", unlock, { once: false });
+}
+
 function tone(freq, dur = 0.12, type = "sine", vol = 0.22, startAt = 0) {
   const c = ctx();
   if (!c) return;

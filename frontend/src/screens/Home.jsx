@@ -189,21 +189,20 @@ export default function Home({ progress, onNavigate }) {
         <h2 className="mb-2.5 px-1 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-500">
           {t("home.moreTitle")}
         </h2>
-        <div className="space-y-2">
+        <div className="grid grid-cols-2 gap-2">
           {MORE.map((m) => (
             <button
               key={m.id}
               onClick={() => onNavigate(m.id)}
-              className={`flex w-full items-center gap-3 rounded-2xl border ${m.border} bg-white p-3.5 text-left transition duration-200 active:scale-[0.98] hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/40 dark:bg-[#0e1a2e] dark:hover:bg-white/5`}
+              className={`flex flex-col items-start gap-2 rounded-2xl border ${m.border} bg-white p-3 text-left transition duration-200 active:scale-[0.97] hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset/40 dark:bg-[#0e1a2e] dark:hover:bg-white/5`}
             >
               <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${m.iconBg}`}>
                 <m.Icon className="h-5 w-5" />
               </span>
-              <span className="min-w-0 flex-1">
-                <span className="block font-semibold text-slate-900 dark:text-white">{t(m.titleKey)}</span>
-                <span className="block truncate text-xs text-slate-500 dark:text-slate-400">{t(m.descKey)}</span>
+              <span className="min-w-0">
+                <span className="block text-sm font-semibold text-slate-900 dark:text-white">{t(m.titleKey)}</span>
+                <span className="mt-0.5 block text-[11px] leading-tight text-slate-500 dark:text-slate-400">{t(m.descKey)}</span>
               </span>
-              <ChevronRight className="h-5 w-5 shrink-0 text-slate-300 dark:text-slate-600" />
             </button>
           ))}
         </div>

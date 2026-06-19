@@ -36,7 +36,7 @@ export default function Landing({ onStart }) {
       {/* ---- Top bar ---- */}
       <div className="relative z-10 flex items-center justify-between px-6 pt-7">
         <span className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-deep/70 dark:text-white/60">
-          Tiew&nbsp;Hatyai
+          Travel&nbsp;Songkhla
         </span>
         <div className="flex gap-2">
           <ThemeToggle />

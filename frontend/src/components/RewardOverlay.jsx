@@ -73,7 +73,7 @@ export default function RewardOverlay({ reward, onClose }) {
 
         <div className="text-5xl">{levelUp ? "👑" : "🎉"}</div>
         <h2 className="mt-3 text-2xl font-extrabold text-white">
-          {levelUp ? t("reward.levelUp") : "เควสสำเร็จ!"}
+          {levelUp ? t("reward.levelUp") : t("reward.questDone")}
         </h2>
 
         {levelUp && (
@@ -113,7 +113,7 @@ export default function RewardOverlay({ reward, onClose }) {
           }`}>
             <div className="flex items-center justify-between gap-2">
               <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
-                ปลดล็อก Badge ใหม่
+                {t("reward.badgeUnlocked")}
               </p>
               <RarityBadge rarity={badge.rarity} />
             </div>
@@ -129,7 +129,7 @@ export default function RewardOverlay({ reward, onClose }) {
         ) : null}
 
         <Button onClick={onClose} variant="game" className="mt-5 w-full">
-          เยี่ยมเลย! 🚀
+          {t("reward.awesome")}
         </Button>
 
         {/* Bottom glow line */}

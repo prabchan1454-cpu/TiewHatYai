@@ -62,6 +62,9 @@ export const STRINGS = {
     "reward.levelUp": "เลเวลอัป!",
     "reward.nowLevel": "ตอนนี้คุณคือ {level}",
     "reward.unlockedNew": "ปลดล็อกใหม่",
+    "reward.questDone": "เควสสำเร็จ!",
+    "reward.badgeUnlocked": "ปลดล็อก Badge ใหม่",
+    "reward.awesome": "เยี่ยมเลย! 🚀",
 
     // Landing
     "landing.eyebrow": "เที่ยวสงขลาแบบเกมผจญภัย",
@@ -516,6 +519,9 @@ export const STRINGS = {
     "reward.levelUp": "Level up!",
     "reward.nowLevel": "You're now {level}",
     "reward.unlockedNew": "Newly unlocked",
+    "reward.questDone": "Quest Complete!",
+    "reward.badgeUnlocked": "New Badge Unlocked",
+    "reward.awesome": "Awesome! 🚀",
 
     // Landing
     "landing.eyebrow": "Explore Hat Yai & Songkhla like an adventure game",

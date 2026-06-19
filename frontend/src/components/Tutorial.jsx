@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "./ui";
 import Mascot from "./Mascot";
 import { useT } from "../lib/i18n.jsx";
-import { House, MessageCircle, Compass, Sparkles, Trophy, MapPinned, Camera, Star } from "lucide-react";
+import { House, MessageCircle, Compass, Sparkles, Trophy, MapPinned, Camera } from "lucide-react";
 
 // Walkthrough steps. `key` maps to i18n entries tut.<key>.title / tut.<key>.desc.
 const STEPS = [
