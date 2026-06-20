@@ -2,21 +2,22 @@
 
 > ซูเปอร์แอป **ท่องเที่ยวและไลฟ์สไตล์ หาดใหญ่–สงขลา** พร้อม AI ส่วนตัว **"น้องเที่ยว"**,
 > เควสที่ต้อง **ไปจริง–ถ่ายรูปจริง** (AI ตรวจรูป), **พาสปอร์ตเก็บดวงตราแลนด์มาร์ก**, **ฟีดเช็คอินชุมชน**,
-> ข้อมูลคนเมือง **โรงพยาบาล–เหตุฉุกเฉิน–การเดินทาง**, **ตำนานและสถานที่ลึกลับ** และ **ไดเรกทอรีร้านค้าท้องถิ่น**  
+> ข้อมูลคนเมือง **โรงพยาบาล–เหตุฉุกเฉิน–การเดินทาง**, **ตำนานและสถานที่ลึกลับ** และ **ไดเรกทอรีร้านค้าท้องถิ่น**
 > ส่งประกวดรายการ **I-New Gen 2027** กลุ่มการท่องเที่ยวและเศรษฐกิจสร้างสรรค์ — ดูกลยุทธ์เต็มที่ [`STRATEGY.md`](STRATEGY.md)
 
 ---
 
 ## ✨ จุดเด่น (ต่างจากแอปรีวิว/ข้อมูลท่องเที่ยวทั่วไป)
 
-แอปท่องเที่ยวทั่วไป = **"เปิดดูข้อมูล"** (passive) · Travel Songkhla = **"เกมเที่ยวจริง"** (active)
+แอปท่องเที่ยวทั่วไป = **"เปิดดูข้อมูล"** (passive) · TiewHatyai = **"เกมเที่ยวจริง"** (active)
 
 - 🛡️ **ไปจริง พิสูจน์ได้ — กันโกง** ทำเควส/เก็บดวงตราต้องอัปโหลด **รูปถ่ายจริง** ให้ AI vision ตรวจว่าตรงสถานที่ (รูปปลอม/การ์ตูน/สกรีนช็อต ถูกปฏิเสธ)
 - 🧜‍♀️ **พาสปอร์ตเที่ยวสงขลา** สะสมดวงตรา 12 แลนด์มาร์กทั่วจังหวัด → กระจายนักท่องเที่ยวสู่หลายอำเภอ/จุดรอง
 - 👥 **เช็คอินชุมชน** โพสต์เช็คอินให้คนอื่นเห็น + แผนที่รวม → สังคมนักเที่ยวจริง ช่วยกันโปรโมตแบบออร์แกนิก
 - 🎁 **เควสล่าของฝาก** ดันให้แวะร้าน/ของฝากท้องถิ่น → หนุนเศรษฐกิจชุมชน
+- 🌐 **สองภาษา** สลับ ไทย/อังกฤษ ได้ทุกหน้า
 
-![Stack](https://img.shields.io/badge/React-18-61DAFB?logo=react) ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi) ![Groq](https://img.shields.io/badge/AI-Groq%20Free%20Tier-F55036) ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker)
+![Stack](https://img.shields.io/badge/React-18-61DAFB?logo=react) ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi) ![Gemini](https://img.shields.io/badge/AI-Gemini%202.5%20Flash-4285F4?logo=googlegemini) ![Firebase](https://img.shields.io/badge/Firebase-Auth%20%2B%20Firestore-FFCA28?logo=firebase) ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker)
 
 ---
 
@@ -25,29 +26,34 @@
 | ฟีเจอร์ | รายละเอียด |
 |---|---|
 | 🏠 **หน้าหลัก** | Dashboard แสดง Level / XP / เควสที่กำลังทำ / ความคืบหน้าพาสปอร์ต |
-| 💬 **น้องเที่ยว** | Chatbot AI ตอบทุกเรื่องสงขลา (หาดใหญ่–เมืองสงขลา–เกาะยอ) ไทย/อังกฤษ |
+| 💬 **น้องเที่ยว** | Chatbot AI ตอบทุกเรื่องสงขลา (หาดใหญ่–เมืองสงขลา–เกาะยอ) ไทย/อังกฤษ รับรูปแนบได้ |
 | 🎯 **เควสผจญภัย** | รับภารกิจ → ไปสถานที่จริง → **บังคับแนบรูป** → AI vision ตรวจ (กันโกง) |
 | 🎁 **เควสล่าของฝาก** | เควสเฉพาะของฝาก/หัตถกรรมท้องถิ่น หนุนเศรษฐกิจชุมชน |
 | 🧜‍♀️ **พาสปอร์ตเที่ยวสงขลา** | สะสมดวงตรา 12 แลนด์มาร์ก (ถ่ายรูป AI ตรวจ) + แผนที่หมุดทั่วจังหวัด |
 | 👥 **เช็คอินชุมชน** | โพสต์เช็คอินพร้อมรูป ให้คนอื่นเห็นในฟีด + แผนที่รวม (Firebase) |
 | ⭐ **แนะนำที่เที่ยว** | AI แนะนำ 3 สถานที่ตามสไตล์/วันเดินทาง/เทศกาล + แผนที่ |
+| 🏪 **ไดเรกทอรีร้านค้า** | รวมร้านค้า/ของฝากท้องถิ่นในหาดใหญ่–สงขลา |
+| ⚕️ **ข้อมูลคนเมือง** | โรงพยาบาล เหตุฉุกเฉิน การเดินทาง ข้อมูลจำเป็นสำหรับนักเที่ยว |
+| 👻 **ตำนาน & สถานที่ลึกลับ** | เรื่องเล่า/ตำนานท้องถิ่นประจำแลนด์มาร์ก |
+| 🧩 **ควิซ** | ทดสอบความรู้เกี่ยวกับสงขลาแบบเล่นสนุก ได้ XP |
 | 🏆 **Leaderboard** | อันดับนักเที่ยวแบบ podium (ทอง–เงิน–ทองแดง) ตาม XP |
 | 🏅 **รางวัล / Badge** | ปลดล็อก Badge หายาก 4 ระดับ (Common → Legendary) |
 | 📈 **ระบบเลเวล** | สะสม XP อัปเลเวล 4 ขั้น มือใหม่ → เซียนสงขลา |
+| 📊 **Impact** | สรุปผลกระทบเชิงเศรษฐกิจ/การกระจายนักท่องเที่ยวจากการเล่น |
 
 ---
 
 ## Tech Stack
 
 ```
-Frontend  │ React 18 + Vite 6 + TailwindCSS 3  (mobile-first, PWA)
+Frontend  │ React 18 + Vite 6 + TailwindCSS 3  (mobile-first, PWA, ไทย/อังกฤษ)
 Backend   │ Python FastAPI  (stateless AI proxy)
-AI        │ Groq Free Tier — llama-3.3-70b-versatile (Thai text)
-          │                  llama-4-scout-17b (vision / ตรวจรูปเควส-ดวงตรา)
+AI        │ Google Gemini 2.5 Flash — แชท/เควส/แนะนำ (ไทย) + vision (ตรวจรูปเควส-ดวงตรา)
 Maps      │ Leaflet + OpenStreetMap (ฟรี — แผนที่พาสปอร์ต/เช็คอิน/แนะนำ)
 Social    │ Firebase Auth (Google) + Firestore  (leaderboard + เช็คอินชุมชน)
+Animation │ Rive  (มาสคอต "น้องเที่ยว")
 State     │ localStorage  (โปรเกรสส่วนตัว — เล่นได้ทันทีแม้ไม่ล็อกอิน)
-Deploy    │ Docker Compose  (frontend nginx + backend uvicorn)
+Deploy    │ Docker Compose (local) · Render (backend) + Netlify/Vercel (frontend) ใน production
 ```
 
 ---
@@ -55,28 +61,33 @@ Deploy    │ Docker Compose  (frontend nginx + backend uvicorn)
 ## โครงสร้างโปรเจกต์
 
 ```
-travel-songkhla/
+TiewHatyai/
 ├── docker-compose.yml
 ├── firestore.rules        # กฎ Firestore (leaderboard + checkins) — publish ใน console
+├── DEPLOY.md               # runbook deploy ขึ้น production
 ├── backend/
 │   ├── Dockerfile
 │   ├── requirements.txt
-│   ├── .env.example
+│   ├── .env                # GEMINI_API_KEY=... (สร้างเอง ไม่มีไฟล์ตัวอย่างใน repo)
 │   └── app/
-│       ├── main.py        # FastAPI routes
-│       ├── ai_client.py   # Groq client + retry logic
-│       ├── prompts.py     # system prompts (chat/quest/recommend/verify/badge…)
-│       └── schemas.py     # Pydantic models
+│       ├── main.py         # FastAPI routes
+│       ├── ai_client.py    # Gemini client (text + vision) + retry/cleanup logic
+│       ├── prompts.py       # system prompts (chat/quest/recommend/verify/badge…)
+│       └── schemas.py       # Pydantic models
 └── frontend/
     ├── Dockerfile
     ├── nginx.conf
-    ├── .env.example       # Firebase keys (optional — เปิด login/leaderboard/เช็คอิน)
+    ├── .env.example         # VITE_API_BASE_URL + Firebase keys (Firebase optional)
     └── src/
         ├── App.jsx
-        ├── screens/       # Landing · Login · Onboarding · Home · Chat · Quests
-        │                  #   · Recommend · Achievements · Passport · Checkins
-        ├── components/    # ui · Mascot · StampMap · CheckinMap · PlacesMap · …
-        └── lib/           # api · progress · landmarks · checkins · leaderboard · firebase · …
+        ├── screens/         # Landing · Login · Onboarding · Home · Chat · Quests
+        │                    #   · AdventureMap · Recommend · Achievements · Passport
+        │                    #   · Checkins · Businesses · Essentials · Legends · Quiz
+        │                    #   · Survey · Impact
+        ├── components/       # ui · Mascot/RiveMascot · StampMap · CheckinMap · PlacesMap
+        │                     #   · Leaderboard · QuestBanner · RewardOverlay · WeatherCard · …
+        └── lib/              # api · progress · landmarks · checkins · leaderboard
+                              #   · firebase · i18n · theme · weather · …
 ```
 
 ---
@@ -88,9 +99,8 @@ travel-songkhla/
 git clone https://github.com/prabchan1454-cpu/TiewHatYai.git
 cd TiewHatYai
 
-# 2. ใส่ Groq API key (ฟรี สมัครที่ console.groq.com)
-cp backend/.env.example backend/.env
-# แก้ GROQ_API_KEY=gsk_...  ใน backend/.env
+# 2. ใส่ Gemini API key (ฟรี สมัครที่ aistudio.google.com/apikey)
+echo "GEMINI_API_KEY=ใส่คีย์ของคุณ" > backend/.env
 
 # 3. รัน
 docker compose up --build
@@ -107,7 +117,7 @@ docker compose up --build
 cd backend
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env   # ใส่ GROQ_API_KEY
+echo "GEMINI_API_KEY=ใส่คีย์ของคุณ" > .env
 uvicorn app.main:app --reload --port 8000
 ```
 
@@ -115,6 +125,7 @@ uvicorn app.main:app --reload --port 8000
 ```bash
 cd frontend
 npm install
+cp .env.example .env   # ใส่ VITE_API_BASE_URL=http://localhost:8000 (ถ้ารัน backend แยกจาก Docker)
 npm run dev   # http://localhost:5174
 ```
 
@@ -126,7 +137,7 @@ npm run dev   # http://localhost:5174
 |---|---|---|
 | GET | `/api/health` | Health check |
 | POST | `/api/onboard` | ทักทายผู้ใช้ครั้งแรก |
-| POST | `/api/chat` | คุยกับน้องเที่ยว (multi-turn) |
+| POST | `/api/chat` | คุยกับน้องเที่ยว (multi-turn, รับรูปแนบได้) |
 | POST | `/api/quest` | สุ่มเควสตามเลเวล (รองรับ `focus:"souvenir"` = เควสของฝาก) |
 | POST | `/api/recommend` | แนะนำสถานที่ตามความชอบ/วันเดินทาง/เทศกาล |
 | POST | `/api/souvenirs` | แนะนำของฝากท้องถิ่น |
@@ -145,6 +156,12 @@ npm run dev   # http://localhost:5174
 | Explorer | นักสำรวจ | 200 |
 | Adventurer | นักผจญภัย | 600 |
 | Master | เซียนสงขลา | 1,200 |
+
+---
+
+## Deploy ขึ้น Production
+
+ดูขั้นตอนเต็มและสถานะปัจจุบันที่ [`DEPLOY.md`](DEPLOY.md) — backend deploy ที่ Render, frontend ที่ Netlify/Vercel, ต้อง publish `firestore.rules` และเพิ่ม authorized domain ใน Firebase ก่อนนำเสนอจริง
 
 ---
 

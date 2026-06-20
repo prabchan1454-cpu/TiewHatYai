@@ -14,8 +14,9 @@ from .prompts import SYSTEM_PROMPT, lang_directive
 
 logger = logging.getLogger(__name__)
 
-# gemini-2.0-flash: fast, excellent Thai, multimodal, generous free quota (1500 req/day)
-MODEL = "gemini-2.0-flash"
+# gemini-2.5-flash: fast, excellent Thai, multimodal, free-tier quota available.
+# (gemini-2.0-flash free tier is currently allocated 0 on this project — 429.)
+MODEL = "gemini-2.5-flash"
 
 # Unicode blocks น้องเที่ยว should never output
 _FOREIGN_SCRIPT = re.compile(
@@ -128,6 +129,7 @@ def chat(messages: list[dict], lang: str = "th", max_tokens: int = 4096) -> str:
                 system_instruction=system,
                 max_output_tokens=max_tokens,
                 temperature=0.5,
+                thinking_config=types.ThinkingConfig(thinking_budget=0),
             ),
         )
         return resp.text or ""
@@ -147,6 +149,7 @@ def complete_text(user_prompt: str, max_tokens: int = 512, system: str | None = 
                 system_instruction=system,
                 max_output_tokens=max_tokens,
                 temperature=0.7,
+                thinking_config=types.ThinkingConfig(thinking_budget=0),
             ),
         )
         return resp.text or ""
@@ -180,6 +183,7 @@ def complete_json(
                 max_output_tokens=max_tokens,
                 temperature=0.7,
                 response_mime_type="application/json",
+                thinking_config=types.ThinkingConfig(thinking_budget=0),
             ),
         )
         return resp.text or ""
