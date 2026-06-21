@@ -12,7 +12,7 @@ import { Sparkles, Lightbulb, Clock, MapPin, ExternalLink, Gift, Tag, CalendarDa
 const RANK_TINT = {
   1: "bg-mango/20 text-amber-600 dark:text-amber-300",
   2: "bg-slate-200 text-slate-600 dark:bg-slate-700/60 dark:text-slate-200",
-  3: "bg-orange-100 text-orange-600 dark:bg-orange-500/20 dark:text-orange-300",
+  3: "bg-boat/15 text-boat dark:bg-boat/20 dark:text-boat",
 };
 
 function mapsUrl(p) {
@@ -196,6 +196,22 @@ export default function Recommend({ preferences, xp = 0, onNavigate }) {
                 </div>
                 <Pill tone="sunset">{p.category}</Pill>
               </div>
+              {((p.hours_reliable && p.open_now !== null) || p.details?.price_per_night) && (
+                <div className="flex flex-wrap items-center gap-2">
+                  {p.hours_reliable && p.open_now !== null && (
+                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-bold ${p.open_now ? "bg-lae/20 text-lae" : "bg-boat/20 text-boat"}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${p.open_now ? "bg-lae" : "bg-boat"}`} />
+                      {p.open_now ? t("rec.openNow") : t("rec.closedNow")}
+                      {p.todays_hours && <span className="font-medium opacity-80">· {p.todays_hours}</span>}
+                    </span>
+                  )}
+                  {p.details?.price_per_night && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 px-2.5 py-0.5 text-[11px] font-bold text-gold">
+                      <Tag className="h-3 w-3" /> {p.details.price_per_night} {t("rec.perNight")}
+                    </span>
+                  )}
+                </div>
+              )}
               <p className="text-slate-300">{p.why_recommended}</p>
               <div className="space-y-1.5 rounded-xl bg-white/5 p-3 text-sm text-slate-300">
                 <p className="flex gap-2">

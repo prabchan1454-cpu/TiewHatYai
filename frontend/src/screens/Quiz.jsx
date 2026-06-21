@@ -73,7 +73,7 @@ export default function Quiz({ progress, onBack }) {
             <Trophy className="h-8 w-8" />
           </span>
           <h2 className="mt-4 text-xl font-extrabold text-slate-900 dark:text-white">{t("quiz.resultTitle")}</h2>
-          <p className="mt-2 text-3xl font-extrabold text-slate-900 dark:text-white">
+          <p className="font-display mt-2 text-4xl leading-none text-slate-900 dark:text-white">
             <span className="tnum">{score}</span>
             <span className="text-slate-400">/{total}</span>
           </p>

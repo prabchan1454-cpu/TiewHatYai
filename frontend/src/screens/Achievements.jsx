@@ -66,7 +66,7 @@ export default function Achievements({ progress, auth, onLogout }) {
           </div>
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-widest text-deep/40 dark:text-white/40">{t("ach.yourLevel")}</p>
-            <h2 className="text-2xl font-extrabold tracking-tight text-deep dark:text-white">{t("level." + lvl.name)}</h2>
+            <h2 className="font-display text-2xl text-deep dark:text-white">{t("level." + lvl.name)}</h2>
             {equippedTitle && (
               <span className="mt-1 inline-block rounded-full border border-mango/30 bg-mango/15 px-2.5 py-0.5 text-[11px] font-bold text-mango">
                 {t(equippedTitle.labelKey)}
@@ -240,7 +240,7 @@ export default function Achievements({ progress, auth, onLogout }) {
 
         <button
           onClick={() => { if (confirm(t("ach.resetConfirm"))) reset(); }}
-          className="w-full rounded-xl py-2 text-sm text-slate-600 transition hover:text-rose-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/30"
+          className="w-full rounded-xl py-2 text-sm text-slate-600 transition hover:text-boat focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-boat/30"
         >
           {t("ach.reset")}
         </button>

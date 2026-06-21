@@ -38,7 +38,7 @@ export default function Essentials({ onBack }) {
       {/* SOS hero — big one-tap medical emergency */}
       <button
         onClick={() => dial("1669", true)}
-        className="group flex w-full items-center gap-3 rounded-3xl bg-gradient-to-br from-rose-600 to-rose-500 p-4 text-left text-white shadow-[0_8px_24px_rgba(225,29,72,0.35)] transition duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
+        className="group flex w-full items-center gap-3 rounded-3xl bg-gradient-to-br from-boat to-boat p-4 text-left text-white shadow-[0_8px_24px_rgba(225,29,72,0.35)] transition duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-boat"
       >
         <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/20">
           <ShieldAlert className="h-6 w-6" />

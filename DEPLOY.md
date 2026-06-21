@@ -15,7 +15,19 @@
 **วิธีแก้ที่ใช้:** เปลี่ยน model เป็น **`gemini-2.5-flash`** (มีโควต้าฟรี ใช้ key เดิมได้) + ปิด thinking (`thinking_budget=0`)
 ใน `backend/app/ai_client.py` — เพราะ 2.5-flash เป็น thinking model ที่กิน budget จน JSON ถูกตัด
 - ✅ ทดสอบ local ครบทุก endpoint แล้ว (chat multi-turn, chat+รูป, quest, recommend, verify-vision, badge, onboard) — ผ่านหมด
-- เผื่อ quota: ถ้าซ้อมเยอะจน 2.5-flash โดน limit ลองสลับ `gemini-2.5-flash-lite` หรือเปิด billing
+- ⚠️ โควต้าฟรี 2.5-flash = **20 ครั้ง/วัน** ต่อ key (และแชทใช้ tool 2–3 ครั้ง/ข้อความ → ~7–10 แชท/วัน)
+
+**API key สำรอง (failover อัตโนมัติ) 🤖** — โค้ดรองรับหลาย key แล้ว ([ai_client.py](backend/app/ai_client.py)): พอ key หลักเต็มโควต้า (429) จะ**สลับไป key ถัดไปเองทันที**
+- ตั้ง env เพิ่มได้: `GEMINI_API_KEY` (หลัก) + `GEMINI_API_KEY_2`, `GEMINI_API_KEY_3` … `GEMINI_API_KEY_5` หรือ `GEMINI_API_KEYS=key1,key2,key3` (คั่นด้วย comma)
+- แต่ละ key คนละโควต้า → 2 key = ~14–20 แชท/วัน, 3 key = ~21–30 แชท/วัน
+- ระบบ dedup key ซ้ำให้เอง; ถ้ามี key เดียวก็ทำงานปกติ (ไม่สลับ)
+- 💡 สร้าง key เพิ่มฟรีจากบัญชี Google คนละอันที่ [aistudio.google.com](https://aistudio.google.com)
+- ทางเลือกถาวร: เปิด billing (โควต้าสูงขึ้นมาก) หรือสลับ `gemini-2.5-flash-lite`
+
+**ตัวสำรองข้ามเจ้า — Groq (เฉพาะแชท) 🤖** — พอ Gemini ทุก key เต็ม/ล่ม แชทน้องเที่ยวจะ**สลับไปตอบด้วย Groq อัตโนมัติ** (โควต้าฟรีเยอะกว่ามาก) เพื่อให้คุยต่อได้
+- ตั้ง env `GROQ_API_KEY` (key ฟรีจาก [console.groq.com](https://console.groq.com)); เปลี่ยนรุ่นได้ด้วย `GROQ_MODEL` (ดีฟอลต์ `llama-3.3-70b-versatile`)
+- ขอบเขต: **เฉพาะแชทข้อความ** — ตอน fallback ฟีเจอร์เปิด/ปิด-ราคา (tool) + ตรวจรูปเควส (vision) + เควส/แนะนำ (JSON) ยังเป็นของ Gemini เท่านั้น ไม่ทำงานบน Groq (น้องเที่ยวจะบอกว่าไม่แน่ใจเรื่องเวลา/ราคา แทนการเดา)
+- ถ้าไม่ตั้ง `GROQ_API_KEY` ระบบทำงานเหมือนเดิม (ไม่มี fallback)
 
 ### ✅ STEP 1 — บั๊กโค้ดที่แก้แล้ว (รอ deploy) 🤖
 - แชทต่อเนื่อง: map role `assistant→model` ใน `backend/app/ai_client.py` (Gemini รับแค่ user/model)
@@ -27,6 +39,7 @@
 - มี `backend/Dockerfile` พร้อม เคย deploy ที่ Render (`tiewhatyai.onrender.com`)
 - Push โค้ดล่าสุด → Render auto-deploy (หรือกด Manual Deploy)
 - ตั้ง env บน Render: `GEMINI_API_KEY` (จาก STEP 0)
+- (ทางเลือก) `GOLD_API_URL` — ฟีด Gold Traders Association สำหรับราคาทองในแชทน้องเที่ยว (ดีฟอลต์ `https://api.chnwt.dev/thai-gold-api/latest`). ถ้าฟีดว่าง/ล่ม ระบบจะข้ามราคาทองให้เอง ไม่ error
 - ตรวจ: เปิด `https://<backend>/api/health` → ต้องได้ `{"status":"ok"}`
 - ⚠️ Render free tier sleep ~50s ตอน request แรก → **ก่อนนำเสนอให้ยิง /api/health อุ่นเครื่องไว้** (หรือ upgrade เป็น paid กันหลับ)
 

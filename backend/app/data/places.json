@@ -1,0 +1,317 @@
+[
+  {
+    "id": "kimyong-market",
+    "name_th": "ตลาดกิมหยง",
+    "name_en": "Kim Yong Market",
+    "category": "market",
+    "area": "นิพัทธ์อุทิศ 1, หาดใหญ่",
+    "lat": 7.0084, "lng": 100.4742, "phone": "",
+    "hours": [
+      {"day": 0, "open": "06:00", "close": "18:00"},
+      {"day": 1, "open": "06:00", "close": "18:00"},
+      {"day": 2, "open": "06:00", "close": "18:00"},
+      {"day": 3, "open": "06:00", "close": "18:00"},
+      {"day": 4, "open": "06:00", "close": "18:00"},
+      {"day": 5, "open": "06:00", "close": "18:00"},
+      {"day": 6, "open": "06:00", "close": "18:00"}
+    ],
+    "details": {}
+  },
+  {
+    "id": "greenway-night-market",
+    "name_th": "ตลาดกรีนเวย์ (Greenway Night Market)",
+    "name_en": "Greenway Night Market",
+    "category": "market",
+    "area": "ถนนนิพัทธ์สงเคราะห์ 1, หาดใหญ่",
+    "lat": 7.0102, "lng": 100.4768, "phone": "",
+    "hours": [
+      {"day": 4, "open": "17:00", "close": "23:00"},
+      {"day": 5, "open": "17:00", "close": "23:00"},
+      {"day": 6, "open": "17:00", "close": "23:00"}
+    ],
+    "details": {}
+  },
+  {
+    "id": "asean-night-bazaar",
+    "name_th": "ตลาดนัดอาเซียนเทรด (ASEAN Night Bazaar)",
+    "name_en": "ASEAN Night Bazaar Hat Yai",
+    "category": "market",
+    "area": "ใกล้สี่แยกคลองเตย, หาดใหญ่",
+    "lat": 7.0066, "lng": 100.4690, "phone": "",
+    "hours": [
+      {"day": 0, "open": "17:00", "close": "23:00"},
+      {"day": 1, "open": "17:00", "close": "23:00"},
+      {"day": 2, "open": "17:00", "close": "23:00"},
+      {"day": 3, "open": "17:00", "close": "23:00"},
+      {"day": 4, "open": "17:00", "close": "23:30"},
+      {"day": 5, "open": "17:00", "close": "23:30"},
+      {"day": 6, "open": "17:00", "close": "23:30"}
+    ],
+    "details": {}
+  },
+  {
+    "id": "khlong-hae-floating-market",
+    "name_th": "ตลาดน้ำคลองแห",
+    "name_en": "Khlong Hae Floating Market",
+    "category": "market",
+    "area": "คลองแห, หาดใหญ่",
+    "lat": 7.0386, "lng": 100.4856, "phone": "",
+    "hours": [
+      {"day": 4, "open": "15:00", "close": "21:00"},
+      {"day": 5, "open": "15:00", "close": "21:00"},
+      {"day": 6, "open": "15:00", "close": "21:00"}
+    ],
+    "details": {}
+  },
+
+  {
+    "id": "realm-hatyai",
+    "name_th": "REALM Hatyai (เรล์ม)",
+    "name_en": "REALM Hatyai",
+    "category": "cafe",
+    "area": "ใจกลางเมืองหาดใหญ่",
+    "lat": 7.0072, "lng": 100.4742, "phone": "",
+    "hours": [
+      {"day": 0, "open": "10:00", "close": "22:00"},
+      {"day": 1, "open": "10:00", "close": "22:00"},
+      {"day": 2, "open": "10:00", "close": "22:00"},
+      {"day": 3, "open": "10:00", "close": "22:00"},
+      {"day": 4, "open": "10:00", "close": "24:00"},
+      {"day": 5, "open": "10:00", "close": "24:00"},
+      {"day": 6, "open": "10:00", "close": "22:00"}
+    ],
+    "details": {}
+  },
+  {
+    "id": "locals-hatyai",
+    "name_th": "Locals Hatyai (โลคอลส์)",
+    "name_en": "Locals Hatyai",
+    "category": "cafe",
+    "area": "หาดใหญ่",
+    "lat": 7.0091, "lng": 100.4719, "phone": "",
+    "hours": [
+      {"day": 0, "open": "09:00", "close": "18:00"},
+      {"day": 1, "open": "09:00", "close": "18:00"},
+      {"day": 2, "open": "09:00", "close": "18:00"},
+      {"day": 4, "open": "09:00", "close": "18:00"},
+      {"day": 5, "open": "09:00", "close": "18:00"},
+      {"day": 6, "open": "09:00", "close": "18:00"}
+    ],
+    "details": {}
+  },
+  {
+    "id": "summer-house-beach-cafe",
+    "name_th": "Summer House Beach Cafe",
+    "name_en": "Summer House Beach Cafe",
+    "category": "cafe",
+    "area": "หาดชลาทัศน์, เมืองสงขลา",
+    "lat": 7.1846, "lng": 100.6010, "phone": "",
+    "hours": [
+      {"day": 0, "open": "10:00", "close": "20:00"},
+      {"day": 1, "open": "10:00", "close": "20:00"},
+      {"day": 2, "open": "10:00", "close": "20:00"},
+      {"day": 3, "open": "10:00", "close": "20:00"},
+      {"day": 4, "open": "10:00", "close": "21:00"},
+      {"day": 5, "open": "10:00", "close": "21:00"},
+      {"day": 6, "open": "10:00", "close": "21:00"}
+    ],
+    "details": {}
+  },
+  {
+    "id": "bannawat-tea-room",
+    "name_th": "บ้านหน้าวัด Tea Room",
+    "name_en": "Bann Na Wat Tea Room",
+    "category": "cafe",
+    "area": "เกาะยอ, เมืองสงขลา",
+    "lat": 7.1659, "lng": 100.5460, "phone": "",
+    "hours": null,
+    "details": {}
+  },
+
+  {
+    "id": "tim-sum-chokdee",
+    "name_th": "ติ่มซำโชคดี",
+    "name_en": "Chok Dee Dim Sum",
+    "category": "restaurant",
+    "area": "ถนนเสน่หานุสรณ์, หาดใหญ่",
+    "lat": 7.0090, "lng": 100.4760, "phone": "",
+    "hours": [
+      {"day": 0, "open": "06:00", "close": "12:00"},
+      {"day": 1, "open": "06:00", "close": "12:00"},
+      {"day": 2, "open": "06:00", "close": "12:00"},
+      {"day": 3, "open": "06:00", "close": "12:00"},
+      {"day": 4, "open": "06:00", "close": "12:00"},
+      {"day": 5, "open": "06:00", "close": "12:30"},
+      {"day": 6, "open": "06:00", "close": "12:30"}
+    ],
+    "details": {}
+  },
+  {
+    "id": "laluna-songkhla",
+    "name_th": "Laluna Songkhla",
+    "name_en": "Laluna Songkhla",
+    "category": "restaurant",
+    "area": "ริมทะเลสาบ, ถนนนครใน, เมืองสงขลา",
+    "lat": 7.1986, "lng": 100.5896, "phone": "",
+    "hours": [
+      {"day": 0, "open": "11:00", "close": "21:00"},
+      {"day": 1, "open": "11:00", "close": "21:00"},
+      {"day": 2, "open": "11:00", "close": "21:00"},
+      {"day": 3, "open": "11:00", "close": "21:00"},
+      {"day": 4, "open": "11:00", "close": "22:00"},
+      {"day": 5, "open": "11:00", "close": "22:00"},
+      {"day": 6, "open": "11:00", "close": "22:00"}
+    ],
+    "details": {}
+  },
+  {
+    "id": "kohyo-seafood-rimle",
+    "name_th": "ร้านอาหารริมเล เกาะยอ",
+    "name_en": "Rim Le Seafood (Ko Yo)",
+    "category": "restaurant",
+    "area": "เกาะยอ, เมืองสงขลา",
+    "lat": 7.1631, "lng": 100.5497, "phone": "",
+    "hours": [
+      {"day": 0, "open": "10:00", "close": "21:00"},
+      {"day": 1, "open": "10:00", "close": "21:00"},
+      {"day": 2, "open": "10:00", "close": "21:00"},
+      {"day": 3, "open": "10:00", "close": "21:00"},
+      {"day": 4, "open": "10:00", "close": "21:00"},
+      {"day": 5, "open": "10:00", "close": "21:30"},
+      {"day": 6, "open": "10:00", "close": "21:30"}
+    ],
+    "details": {}
+  },
+
+  {
+    "id": "centara-hatyai",
+    "name_th": "โรงแรมเซ็นทารา หาดใหญ่",
+    "name_en": "Centara Hotel Hat Yai",
+    "category": "hotel",
+    "area": "ถนนเสน่หานุสรณ์, หาดใหญ่",
+    "lat": 7.0075, "lng": 100.4753, "phone": "074352222",
+    "hours_24": true,
+    "details": { "price_per_night": "1,800–3,000 บาท", "stars": "4" }
+  },
+  {
+    "id": "buddy-oriental-hatyai",
+    "name_th": "โรงแรมบัดดี้ โอเรียนทอล หาดใหญ่",
+    "name_en": "Buddy Oriental Hat Yai",
+    "category": "hotel",
+    "area": "ถนนนิพัทธ์อุทิศ 3, หาดใหญ่",
+    "lat": 7.0094, "lng": 100.4748, "phone": "",
+    "hours_24": true,
+    "details": { "price_per_night": "1,200–2,200 บาท", "stars": "3" }
+  },
+  {
+    "id": "the-bed-vacation-songkhla",
+    "name_th": "เดอะ เบด เวเคชั่น ราชมังคลา สงขลา",
+    "name_en": "The Bed Vacation Rajamangala Songkhla",
+    "category": "hotel",
+    "area": "ใกล้หาดสมิหลา, เมืองสงขลา",
+    "lat": 7.2056, "lng": 100.5972, "phone": "",
+    "hours_24": true,
+    "details": { "price_per_night": "1,500–2,800 บาท", "stars": "4" }
+  },
+  {
+    "id": "hatyai-budget-hostel",
+    "name_th": "หาดใหญ่ บัดเจ็ต โฮสเทล",
+    "name_en": "Hat Yai Budget Hostel",
+    "category": "hotel",
+    "area": "ใกล้ตลาดกิมหยง, หาดใหญ่",
+    "lat": 7.0081, "lng": 100.4736, "phone": "",
+    "hours_24": true,
+    "details": { "price_per_night": "450–900 บาท", "stars": "2" }
+  },
+
+  {
+    "id": "jinhuaheng-gold-hatyai",
+    "name_th": "ห้างทองจินฮั้วเฮง หาดใหญ่",
+    "name_en": "Jin Hua Heng Gold Shop (Hat Yai)",
+    "category": "gold_shop",
+    "area": "ถนนนิพัทธ์อุทิศ 1, หาดใหญ่",
+    "lat": 7.0088, "lng": 100.4744, "phone": "",
+    "hours": [
+      {"day": 0, "open": "08:30", "close": "18:00"},
+      {"day": 1, "open": "08:30", "close": "18:00"},
+      {"day": 2, "open": "08:30", "close": "18:00"},
+      {"day": 3, "open": "08:30", "close": "18:00"},
+      {"day": 4, "open": "08:30", "close": "18:00"},
+      {"day": 5, "open": "08:30", "close": "18:30"},
+      {"day": 6, "open": "08:30", "close": "18:30"}
+    ],
+    "details": {}
+  },
+  {
+    "id": "yaowarat-gold-hatyai",
+    "name_th": "ห้างทองเยาวราช หาดใหญ่",
+    "name_en": "Yaowarat Gold Shop (Hat Yai)",
+    "category": "gold_shop",
+    "area": "ตลาดกิมหยง, หาดใหญ่",
+    "lat": 7.0085, "lng": 100.4741, "phone": "",
+    "hours": [
+      {"day": 0, "open": "08:30", "close": "17:30"},
+      {"day": 1, "open": "08:30", "close": "17:30"},
+      {"day": 2, "open": "08:30", "close": "17:30"},
+      {"day": 3, "open": "08:30", "close": "17:30"},
+      {"day": 4, "open": "08:30", "close": "17:30"},
+      {"day": 5, "open": "08:30", "close": "18:00"},
+      {"day": 6, "open": "08:30", "close": "18:00"}
+    ],
+    "details": {}
+  },
+  {
+    "id": "songkhla-gold-nangngam",
+    "name_th": "ร้านทอง ถนนนางงาม สงขลา",
+    "name_en": "Nang Ngam Gold Shop (Songkhla)",
+    "category": "gold_shop",
+    "area": "ถนนนางงาม, เมืองเก่าสงขลา",
+    "lat": 7.1969, "lng": 100.5934, "phone": "",
+    "hours": [
+      {"day": 0, "open": "08:30", "close": "17:00"},
+      {"day": 1, "open": "08:30", "close": "17:00"},
+      {"day": 2, "open": "08:30", "close": "17:00"},
+      {"day": 3, "open": "08:30", "close": "17:00"},
+      {"day": 4, "open": "08:30", "close": "17:00"},
+      {"day": 5, "open": "08:30", "close": "17:30"}
+    ],
+    "details": {}
+  },
+
+  {
+    "id": "fascino-hatyai",
+    "name_th": "ร้านขายยาฟาสซิโน หาดใหญ่",
+    "name_en": "Fascino Pharmacy (Hat Yai)",
+    "category": "pharmacy",
+    "area": "ถนนเพชรเกษม, หาดใหญ่",
+    "lat": 7.0079, "lng": 100.4701, "phone": "",
+    "hours": [
+      {"day": 0, "open": "08:00", "close": "22:00"},
+      {"day": 1, "open": "08:00", "close": "22:00"},
+      {"day": 2, "open": "08:00", "close": "22:00"},
+      {"day": 3, "open": "08:00", "close": "22:00"},
+      {"day": 4, "open": "08:00", "close": "22:00"},
+      {"day": 5, "open": "08:00", "close": "22:00"},
+      {"day": 6, "open": "08:00", "close": "22:00"}
+    ],
+    "details": {}
+  },
+  {
+    "id": "save-drug-central-hatyai",
+    "name_th": "ร้านยา Save Drug เซ็นทรัลหาดใหญ่",
+    "name_en": "Save Drug (Central Hat Yai)",
+    "category": "pharmacy",
+    "area": "เซ็นทรัลหาดใหญ่, ถนนกาญจนวนิช",
+    "lat": 7.0246, "lng": 100.4669, "phone": "",
+    "hours": [
+      {"day": 0, "open": "10:30", "close": "21:00"},
+      {"day": 1, "open": "10:30", "close": "21:00"},
+      {"day": 2, "open": "10:30", "close": "21:00"},
+      {"day": 3, "open": "10:30", "close": "21:00"},
+      {"day": 4, "open": "10:30", "close": "21:30"},
+      {"day": 5, "open": "10:30", "close": "21:30"},
+      {"day": 6, "open": "10:30", "close": "21:30"}
+    ],
+    "details": {}
+  }
+]

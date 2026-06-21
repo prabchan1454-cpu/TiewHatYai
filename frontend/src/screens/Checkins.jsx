@@ -354,7 +354,7 @@ function PostCard({ p, auth, t, lang }) {
             onClick={onLike}
             aria-pressed={liked}
             className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold transition active:scale-90 ${
-              liked ? "bg-rose-500/12 text-rose-500" : "text-slate-500 hover:bg-slate-100 dark:hover:bg-white/8"
+              liked ? "bg-boat/12 text-boat" : "text-slate-500 hover:bg-slate-100 dark:hover:bg-white/8"
             }`}
           >
             <Heart className="h-3.5 w-3.5" fill={liked ? "currentColor" : "none"} />

@@ -13,7 +13,7 @@ import {
 
 const TYPE_META = {
   legend:  { Icon: BookOpen,   accent: "text-sunset",  bg: "bg-sunset/15" },
-  ghost:   { Icon: Ghost,      accent: "text-purple-500 dark:text-purple-300", bg: "bg-purple-500/15" },
+  ghost:   { Icon: Ghost,      accent: "text-ink dark:text-plaster", bg: "bg-ink/10 dark:bg-white/10" },
   fortune: { Icon: Sparkles,   accent: "text-mango",   bg: "bg-mango/15" },
   mystery: { Icon: HelpCircle, accent: "text-lagoon",  bg: "bg-lagoon/15" },
 };
@@ -54,7 +54,7 @@ export default function Legends({ progress, onNavigate, onBack }) {
             )}
           </div>
 
-          <h1 className="mt-3 text-xl font-extrabold leading-snug text-slate-900 dark:text-white">{T(open.title)}</h1>
+          <h1 className="font-display mt-3 text-[22px] leading-snug text-slate-900 dark:text-white">{T(open.title)}</h1>
           {place && (
             <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-lagoon">
               <MapPin className="h-3.5 w-3.5" /> {place}

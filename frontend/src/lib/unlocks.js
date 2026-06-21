@@ -26,10 +26,10 @@ export const FRAMES = [
 
 // `gradient` is the passport hero gradient; the default matches the original.
 export const COVERS = [
-  { id: "default", level: 0, labelKey: "cover.default", gradient: "from-sunset to-mango" },
-  { id: "sea", level: 2, labelKey: "cover.sea", gradient: "from-lagoon to-cyan-400" },
-  { id: "night", level: 4, labelKey: "cover.night", gradient: "from-deep to-indigo-600" },
-  { id: "gold", level: 5, labelKey: "cover.gold", gradient: "from-amber-400 to-yellow-500" },
+  { id: "default", level: 0, labelKey: "cover.default", gradient: "from-boat to-gold" },
+  { id: "sea", level: 2, labelKey: "cover.sea", gradient: "from-lae to-[#5FB8AE]" },
+  { id: "night", level: 4, labelKey: "cover.night", gradient: "from-ink to-lae-deep" },
+  { id: "gold", level: 5, labelKey: "cover.gold", gradient: "from-gold to-[#E6BE63]" },
 ];
 
 export const DEFAULT_FRAME_RING = "ring-slate-100 dark:ring-slate-700";

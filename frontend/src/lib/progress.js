@@ -53,8 +53,6 @@ const DEFAULT = {
   collectedStamps: [], // [{ id, collectedAt }] — Songkhla Passport landmark stamps
   unlockedLegends: [], // [{ id, unlockedAt }] — Legends & Mysteries visited/unlocked
   cosmetics: { title: null, frame: null, cover: null }, // chosen level-unlocked cosmetics
-  surveyDone: false, // "รู้จักสงขลา" self-assessment survey shown once after onboarding
-  surveyResponses: null, // { [questionId]: optionIndex }
 };
 
 export function todayStr(d = new Date()) {

@@ -5,14 +5,29 @@ export default {
   theme: {
     extend: {
       colors: {
-        sunset: "#ff7a45",
-        mango: "#ffb020",
-        lagoon: "#0fb9b1",
-        deep: "#1b2a4a",
-        canvas: "#f6f7fb",
+        // ── Songkhla identity palette (เมืองเก่า meets ทะเล) ──
+        plaster: "#F4F0E9",   // limewashed old-town shophouse wall (light bg)
+        ink: "#1B332E",       // wet-lake teal-charcoal (text / dark surfaces)
+        lae: {                // อ่าวไทย / ทะเลสาบสงขลา brackish green (primary)
+          DEFAULT: "#2C7A74",
+          deep: "#1F5D58",    // text-on-light variant (≥4.5:1)
+        },
+        gold: "#C9962F",      // bronze of the Samila mermaid statue (signature accent)
+        boat: "#D14B3D",      // southern fishing-boat paint / shrine red (energy, SOS)
+        sage: "#6F8F7A",      // faded Sino-Portuguese window shutters (support)
+
+        // ── legacy tokens, re-pointed to the Songkhla palette so every screen
+        //    shifts coherently. sunset→boat (warm energy), mango→gold (accent),
+        //    lagoon→sea teal, deep→ink, canvas→plaster. ──
+        sunset: "#D14B3D",  // → boat red
+        mango: "#C9962F",   // → mermaid gold
+        lagoon: "#2C8A80",  // → sea teal (lae family, kept slightly brighter for contrast)
+        deep: "#1B332E",    // → ink
+        canvas: "#F4F0E9",  // → plaster
       },
       fontFamily: {
-        sans: ["'Noto Sans Thai'", "system-ui", "sans-serif"],
+        sans: ["'IBM Plex Sans Thai'", "'Noto Sans Thai'", "system-ui", "sans-serif"],
+        display: ["'Chonburi'", "'IBM Plex Sans Thai'", "system-ui", "sans-serif"],
       },
       boxShadow: {
         card: "0 1px 2px 0 rgb(27 42 74 / 0.04), 0 1px 3px 0 rgb(27 42 74 / 0.06)",
@@ -26,10 +41,10 @@ export default {
         "rarity-rare": "linear-gradient(135deg, #1e3a5f 0%, #0d2137 100%)",
         "rarity-epic": "linear-gradient(135deg, #2d1b4e 0%, #1a0d30 100%)",
         "rarity-legendary": "linear-gradient(135deg, #4a2c0a 0%, #2a1500 100%)",
-        "quest-dark": "linear-gradient(180deg, #0e1a2e 0%, #0a1220 100%)",
-        "quest-light": "linear-gradient(180deg, #f0f5ff 0%, #e8f0fe 100%)",
-        "hero-mesh": "radial-gradient(ellipse at top, #1b3a6b 0%, #0e1525 60%)",
-        "hero-mesh-light": "radial-gradient(ellipse at top, #dceefb 0%, #f0f4fc 60%)",
+        "quest-dark": "linear-gradient(180deg, #16302B 0%, #102420 100%)",
+        "quest-light": "linear-gradient(180deg, #F4F0E9 0%, #ECE6DA 100%)",
+        "hero-mesh": "radial-gradient(ellipse at top, #1F5D58 0%, #14241F 60%)",
+        "hero-mesh-light": "radial-gradient(ellipse at top, #BFD8CC 0%, #F4F0E9 60%)",
       },
       animation: {
         "glow-pulse": "glow-pulse 2s ease-in-out infinite",

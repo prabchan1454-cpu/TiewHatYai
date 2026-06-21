@@ -348,7 +348,7 @@ export default function Quests({ progress }) {
               </span>
             </div>
 
-            <h2 className="text-xl font-extrabold leading-snug text-slate-900 dark:text-white">{quest.quest_name}</h2>
+            <h2 className="font-display text-[22px] leading-snug text-ink dark:text-white">{quest.quest_name}</h2>
 
             <p className={`text-sm italic text-slate-500 dark:text-slate-400 ${!storyExpanded ? "line-clamp-2" : ""}`}>
               {quest.quest_story}

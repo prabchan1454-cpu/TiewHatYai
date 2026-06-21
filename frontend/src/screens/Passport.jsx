@@ -227,7 +227,7 @@ export default function Passport({ progress, onBack }) {
             <p className="flex items-center gap-1.5 text-xs font-bold text-deep/60">
               <MapPin className="h-3.5 w-3.5" /> {t("passport.tagline")}
             </p>
-            <p className="mt-2 text-5xl font-extrabold tracking-tight text-deep tnum">{done}</p>
+            <p className="font-display mt-2 text-5xl leading-none text-deep tnum">{done}</p>
             <p className="text-sm font-bold text-deep/60">/ {total} stamps</p>
           </div>
           {/* Circular progress ring */}

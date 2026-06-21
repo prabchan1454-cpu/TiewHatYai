@@ -13,6 +13,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import ai_client as ai
+from . import places as places_mod
 from . import prompts, schemas
 
 logging.basicConfig(level=logging.INFO)
@@ -88,8 +89,18 @@ def recommend(req: schemas.RecommendRequest):
         req.hidden_gems,
     )
     data = _guard(lambda: ai.complete_json(prompt + prompts.lang_directive(req.lang), max_tokens=1500))
-    places = data if isinstance(data, list) else data.get("places", [])
-    return schemas.Recommendations(places=[schemas.Place(**p) for p in places])
+    raw = data if isinstance(data, list) else data.get("places", [])
+    places = [schemas.Place(**p) for p in raw]
+    # Enrich each card with REAL open/closed + hours + price from the curated
+    # dataset when we can confidently match it (never a model-guessed status).
+    for pl in places:
+        enr = places_mod.enrich_recommendation(pl.place_name)
+        if enr:
+            pl.open_now = enr["open_now"]
+            pl.todays_hours = enr["todays_hours"]
+            pl.hours_reliable = enr["hours_reliable"]
+            pl.details = enr.get("details")
+    return schemas.Recommendations(places=places)
 
 
 # Prompt 3b — Local souvenirs / ของฝาก (exactly 4 items).

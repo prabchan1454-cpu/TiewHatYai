@@ -1,5 +1,6 @@
 import { Button, LangToggle, ThemeToggle } from "../components/ui";
 import Mascot from "../components/Mascot";
+import WovenBand from "../components/WovenBand";
 import { useT } from "../lib/i18n.jsx";
 import { MessageCircle, Compass, Sparkles, Trophy, MapPin } from "lucide-react";
 
@@ -12,21 +13,21 @@ const FEATURES = [
 ];
 
 const CHIP_TONE = {
-  lagoon: "text-lagoon",
-  sunset: "text-sunset",
-  mango: "text-[#e0930a] dark:text-mango",
+  lagoon: "text-lae-deep dark:text-lae",
+  sunset: "text-boat",
+  mango: "text-gold",
 };
 
 export default function Landing({ onStart }) {
   const { t } = useT();
 
   return (
-    <div className="relative mx-auto flex min-h-screen max-w-md flex-col overflow-hidden bg-[linear-gradient(to_bottom,#ff8a52_0%,#ffac6e_18%,#ffd9b0_48%,#fff4e8_82%)] text-deep dark:bg-[linear-gradient(to_bottom,#0a1120_0%,#13203c_55%,#2c1c34_100%)] dark:text-white">
-      {/* ---- Sky: the rising/setting sun over the two seas ---- */}
+    <div className="relative mx-auto flex min-h-screen max-w-md flex-col overflow-hidden bg-[linear-gradient(to_bottom,#F6F1E6_0%,#F1E7CE_30%,#BFD8CC_66%,#5FA597_100%)] text-ink dark:bg-[linear-gradient(to_bottom,#14241F_0%,#173029_45%,#1F5D58_100%)] dark:text-white">
+      {/* ---- Golden-hour sun over the Samila shore ---- */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-24 h-72 w-72 -translate-x-1/2 rounded-full opacity-90 blur-2xl motion-reduce:animate-none animate-glow-pulse"
-        style={{ background: "radial-gradient(circle, rgba(255,231,168,0.95) 0%, rgba(255,231,168,0) 70%)" }}
+        className="pointer-events-none absolute left-1/2 top-24 h-72 w-72 -translate-x-1/2 rounded-full opacity-80 blur-2xl motion-reduce:animate-none animate-glow-pulse"
+        style={{ background: "radial-gradient(circle, rgba(230,190,99,0.85) 0%, rgba(230,190,99,0) 70%)" }}
       />
       {/* drifting sea-spray motes */}
       <div aria-hidden className="pointer-events-none absolute left-8 top-32 h-3 w-3 rounded-full bg-white/40 motion-reduce:animate-none animate-bob" style={{ animationDelay: "0.4s" }} />
@@ -44,6 +45,11 @@ export default function Landing({ onStart }) {
         </div>
       </div>
 
+      {/* Ko Yo woven trim — signature, lands on the very first screen */}
+      <div className="relative z-10 mt-3 px-6">
+        <WovenBand className="h-1.5" rounded />
+      </div>
+
       {/* ---- Hero ---- */}
       <div className="relative z-10 flex flex-1 flex-col items-center px-6 pb-2 text-center">
         {/* Mascot — Samila's golden mermaid — on a glowing tide disc */}
@@ -53,10 +59,10 @@ export default function Landing({ onStart }) {
           <Mascot size={140} float interactive className="relative drop-shadow-[0_12px_20px_rgba(27,42,74,0.28)]" />
         </div>
 
-        <h1 className="mt-3 animate-slide-up text-[2.8rem] font-extrabold leading-none tracking-tight" style={{ animationDelay: "90ms" }}>
+        <h1 className="font-display mt-3 animate-slide-up text-[2.9rem] leading-none" style={{ animationDelay: "90ms" }}>
           {t("app.title")}
         </h1>
-        <span aria-hidden className="mt-3 h-1.5 w-12 animate-slide-up rounded-full bg-deep/30 dark:bg-mango/60" style={{ animationDelay: "120ms" }} />
+        <span aria-hidden className="mt-3 h-1.5 w-12 animate-slide-up rounded-full bg-gold dark:bg-gold/80" style={{ animationDelay: "120ms" }} />
         <p className="mt-3 max-w-[18rem] animate-slide-up text-[15px] font-medium leading-relaxed text-deep/80 dark:text-white/75" style={{ animationDelay: "150ms" }}>
           {t("landing.subtitle")}
         </p>
@@ -101,7 +107,7 @@ export default function Landing({ onStart }) {
       <div className="relative z-10 mt-4">
         {/* lagoon tide line just above the foam */}
         <svg viewBox="0 0 390 56" preserveAspectRatio="none" className="block h-10 w-full -mb-px" aria-hidden>
-          <path d="M0,34 C70,10 130,10 200,30 C265,48 330,48 390,26 L390,56 L0,56 Z" fill="#0fb9b1" opacity="0.35" />
+          <path d="M0,34 C70,10 130,10 200,30 C265,48 330,48 390,26 L390,56 L0,56 Z" fill="#2C7A74" opacity="0.4" />
           <path d="M0,40 C70,18 130,18 200,36 C265,52 330,52 390,32 L390,56 L0,56 Z" className="fill-white dark:fill-[#0e1525]" />
         </svg>
         <div className="bg-white px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-2 dark:bg-[#0e1525]">

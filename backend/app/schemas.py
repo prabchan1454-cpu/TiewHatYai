@@ -45,6 +45,12 @@ class Place(BaseModel):
     approximate_area: str
     latitude: Optional[float] = None
     longitude: Optional[float] = None
+    # Enriched server-side from the curated place dataset (NOT model output) —
+    # real open/closed status + that day's hours + price details when matched.
+    open_now: Optional[bool] = None
+    todays_hours: Optional[str] = None
+    hours_reliable: bool = False
+    details: Optional[dict] = None
 
 
 class Recommendations(BaseModel):

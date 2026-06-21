@@ -36,16 +36,20 @@ export function Button({ children, variant = "primary", className = "", ...props
   const base =
     "inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 font-bold transition duration-200 active:scale-95 disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900";
   const variants = {
+    // Calm sea-green default — the primary interactive colour.
     primary:
-      "bg-sunset text-deep shadow-lg shadow-sunset/30 hover:brightness-105 focus-visible:ring-sunset dark:shadow-none",
+      "bg-lae text-white shadow-lg shadow-lae/30 hover:brightness-110 focus-visible:ring-lae dark:shadow-none",
     soft:
-      "bg-white text-deep border border-slate-200 hover:bg-slate-50 focus-visible:ring-deep/40 dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 dark:hover:bg-slate-700",
+      "bg-white text-ink border border-ink/15 hover:bg-plaster focus-visible:ring-lae/50 dark:bg-ink/40 dark:text-plaster dark:border-white/10 dark:hover:bg-ink/60",
     lagoon:
-      "bg-lagoon text-deep shadow-lg shadow-lagoon/30 hover:brightness-105 focus-visible:ring-lagoon dark:shadow-none",
+      "bg-lae text-white shadow-lg shadow-lae/30 hover:brightness-110 focus-visible:ring-lae dark:shadow-none",
     ghost:
-      "text-deep hover:bg-slate-100 focus-visible:ring-deep/40 dark:text-slate-100 dark:hover:bg-slate-800",
+      "text-ink hover:bg-ink/8 focus-visible:ring-lae/50 dark:text-plaster dark:hover:bg-white/10",
+    // Juicy warm CTA (quests, rewards) — boat-red → aged brass. Gold end is
+    // deepened to #B8801F so white text keeps ≥3:1 contrast across the gradient,
+    // plus a soft text-shadow for legibility on the warm tones.
     game:
-      "bg-gradient-to-r from-sunset to-mango text-white font-bold shadow-[0_4px_16px_rgba(255,122,69,0.4)] hover:shadow-[0_6px_24px_rgba(255,122,69,0.55)] focus-visible:ring-sunset active:scale-95",
+      "bg-gradient-to-r from-boat to-[#B8801F] text-white font-bold [text-shadow:0_1px_2px_rgba(0,0,0,0.28)] shadow-[0_4px_16px_rgba(209,75,61,0.4)] hover:shadow-[0_6px_24px_rgba(209,75,61,0.55)] focus-visible:ring-boat active:scale-95",
   };
   return (
     <button className={`${base} ${variants[variant] ?? variants.primary} ${className}`} {...props}>
@@ -90,7 +94,7 @@ export function RarityBadge({ rarity }) {
 }
 
 // Animated XP progress bar — width animates from 0 to pct on mount.
-export function XpBar({ xp, min, max, className = "" }) {
+export function XpBar({ xp, min, max, className = "", trackClass = "bg-slate-200 dark:bg-white/15", fillClass = "bg-gradient-to-r from-sunset to-mango" }) {
   const pct = max > min ? Math.min(100, Math.round(((xp - min) / (max - min)) * 100)) : 100;
   const fillRef = useRef(null);
 
@@ -107,10 +111,10 @@ export function XpBar({ xp, min, max, className = "" }) {
   }, [pct]);
 
   return (
-    <div className={`h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-white/15 ${className}`}>
+    <div className={`h-2 w-full overflow-hidden rounded-full ${trackClass} ${className}`}>
       <div
         ref={fillRef}
-        className="h-full rounded-full bg-gradient-to-r from-sunset to-mango"
+        className={`h-full rounded-full ${fillClass}`}
         style={{ width: `${pct}%` }}
       />
     </div>

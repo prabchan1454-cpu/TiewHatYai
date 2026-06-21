@@ -8,7 +8,6 @@ import { initAudioUnlock } from "./lib/sfx";
 import Landing from "./screens/Landing";
 import Login from "./screens/Login";
 import Onboarding from "./screens/Onboarding";
-import Survey from "./screens/Survey";
 import Home from "./screens/Home";
 const Chat = lazy(() => import("./screens/Chat"));
 const Quests = lazy(() => import("./screens/Quests"));
@@ -98,14 +97,6 @@ export default function App() {
     return (
       <Onboarding
         onDone={(preferences) => update({ onboarded: true, preferences })}
-      />
-    );
-  }
-
-  if (!state.surveyDone) {
-    return (
-      <Survey
-        onDone={(responses) => update({ surveyDone: true, surveyResponses: responses })}
       />
     );
   }

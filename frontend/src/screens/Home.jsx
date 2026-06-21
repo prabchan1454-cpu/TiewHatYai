@@ -23,6 +23,7 @@ import {
   BarChart3,
 } from "lucide-react";
 import Mascot from "../components/Mascot";
+import WovenBand from "../components/WovenBand";
 
 const LINKS = [
   {
@@ -53,20 +54,20 @@ const LINKS = [
     id: "profile",
     Icon: Trophy,
     key: "profile",
-    glow: "shadow-[0_0_16px_rgba(168,85,247,0.4)]",
-    iconBg: "bg-purple-500/20 text-purple-400",
-    border: "border-purple-500/20",
+    glow: "shadow-[0_0_16px_rgba(201,150,47,0.4)]",
+    iconBg: "bg-gold/20 text-gold",
+    border: "border-gold/25",
   },
 ];
 
 // "Super-app" services beyond tourism — the modules that answer the judges'
 // "expand beyond tourism" + "entertainment" + "business value" feedback.
 const MORE = [
-  { id: "essentials", Icon: HeartPulse, titleKey: "ess.homeCard",   descKey: "ess.homeCardDesc",   iconBg: "bg-rose-500/15 text-rose-500",   border: "border-rose-500/20" },
-  { id: "legends",    Icon: BookOpen,   titleKey: "leg.homeCard",   descKey: "leg.homeCardDesc",   iconBg: "bg-purple-500/15 text-purple-500 dark:text-purple-300", border: "border-purple-500/20" },
-  { id: "quiz",       Icon: Brain,      titleKey: "quiz.homeCard",  descKey: "quiz.homeCardDesc",  iconBg: "bg-lagoon/15 text-lagoon",       border: "border-lagoon/20" },
-  { id: "businesses", Icon: Store,      titleKey: "biz.homeCard",   descKey: "biz.homeCardDesc",   iconBg: "bg-emerald-500/15 text-emerald-500", border: "border-emerald-500/20" },
-  { id: "impact",     Icon: BarChart3,  titleKey: "impact.homeCard", descKey: "impact.homeCardDesc", iconBg: "bg-mango/15 text-mango",        border: "border-mango/20" },
+  { id: "essentials", Icon: HeartPulse, titleKey: "ess.homeCard",   descKey: "ess.homeCardDesc",   iconBg: "bg-boat/15 text-boat",   border: "border-boat/25" },
+  { id: "legends",    Icon: BookOpen,   titleKey: "leg.homeCard",   descKey: "leg.homeCardDesc",   iconBg: "bg-ink/10 text-ink dark:bg-white/10 dark:text-plaster", border: "border-ink/15 dark:border-white/15" },
+  { id: "quiz",       Icon: Brain,      titleKey: "quiz.homeCard",  descKey: "quiz.homeCardDesc",  iconBg: "bg-lae/15 text-lae-deep dark:text-lae", border: "border-lae/25" },
+  { id: "businesses", Icon: Store,      titleKey: "biz.homeCard",   descKey: "biz.homeCardDesc",   iconBg: "bg-sage/20 text-sage",   border: "border-sage/30" },
+  { id: "impact",     Icon: BarChart3,  titleKey: "impact.homeCard", descKey: "impact.homeCardDesc", iconBg: "bg-gold/15 text-gold",  border: "border-gold/25" },
 ];
 
 export default function Home({ progress, onNavigate }) {
@@ -84,56 +85,61 @@ export default function Home({ progress, onNavigate }) {
     <div className="space-y-4 p-4 pb-6">
       <WeatherCard />
 
-      {/* ── Player Hero Card ──────────────────────────────────────── */}
-      <section className="relative overflow-hidden rounded-3xl bg-hero-mesh-light p-5 shadow-hero dark:bg-hero-mesh">
-        {/* decorative compass texture */}
-        <svg className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 opacity-5 text-white" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1">
-          <circle cx="50" cy="50" r="45" />
-          <circle cx="50" cy="50" r="30" />
-          <line x1="50" y1="5" x2="50" y2="95" />
-          <line x1="5" y1="50" x2="95" y2="50" />
-          <polygon points="50,10 54,40 50,45 46,40" fill="currentColor" stroke="none" />
-        </svg>
+      {/* ── Player Hero — "level signboard" (เมืองเก่า meets ทะเล) ──── */}
+      <section className="relative overflow-hidden rounded-3xl bg-lae shadow-hero dark:bg-lae-deep">
+        {/* Koh Yo woven stripe — signature element */}
+        <WovenBand className="h-2.5" />
 
-        {/* Level + XP */}
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-deep/40 dark:text-white/40">
-              {t("home.yourLevel")}
-            </p>
-            <h2 className="mt-0.5 text-2xl font-extrabold tracking-tight text-deep dark:text-white">
-              {t("level." + lvl.name)}
-            </h2>
-          </div>
-          <div className="flex items-center gap-1.5 rounded-full bg-mango/20 px-3 py-1.5 text-sm font-extrabold text-mango">
-            <Zap className="h-3.5 w-3.5" fill="currentColor" />
-            <span className="tnum">{state.xp} XP</span>
-          </div>
-        </div>
+        {/* faint sun-over-sea glow */}
+        <div className="pointer-events-none absolute right-0 top-2 h-40 w-40 rounded-full opacity-25 blur-2xl" style={{ background: "radial-gradient(circle, #E6BE63, transparent 70%)" }} />
 
-        {/* XP bar */}
-        <div className="mt-4">
-          <XpBar xp={state.xp} min={lvl.min} max={next?.min ?? lvl.min + 1} />
-          <p className="mt-1.5 text-[11px] text-deep/50 dark:text-white/45">
-            {next
-              ? t("home.toNext", { xp: next.min - state.xp, level: t("level." + next.name) })
-              : t("home.maxLevel")}
-          </p>
-        </div>
-
-        {/* Quick stats */}
-        <div className="mt-4 flex gap-2">
-          {[
-            { icon: Flag, label: t("home.questsDone"), value: state.completedQuests.length, color: "text-sunset" },
-            { icon: Stamp, label: t("passport.progress", { done: stampsCount, total: LANDMARKS.length }), value: `${stampPct}%`, color: "text-mango" },
-            { icon: Award, label: t("home.rewardsGot"), value: state.badges.length, color: "text-lagoon" },
-          ].map(({ icon: Icon, label, value, color }) => (
-            <div key={label} className="flex flex-1 flex-col items-center gap-0.5 rounded-2xl bg-deep/8 py-2.5 dark:bg-white/8">
-              <Icon className={`h-4 w-4 ${color}`} />
-              <span className={`tnum text-base font-extrabold text-deep dark:text-white`}>{value}</span>
-              <span className="text-center text-[9px] leading-tight text-deep/40 dark:text-white/40">{label}</span>
+        <div className="relative p-5">
+          {/* Level + XP */}
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-plaster/70">
+                {t("home.yourLevel")}
+              </p>
+              <h2 className="font-display mt-1 text-[28px] leading-none text-plaster">
+                {t("level." + lvl.name)}
+              </h2>
             </div>
-          ))}
+            <div className="flex shrink-0 items-center gap-1.5 rounded-full bg-gold px-3 py-1.5 text-sm font-extrabold text-ink shadow-[0_2px_8px_rgba(201,150,47,0.45)]">
+              <Zap className="h-3.5 w-3.5" fill="currentColor" />
+              <span className="tnum">{state.xp} XP</span>
+            </div>
+          </div>
+
+          {/* XP bar */}
+          <div className="mt-4">
+            <XpBar
+              xp={state.xp}
+              min={lvl.min}
+              max={next?.min ?? lvl.min + 1}
+              trackClass="bg-ink/25"
+              fillClass="bg-gradient-to-r from-gold to-[#E6BE63]"
+            />
+            <p className="mt-1.5 text-[11px] font-medium text-plaster/75">
+              {next
+                ? t("home.toNext", { xp: next.min - state.xp, level: t("level." + next.name) })
+                : t("home.maxLevel")}
+            </p>
+          </div>
+
+          {/* Quick stats */}
+          <div className="mt-4 flex gap-2">
+            {[
+              { icon: Flag, label: t("home.questsDone"), value: state.completedQuests.length, color: "text-gold" },
+              { icon: Stamp, label: t("passport.progress", { done: stampsCount, total: LANDMARKS.length }), value: `${stampPct}%`, color: "text-plaster" },
+              { icon: Award, label: t("home.rewardsGot"), value: state.badges.length, color: "text-boat" },
+            ].map(({ icon: Icon, label, value, color }) => (
+              <div key={label} className="flex flex-1 flex-col items-center gap-0.5 rounded-2xl bg-ink/15 py-2.5">
+                <Icon className={`h-4 w-4 ${color}`} />
+                <span className="tnum text-base font-extrabold text-plaster">{value}</span>
+                <span className="text-center text-[9px] leading-tight text-plaster/55">{label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

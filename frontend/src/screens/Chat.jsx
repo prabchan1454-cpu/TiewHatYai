@@ -248,7 +248,7 @@ export default function Chat({ greeting }) {
             <div
               className={`max-w-[80%] rounded-3xl px-4 py-2.5 text-sm ${
                 m.role === "user"
-                  ? "rounded-br-md bg-gradient-to-br from-sunset to-orange-500 text-white shadow-[0_4px_12px_rgba(255,122,69,0.3)]"
+                  ? "rounded-br-md bg-gradient-to-br from-boat to-[#B5392C] text-white shadow-[0_4px_12px_rgba(209,75,61,0.3)]"
                   : "rounded-bl-md bg-slate-100 text-slate-800 border border-lagoon/20 shadow-sm dark:bg-[#0f2033] dark:text-slate-200 dark:border-lagoon/15 dark:shadow-[0_0_12px_rgba(15,185,177,0.08)]"
               }`}
             >

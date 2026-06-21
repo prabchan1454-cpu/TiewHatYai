@@ -45,9 +45,9 @@ export default function Impact({ progress, onBack }) {
     { Icon: MapPinned, mkey: "districts", value: districtsReached, accent: "text-lagoon" },
     { Icon: Flag, mkey: "quests", value: state.completedQuests.length, accent: "text-sunset" },
     { Icon: Stamp, mkey: "stamps", value: stamps.length, accent: "text-mango" },
-    { Icon: Award, mkey: "badges", value: state.badges.length, accent: "text-purple-500 dark:text-purple-300" },
+    { Icon: Award, mkey: "badges", value: state.badges.length, accent: "text-gold" },
     { Icon: BookOpen, mkey: "legends", value: legends.length, accent: "text-sunset" },
-    { Icon: ShieldAlert, mkey: "emergency", value: emergencyUse, accent: "text-rose-500" },
+    { Icon: ShieldAlert, mkey: "emergency", value: emergencyUse, accent: "text-boat" },
   ];
 
   // ── Community totals (seed + user's real contribution) ─────────────────────
@@ -57,7 +57,7 @@ export default function Impact({ progress, onBack }) {
     { Icon: BookOpen, mkey: "legends", value: SEED.legends + legends.length, accent: "text-lagoon" },
     { Icon: Users, mkey: "checkins", value: SEED.checkins, accent: "text-lagoon" },
     { Icon: Store, mkey: "businesses", value: SEED.businesses + bizCount, accent: "text-emerald-500" },
-    { Icon: ShieldAlert, mkey: "emergency", value: SEED.emergency + emergencyUse, accent: "text-rose-500" },
+    { Icon: ShieldAlert, mkey: "emergency", value: SEED.emergency + emergencyUse, accent: "text-boat" },
   ];
 
   // ── Tourism spread: stamps per district ────────────────────────────────────

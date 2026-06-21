@@ -3,21 +3,26 @@
 @tailwind utilities;
 
 :root {
-  font-family: "Noto Sans Thai", system-ui, sans-serif;
+  font-family: "IBM Plex Sans Thai", "Noto Sans Thai", system-ui, sans-serif;
 }
 
 body {
   margin: 0;
-  background: #f6f7fb;
-  color: #334155;
+  background: #f4f0e9; /* plaster — limewashed old-town wall */
+  color: #1b332e;      /* ink — wet-lake teal-charcoal */
   -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 .dark body {
-  background: #0e1525;
-  color: #cbd5e1;
+  background: #14241f; /* deep teal-charcoal (re-toned from generic near-black) */
+  color: #d8e0d6;
+}
+
+/* Display face — Hat Yai shop-sign lettering. Use sparingly: wordmark, eyebrows, big numbers. */
+.font-display {
+  font-family: "Chonburi", "IBM Plex Sans Thai", system-ui, sans-serif;
 }
 
 /* Numerals that don't jitter as values change (XP, stats, distances). */
